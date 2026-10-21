@@ -121,6 +121,12 @@ pub fn setup(app: &AppHandle) {
         }
         match builder.build() {
             Ok(win) => {
+                // Windows ignores an off-screen position at creation and cascades
+                // the window onto the screen (179,179): park it for real, or the
+                // invisible pill sits there from launch.
+                if park {
+                    let _ = win.set_position(PhysicalPosition::new(PARKED.0, PARKED.1));
+                }
                 if !platform::prepare_pill_window(&win, mode) {
                     let _ = win.destroy();
                     mode = DesktopMode::Off;

@@ -334,7 +334,14 @@ fn create_window(app: &AppHandle, _mode: DesktopMode) -> Option<WebviewWindow> {
     }
     let built = builder.build();
     match built {
-        Ok(win) => Some(win),
+        Ok(win) => {
+            // Windows ignores an off-screen position at creation and cascades
+            // the window onto the screen: park it for real.
+            if PARK {
+                let _ = win.set_position(PhysicalPosition::new(PARKED.0 as i32, PARKED.1 as i32));
+            }
+            Some(win)
+        }
         Err(err) => {
             crate::log::line(format!("desktop Tobi window failed: {err}"));
             None
