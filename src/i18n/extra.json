@@ -5129,6 +5129,32 @@
    "id": "Perbarui Tobi ke {version}…",
    "de": "Tobi auf {version} aktualisieren…",
    "tr": "Tobi'yu {version} sürümüne güncelle…"
+  },
+  "Hide when idle": {
+   "zh-Hans": "空闲时隐藏",
+   "hi": "खाली होने पर छिपाएँ",
+   "es": "Ocultar en reposo",
+   "ar": "إخفاء عند الخمول",
+   "fr": "Masquer au repos",
+   "bn": "নিষ্ক্রিয় থাকলে লুকান",
+   "pt-BR": "Ocultar quando ocioso",
+   "ru": "Прятать в покое",
+   "id": "Sembunyikan saat diam",
+   "de": "Im Leerlauf ausblenden",
+   "tr": "Boştayken gizle"
+  },
+  "Nothing stays at the top of the screen while Tobi has nothing to show. Call him with Ctrl+Alt+N; requests from your agents still bring him out.": {
+   "zh-Hans": "Tobi 无事可显示时，屏幕顶部不留任何东西。按 Ctrl+Alt+N 呼出他；智能体的请求仍会让他出现。",
+   "hi": "जब Tobi के पास दिखाने को कुछ नहीं होता, स्क्रीन के ऊपर कुछ नहीं रहता। उसे Ctrl+Alt+N से बुलाएँ; एजेंटों के अनुरोध उसे फिर भी बाहर लाते हैं।",
+   "es": "Nada se queda en la parte superior de la pantalla mientras Tobi no tiene nada que mostrar. Llámalo con Ctrl+Alt+N; las solicitudes de tus agentes lo siguen sacando.",
+   "ar": "لا يبقى شيء في أعلى الشاشة ما دام Tobi لا يملك ما يعرضه. استدعه بـ Ctrl+Alt+N؛ وطلبات وكلائك تُظهره كذلك.",
+   "fr": "Rien ne reste en haut de l'écran tant que Tobi n'a rien à montrer. Appelez-le avec Ctrl+Alt+N ; les demandes de vos agents le font toujours apparaître.",
+   "bn": "Tobi-র দেখানোর কিছু না থাকলে স্ক্রিনের উপরে কিছুই থাকে না। Ctrl+Alt+N দিয়ে ডাকুন; এজেন্টদের অনুরোধ তবুও তাকে বের করে আনে।",
+   "pt-BR": "Nada fica no topo da tela enquanto o Tobi não tem nada para mostrar. Chame-o com Ctrl+Alt+N; os pedidos dos seus agentes ainda o trazem de volta.",
+   "ru": "Пока Tobi нечего показать, вверху экрана ничего нет. Вызывай его по Ctrl+Alt+N; запросы агентов всё равно его покажут.",
+   "id": "Tidak ada yang tersisa di atas layar selama Tobi tidak punya apa pun untuk ditampilkan. Panggil dengan Ctrl+Alt+N; permintaan agen tetap memunculkannya.",
+   "de": "Oben am Bildschirm bleibt nichts, solange Tobi nichts zu zeigen hat. Ruf ihn mit Strg+Alt+N; Anfragen deiner Agenten holen ihn trotzdem hervor.",
+   "tr": "Tobi'nin gösterecek bir şeyi yokken ekranın üstünde hiçbir şey kalmaz. Onu Ctrl+Alt+N ile çağır; ajanlarının istekleri onu yine de getirir."
   }
  }
 }

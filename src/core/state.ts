@@ -105,6 +105,8 @@ export interface Settings {
   openOnHover: boolean;
   /** Date and time in the middle of the compact island. */
   showClock: boolean;
+  /** Nothing at the top of the screen while idle (no hover strip). */
+  hideWhenIdle: boolean;
   absenceInterval: number;
   /** Declared pills next to the main one (at most 4), in the order they were added. */
   activeIntegrations: string[];
@@ -172,6 +174,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoCloseInterval: 15,
   openOnHover: false,
   showClock: false,
+  hideWhenIdle: true,
   absenceInterval: 180,
   activeIntegrations: [
     "integration_resend", "integration_n8n", "integration_vercel", "integration_github",
@@ -192,7 +195,7 @@ export const DEFAULT_SETTINGS: Settings = {
   shortcuts: {},
   tobiOutfit: DEFAULT_OUTFIT,
   pillColors: {},
-  language: "",
+  language: "ru",
 };
 
 type Listener = () => void;

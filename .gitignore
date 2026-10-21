@@ -11,3 +11,9 @@ src-tauri/gen/schemas/
 .env
 .env.*
 !.env.example
+
+# README generator fonts
+tools/readme/.font/
+
+# Local previews
+.claude/preview/

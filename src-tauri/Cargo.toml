@@ -63,6 +63,8 @@ windows = { version = "0.61", features = [
   "Media_Control",
   "Storage_Streams",
   "Win32_Foundation",
+  # No Windows 11 frame (grey border, rounded corners) around the island, Tobi and the pill.
+  "Win32_Graphics_Dwm",
   # The Spotify pill's volume: Spotify's session in the Windows mixer.
   "Win32_Media_Audio",
   "Win32_System_Com",

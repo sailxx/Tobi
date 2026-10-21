@@ -362,8 +362,18 @@ pub fn apply_geometry(app: &AppHandle, pref: &str, collapsed: bool) {
     let (lw, lh) = if collapsed { (STRIP_W, STRIP_H) } else { (PANEL_W, PANEL_H) };
     let pw = (lw * scale).round().max(1.0) as u32;
     let ph = (lh * scale).round().max(1.0) as u32;
-    let x = mp.x + (ms.width as i32 - pw as i32) / 2;
-    let y = mp.y;
+    let mut x = mp.x + (ms.width as i32 - pw as i32) / 2;
+    let mut y = mp.y;
+    // Settings → Hide when idle: the strip is parked off screen, where nothing
+    // can be seen or hovered; the webview keeps running, ready to come back.
+    let hide = collapsed
+        && app
+            .try_state::<crate::Shared>()
+            .and_then(|s| s.settings.try_lock().ok().map(|s| s.hide_when_idle))
+            .unwrap_or(false);
+    if hide {
+        (x, y) = (-32000, -32000);
+    }
 
     // GTK never sizes a non-resizable window below its natural size (200 px
     // here), so on Linux the 6 px wake strip would stay a 200 px block. tao

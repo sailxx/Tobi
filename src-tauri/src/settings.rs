@@ -99,6 +99,10 @@ pub struct Settings {
     pub phone_relay_url: String,
     /// The date and time in the middle of the compact island. Off by default.
     pub show_clock: bool,
+    /// Nothing at the top of the screen while Tobi is idle: no wake strip, so
+    /// hovering the top edge does nothing. Ctrl+Alt+N, the tray and the agents'
+    /// events still bring him out. On by default in Tobi.
+    pub hide_when_idle: bool,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -152,7 +156,8 @@ impl Default for Settings {
             shortcuts: Default::default(),
             tobi_outfit: "auto".into(),
             pill_colors: BTreeMap::new(),
-            language: String::new(),
+            // Tobi speaks Russian out of the box; "" (System) is one click away.
+            language: "ru".into(),
             desktop_tobi: DesktopTobiPref::default(),
             phone_link: false,
             phone_chat: false,
@@ -165,6 +170,7 @@ impl Default for Settings {
             phone_relay: false,
             phone_relay_url: String::new(),
             show_clock: false,
+            hide_when_idle: true,
         }
     }
 }
@@ -452,7 +458,8 @@ mod tests {
   "phoneServices": ["integration_stripe"],
   "phoneRelay": true,
   "phoneRelayUrl": "wss://relay.example.workers.dev",
-  "showClock": true
+  "showClock": true,
+  "hideWhenIdle": false
 }"##;
 
     fn custom() -> Value {
@@ -692,8 +699,8 @@ mod tests {
         // the choice must survive a save made by this one.
         let loaded = parse(&custom_with("tobiOutfit", Some(json!("topHat")))).unwrap();
         assert_eq!(loaded.tobi_outfit, "topHat");
-        // The language too: "" (follow the system) when absent, as it comes otherwise.
-        assert_eq!(parse(&custom_with("language", None)).unwrap().language, "");
+        // The language too: Russian when absent, as it comes otherwise.
+        assert_eq!(parse(&custom_with("language", None)).unwrap().language, "ru");
         assert_eq!(parse(&custom_with("language", Some(json!("xx")))).unwrap().language, "xx");
     }
 
@@ -961,6 +968,7 @@ mod tests {
                 "phoneRelay",
                 "phoneRelayUrl",
                 "showClock",
+                "hideWhenIdle",
             ]
         );
         let _ = std::fs::remove_dir_all(&dir);

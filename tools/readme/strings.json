@@ -1,0 +1,225 @@
+{
+  "en": {
+    "hero": {
+      "alt": "Tobi — an AI helper for Windows 11",
+      "title": [
+        "Your AI helper,",
+        "*one Ctrl+Alt+N away*"
+      ],
+      "sub": [
+        "Tobi lives at the top of your screen and shows",
+        "what Claude is doing: thinking, editing, running."
+      ],
+      "cards": [
+        [
+          "Live agents",
+          "Every step of a session"
+        ],
+        [
+          "One click",
+          "Allow or deny"
+        ],
+        [
+          "VS Code",
+          "Diffs, jump to the file"
+        ],
+        [
+          "GitHub",
+          "PRs, reviews and CI"
+        ]
+      ],
+      "island": {
+        "agent": "Claude Code",
+        "status": "thinking",
+        "steps": [
+          [
+            "Read",
+            "src/app.ts",
+            ""
+          ],
+          [
+            "Edit",
+            "island.ts",
+            "+12 −3"
+          ],
+          [
+            "Bash",
+            "npm test",
+            ""
+          ]
+        ],
+        "ask": "Run npm run build?",
+        "deny": "Deny",
+        "allow": "Allow"
+      }
+    },
+    "buttons": {
+      "windows": "Download for Windows",
+      "whatsNew": "What’s new"
+    },
+    "features": {
+      "alt": "Features: agents, permissions, terminal and VS Code, GitHub, chat, character",
+      "chip": "Features",
+      "title": "All about your agent — *in one little window*",
+      "items": [
+        [
+          "Live agents",
+          [
+            "Claude Code, Codex, Cursor, Gemini CLI,",
+            "Copilot CLI, OpenCode, Amp and more."
+          ]
+        ],
+        [
+          "Permissions",
+          [
+            "Allow, Deny and Always right in the window.",
+            "Answer the agent’s questions with a click."
+          ]
+        ],
+        [
+          "Terminal and VS Code",
+          [
+            "Ctrl+Alt+T brings the session’s window up.",
+            "See a diff and open the file in your editor."
+          ]
+        ],
+        [
+          "GitHub and services",
+          [
+            "Open PRs, review requests and CI status.",
+            "Vercel, Stripe, n8n, Notion, Cal.com."
+          ]
+        ],
+        [
+          "Chat with models",
+          [
+            "Claude, OpenAI, Gemini, DeepSeek, Ollama.",
+            "Drop a file on Tobi and ask about it."
+          ]
+        ],
+        [
+          "A real character",
+          [
+            "Blinks, follows your cursor, cheers,",
+            "dozes off and grumbles when poked."
+          ]
+        ]
+      ]
+    },
+    "keys": {
+      "alt": "Keyboard shortcuts: open Tobi, chat, request, terminal, pills, sound",
+      "chip": "Shortcuts",
+      "title": "Call Tobi *from the keyboard*",
+      "note": "Change any of them in Settings → Shortcuts",
+      "items": [
+        [
+          [
+            "Ctrl",
+            "Alt",
+            "N"
+          ],
+          "Open and close Tobi"
+        ],
+        [
+          [
+            "Ctrl",
+            "Alt",
+            "Space"
+          ],
+          "Chat with a model"
+        ],
+        [
+          [
+            "Ctrl",
+            "Alt",
+            "A"
+          ],
+          "Jump to the waiting request"
+        ],
+        [
+          [
+            "Ctrl",
+            "Alt",
+            "T"
+          ],
+          "The session’s terminal"
+        ],
+        [
+          [
+            "Ctrl",
+            "Alt",
+            "→"
+          ],
+          "Next pill"
+        ],
+        [
+          [
+            "Ctrl",
+            "Alt",
+            "S"
+          ],
+          "Sound on and off"
+        ]
+      ]
+    },
+    "states": {
+      "alt": "Tobi’s states: idle, thinking, working, needs you, done, asleep",
+      "chip": "States",
+      "title": "The antenna light — *what is going on*",
+      "items": [
+        "Idle",
+        "Thinking",
+        "Working",
+        "Needs you",
+        "Done",
+        "Asleep"
+      ]
+    },
+    "numbers": {
+      "alt": "By the numbers: 9 MB, no telemetry, 10+ agents, 12 languages, 29 sounds",
+      "chip": "By the numbers",
+      "title": "Light, quiet *and private*",
+      "items": [
+        [
+          "9",
+          " MB",
+          [
+            "installer"
+          ]
+        ],
+        [
+          "0",
+          "",
+          [
+            "telemetry",
+            "or accounts"
+          ]
+        ],
+        [
+          "10",
+          "+",
+          [
+            "agents",
+            "and CLIs"
+          ]
+        ],
+        [
+          "12",
+          "",
+          [
+            "UI",
+            "languages"
+          ]
+        ],
+        [
+          "29",
+          "",
+          [
+            "sounds of",
+            "his own"
+          ]
+        ]
+      ]
+    }
+  }
+}
