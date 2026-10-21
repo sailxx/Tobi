@@ -718,50 +718,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tobi"
-version = "0.5.1"
-dependencies = [
- "arboard",
- "cpal",
- "dbus",
- "futures-util",
- "gtk",
- "keyring",
- "libc",
- "mdns-sd",
- "qrcode",
- "rcgen",
- "reqwest 0.12.28",
- "ring",
- "rustls",
- "serde",
- "serde_json",
- "sherpa-onnx",
- "tauri",
- "tauri-build",
- "tauri-plugin-autostart",
- "tauri-plugin-global-shortcut",
- "tauri-plugin-single-instance",
- "tokio",
- "tokio-rustls",
- "tokio-tungstenite",
- "webpki-roots 1.0.9",
- "webview2-com",
- "windows 0.61.3",
- "windows-core 0.62.2",
- "x11rb",
-]
-
-[[package]]
-name = "tobi-hook"
-version = "0.5.1"
-dependencies = [
- "libc",
- "serde_json",
- "windows 0.61.3",
-]
-
-[[package]]
 name = "cpal"
 version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4949,6 +4905,50 @@ name = "tinyvec"
 version = "1.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fd3ca314f692efd6c868f8408f53fe444634a845f96c028b97d35f6a1f79f0ee"
+
+[[package]]
+name = "tobi"
+version = "0.1.0"
+dependencies = [
+ "arboard",
+ "cpal",
+ "dbus",
+ "futures-util",
+ "gtk",
+ "keyring",
+ "libc",
+ "mdns-sd",
+ "qrcode",
+ "rcgen",
+ "reqwest 0.12.28",
+ "ring",
+ "rustls",
+ "serde",
+ "serde_json",
+ "sherpa-onnx",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-autostart",
+ "tauri-plugin-global-shortcut",
+ "tauri-plugin-single-instance",
+ "tokio",
+ "tokio-rustls",
+ "tokio-tungstenite",
+ "webpki-roots 1.0.9",
+ "webview2-com",
+ "windows 0.61.3",
+ "windows-core 0.62.2",
+ "x11rb",
+]
+
+[[package]]
+name = "tobi-hook"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "serde_json",
+ "windows 0.61.3",
+]
 
 [[package]]
 name = "tokio"

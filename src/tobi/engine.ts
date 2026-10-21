@@ -9,6 +9,10 @@ import { Sound } from "../core/sound";
 import type { BotEmoteName, BotStateName } from "../core/layout";
 import { PUMPKIN_BODY, drawOutfitBehind, drawOutfitFront, makeHead } from "./outfits";
 import type { Outfit } from "./wardrobe";
+import {
+  ANTENNA_IDLE_RGB, BODY_BOTTOM_RGB, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP_RGB,
+  EYE_GLOW, STALK, VISOR_BOTTOM, VISOR_TOP,
+} from "./look";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -67,8 +71,8 @@ const EYE_W = 0.25;
 const EYE_H = 0.27;
 const EYE_SP = 0.37;
 const EYE_P = -0.12;
-const BASE_TOP: RGB = [0.929, 0.929, 0.937]; // #EDEDEF
-const BASE_BOTTOM: RGB = [0.769, 0.773, 0.792]; // #C4C5CA
+const BASE_TOP: RGB = BODY_TOP_RGB;
+const BASE_BOTTOM: RGB = BODY_BOTTOM_RGB;
 const INK = "rgb(26,20,18)"; // #1A1412
 const MINI_INK = "rgb(16,19,26)"; // #10131A
 
@@ -756,7 +760,7 @@ export class BotEngine {
     if (this.dancingLevel <= 0.001) return;
     const R = W * 0.3;
     const px = W / 2 + this.ox * R;
-    const py = H / 2 + this.particleOverhang / 2 + this.oy * R + R * 0.06 + R * 0.88;
+    const py = H / 2 + this.particleOverhang / 2 + this.oy * R + R * 0.06 + R * BODY_RY;
     const d = danceTransform(now(), this.dancingLevel, R);
     x.translate(px + d.dx, py + d.dy);
     x.rotate(d.rotate);
@@ -772,8 +776,8 @@ export class BotEngine {
    */
   draw(x: CanvasRenderingContext2D, W: number, H: number) {
     const R = W * 0.3;
-    const rx = R * 1.14;
-    const ry = R * 0.88;
+    const rx = R * BODY_RX;
+    const ry = R * BODY_RY;
     const cx = W / 2 + this.ox * R;
     const cy = H / 2 + this.particleOverhang / 2 + this.oy * R + R * 0.06;
 
@@ -797,6 +801,7 @@ export class BotEngine {
     const head = dressed ? makeHead(R, this.yaw, this.pitch, this.physDx, this.physDy) : null;
     const outfitState = { presence: this.outfitPresence, morph: this.morph };
     if (head) drawOutfitBehind(x, this.outfit, head, outfitState);
+    else this.drawAntenna(x, R, rx, ry);
 
     const body = this.bodyPath(rx, ry, R);
     this.drawBody(x, body, R, rx, ry);
@@ -809,7 +814,7 @@ export class BotEngine {
       x.fillStyle = `rgba(255,120,150,${0.5 * blushVal})`;
       for (const sd of [-1, 1]) {
         x.beginPath();
-        x.ellipse(sd * rx * 0.55 + yOffset, ry * 0.2, R * 0.17, R * 0.1, 0, 0, Math.PI * 2);
+        x.ellipse(sd * rx * 0.58 + yOffset, ry * 0.52, R * 0.15, R * 0.09, 0, 0, Math.PI * 2);
         x.fill();
       }
       x.restore();
@@ -831,7 +836,7 @@ export class BotEngine {
 
   private bodyPath(rx: number, ry: number, R: number): Path2D {
     const n = 72;
-    const expN = 2.0 / 2.7;
+    const expN = 2.0 / BODY_EXP;
     const tw = R * 1.0;
     const th = R * 0.94;
     const tr = R * 0.42;
@@ -926,9 +931,19 @@ export class BotEngine {
 
     x.save();
     x.clip(body);
-    const ink = this.isMini ? MINI_INK : INK;
+    // The visor: a dark glass band across the face that turns with the head.
+    // It fades while Tobi turns into a box, and minis keep plain ink eyes.
+    const visor = this.isMini ? 0 : Math.max(0, 1 - this.morph * 1.6);
+    if (visor > 0.01) this.drawVisor(x, R, rx, ry, visor);
+    const glowing = visor > 0.5;
+    const ink = glowing ? EYE_GLOW : this.isMini ? MINI_INK : INK;
     x.fillStyle = ink;
     x.strokeStyle = ink;
+    if (glowing) {
+      const glow = this.tint > 0.05 ? mix3([0.55, 0.85, 1], this.col, Math.min(1, this.tint)) : ([0.55, 0.85, 1] as RGB);
+      x.shadowColor = rgba(glow, 0.9);
+      x.shadowBlur = R * 0.14;
+    }
 
     for (const sd of [-1, 1]) {
       const eyeYaw = sd * EYE_SP + this.yaw;
@@ -952,6 +967,71 @@ export class BotEngine {
       this.drawEyeShape(x, shape, ew, eh, sd, ink);
       x.restore();
     }
+    x.restore();
+  }
+
+  private drawVisor(x: CanvasRenderingContext2D, R: number, rx: number, ry: number, alpha: number) {
+    const pitch = EYE_P + this.pitch;
+    const cp = Math.cos(pitch);
+    const face = Math.max(0.3, Math.cos(this.yaw));
+    const vx = Math.sin(this.yaw) * cp * rx * 0.9;
+    const vy = -Math.sin(pitch) * ry;
+    const vw = (2 * Math.sin(EYE_SP) * rx + R * 0.72) * (0.5 + 0.5 * face);
+    const vh = R * 0.58 * Math.max(0.35, cp);
+    x.save();
+    x.globalAlpha = alpha;
+    const g = x.createLinearGradient(0, vy - vh / 2, 0, vy + vh / 2);
+    g.addColorStop(0, VISOR_TOP);
+    g.addColorStop(1, VISOR_BOTTOM);
+    roundRectPath(x, vx - vw / 2, vy - vh / 2, vw, vh, vh / 2);
+    x.fillStyle = g;
+    x.fill();
+    // A thin reflection along the top of the glass.
+    x.strokeStyle = "rgba(255,255,255,0.16)";
+    x.lineWidth = Math.max(0.6, R * 0.03);
+    x.lineCap = "round";
+    x.beginPath();
+    x.moveTo(vx - vw * 0.28, vy - vh * 0.32);
+    x.lineTo(vx + vw * 0.18, vy - vh * 0.32);
+    x.stroke();
+    x.restore();
+  }
+
+  /** The antenna, behind the body: its light shows the state's colour and pulses while he works. */
+  private drawAntenna(x: CanvasRenderingContext2D, R: number, rx: number, ry: number) {
+    if (R <= 6) return;
+    const fade = 1 - Math.min(1, this.morph / 0.5);
+    if (fade <= 0.01) return;
+    const t = now();
+    const lean = Math.sin(this.yaw) * 0.45 + this.physDx * 0.35;
+    const len = R * (this.isMini ? 0.42 : 0.52);
+    const baseX = Math.sin(this.yaw) * rx * 0.22;
+    const baseY = -ry * 0.8;
+    const tipX = baseX + lean * len;
+    const tipY = baseY - len * (1 - Math.abs(lean) * 0.2) + this.physDy * len * 0.25;
+    x.save();
+    x.globalAlpha = fade;
+    x.strokeStyle = STALK;
+    x.lineWidth = Math.max(1, R * 0.07);
+    x.lineCap = "round";
+    x.beginPath();
+    x.moveTo(baseX, baseY);
+    x.quadraticCurveTo(baseX, baseY - len * 0.6, tipX, tipY);
+    x.stroke();
+    const busy = this.state === "working" || this.state === "thinking" || this.state === "searching";
+    const light = this.tint > 0.05 ? mix3(ANTENNA_IDLE_RGB, this.col, Math.min(1, this.tint * 1.5)) : (ANTENNA_IDLE_RGB as RGB);
+    const pulse = busy ? 0.5 + 0.5 * Math.sin(t * 6) : this.state === "sleeping" ? 0 : 0.35;
+    x.shadowColor = rgba(light, 0.95);
+    x.shadowBlur = R * (0.12 + 0.3 * pulse);
+    x.fillStyle = rgba(mix3(light, [1, 1, 1], 0.15 * pulse));
+    x.beginPath();
+    x.arc(tipX, tipY, R * 0.12, 0, Math.PI * 2);
+    x.fill();
+    x.shadowBlur = 0;
+    x.fillStyle = "rgba(255,255,255,0.7)";
+    x.beginPath();
+    x.arc(tipX + R * 0.035, tipY - R * 0.035, R * 0.035, 0, Math.PI * 2);
+    x.fill();
     x.restore();
   }
 

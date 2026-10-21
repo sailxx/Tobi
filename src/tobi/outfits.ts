@@ -12,10 +12,11 @@
 // flips to a top-down view.
 
 import { Ease } from "../core/anim";
+import { BODY_BOTTOM, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP } from "./look";
 import type { Outfit, OutfitSelection } from "./wardrobe";
 import { SCRIPT_FONTS } from "../core/fonts";
 
-const EXP = 2.7;
+const EXP = BODY_EXP;
 const VIEW_TILT = -0.3;
 const ACC_PITCH = 0.4;
 const EYE_W = 0.25;
@@ -43,7 +44,7 @@ export interface Head {
 }
 
 export function makeHead(R: number, yaw = 0, pitch = 0, physDx = 0, physDy = 0): Head {
-  return { R, rx: R * 1.14, ry: R * 0.88, yaw, pitch, physDx, physDy };
+  return { R, rx: R * BODY_RX, ry: R * BODY_RY, yaw, pitch, physDx, physDy };
 }
 
 // ── 3D helpers ────────────────────────────────────────────────────────────────
@@ -1086,7 +1087,7 @@ function iconTobi(ctx: Ctx, size: number, outfit: Outfit) {
   ctx.translate(cx, cy);
   drawOutfitBehind(ctx, outfit, H, st);
   const body = bodyOutline(H.rx, H.ry);
-  const [top, bottom] = outfit === "pumpkin" ? PUMPKIN_BODY : ["rgb(237,237,239)", "rgb(196,197,202)"];
+  const [top, bottom] = outfit === "pumpkin" ? PUMPKIN_BODY : [BODY_TOP, BODY_BOTTOM];
   ctx.fillStyle = lin(ctx, H.rx * 0.7, -H.ry * 0.85, -H.rx * 0.8, H.ry * 0.9, [[0, top], [1, bottom]]);
   ctx.fill(body);
   ctx.fillStyle = rad(ctx, 0, 0, R * 0.15, R * 1.25, [[0, "rgba(0,0,0,0)"], [0.6, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0.2)"]]);
@@ -1135,7 +1136,7 @@ export function drawWardrobeIcon(ctx: Ctx, size: number, selection: OutfitSelect
   iconTobi(ctx, size, selection === "auto" ? seasonal : selection);
   if (selection !== "auto") return;
   const R = 10;
-  const by = size / 2 + R * 0.62 + R * 0.88 * 0.72;
+  const by = size / 2 + R * 0.62 + R * BODY_RY * 0.72;
   const bw = 14;
   const bh = 6.5;
   ctx.save();

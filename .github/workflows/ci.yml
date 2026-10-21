@@ -1,0 +1,52 @@
+name: CI
+
+# Type-checks and tests Tobi on every push to main and every pull request.
+# Nothing is packed and nothing is published: releases are release.yml.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Cache cargo
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ci-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: ci-cargo-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Island tests
+        run: npm test
+
+      # The app bundles target/release/tobi-hook.exe as a resource, and its
+      # build script refuses to run until that file exists.
+      - name: Build the hook relay
+        run: cargo build --release -p tobi-hook
+
+      - name: Rust tests
+        run: cargo test --release --workspace --locked

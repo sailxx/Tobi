@@ -15,7 +15,8 @@
 
 use ring::{aead, hkdf, hmac};
 
-pub const LABEL: &str = "tobi-relay/v1";
+// Protocol label kept from Coucou: the test vectors (tests/fixtures) are derived from it.
+pub const LABEL: &str = "coucou-relay/v1";
 pub const VER: u8 = 1;
 pub const T_INIT: u8 = 1;
 pub const T_ACCEPT: u8 = 2;

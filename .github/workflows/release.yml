@@ -1,0 +1,94 @@
+name: Release
+
+# A tag vX.Y.Z builds the installers and publishes the GitHub release.
+# The in-app updater (src-tauri/src/update.rs) looks for these v* tags.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Cache cargo
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: release-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: release-cargo-
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Three files carry the version: a "0.1.1" that installs a 0.1.0 is the
+      # kind of thing nobody notices until a bug report arrives.
+      - name: Check the tag and every version agree
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        run: |
+          $tag  = "${{ github.ref_name }}" -replace '^v', ''
+          $conf = (Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json).version
+          $pkg  = (Get-Content package.json | ConvertFrom-Json).version
+          $cargo = (Select-String -Path Cargo.toml -Pattern '^version\s*=\s*"(.+)"').Matches[0].Groups[1].Value
+          "tag=$tag tauri.conf=$conf package.json=$pkg Cargo.toml=$cargo"
+          $bad = @()
+          if ($tag -ne $conf)  { $bad += "tauri.conf.json says $conf" }
+          if ($tag -ne $pkg)   { $bad += "package.json says $pkg" }
+          if ($tag -ne $cargo) { $bad += "Cargo.toml says $cargo" }
+          if ($bad) { throw "tag says $tag but $($bad -join '; ')" }
+
+      - name: Build and pack the installers
+        id: pack
+        shell: pwsh
+        run: |
+          npm run pack
+          $version = (Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json).version
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Get-ChildItem release | Format-Table Name, Length
+
+      - uses: actions/upload-artifact@v7
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: Tobi-Windows
+          path: |
+            release/Tobi-Windows-${{ steps.pack.outputs.version }}-setup.exe
+            release/Tobi-Windows-${{ steps.pack.outputs.version }}.msi
+          retention-days: 3
+
+      # Both the versioned names (the updater picks these) and the plain ones
+      # (README links to /releases/latest/download/Tobi-Windows-setup.exe).
+      - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $v = "${{ steps.pack.outputs.version }}"
+          $notes = @"
+          Tobi $v для Windows 10/11.
+
+          Скачай ``Tobi-Windows-setup.exe`` и запусти. Установщик пока без подписи, поэтому SmartScreen покажет предупреждение: **Подробнее → Выполнить в любом случае**.
+          "@
+          gh release create "${{ github.ref_name }}" `
+            "release/Tobi-Windows-$v-setup.exe" `
+            "release/Tobi-Windows-$v.msi" `
+            "release/Tobi-Windows-setup.exe" `
+            "release/Tobi-Windows.msi" `
+            --title "Tobi $v" `
+            --notes $notes

@@ -20,7 +20,7 @@
 //   Ctrl+Alt+A       waiting permission      Ctrl+Alt+S      mute Tobi
 //   Ctrl+Alt+T       open the terminal       Ctrl+Alt+G      wardrobe
 //   Ctrl+Alt+D       Tobi to the desktop, or home again (the Mac's ⌃⌥D)
-//   Ctrl+Alt+N       open / close the island (off by default, as on the Mac)
+//   Ctrl+Alt+N       open / close the island (on by default in Tobi: the main way to call him)
 //
 // ⌃⌥[ and ⌃⌥] became the arrows (brackets are AltGr characters almost
 // everywhere) and ⌃⌥M became S (AltGr+M is µ in German). Layouts outside that
@@ -58,7 +58,7 @@ const fn action(id: &'static str, keys: &'static str, on: bool, ported: bool) ->
 
 /// Same order as `ShortcutAction.allCases`.
 pub const ACTIONS: &[ActionDef] = &[
-    action("toggleIsland", "Ctrl+Alt+N", false, true),
+    action("toggleIsland", "Ctrl+Alt+N", true, true),
     action("openChat", "Ctrl+Alt+Space", true, true),
     action("goToAlert", "Ctrl+Alt+A", true, true),
     action("jumpToTerminal", "Ctrl+Alt+T", true, true),
@@ -639,8 +639,8 @@ mod wayland {
             // Left out of the answer.
             assert_eq!(of(&r, "muteToggle").status, Status::Refused);
             assert_eq!(of(&r, "desktopToggle").status, Status::Refused);
+            assert_eq!(of(&r, "toggleIsland").status, Status::Refused);
             // Never handed over: untouched.
-            assert_eq!(of(&r, "toggleIsland").status, Status::Off);
             assert_eq!(of(&r, "attachFrontWindow").status, Status::NotPorted);
         }
 
@@ -660,7 +660,7 @@ mod wayland {
             assert_eq!(of(&r, "openChat").trigger.as_deref(), Some("Meta+C"));
             assert_eq!(of(&r, "muteToggle").status, Status::Active);
             assert_eq!(of(&r, "muteToggle").trigger.as_deref(), Some("Meta+M"));
-            assert_eq!(of(&r, "toggleIsland").status, Status::Off);
+            assert_eq!(of(&r, "toggleIsland").status, Status::Refused);
         }
 
         #[test]
@@ -725,9 +725,9 @@ mod tests {
 
     // testEnabledByDefault
     #[test]
-    fn only_the_island_toggle_is_off_by_default() {
+    fn every_action_is_on_by_default() {
         for def in ACTIONS {
-            assert_eq!(def.enabled_by_default, def.id != "toggleIsland", "{}", def.id);
+            assert!(def.enabled_by_default, "{}", def.id);
         }
     }
 
@@ -740,7 +740,7 @@ mod tests {
             match outcome {
                 Ok(_) => assert!(def.ported && def.enabled_by_default, "{}", def.id),
                 Err(s) if reserved => assert_eq!(s.status, Status::NotPorted),
-                Err(s) => assert_eq!((def.id, s.status), ("toggleIsland", Status::Off)),
+                Err(s) => panic!("{} not registered: {:?}", def.id, s.status),
             }
         }
     }
@@ -798,7 +798,7 @@ mod tests {
         // Same key, other modifiers: not a duplicate.
         stored.insert("jumpToTerminal".into(), Binding { keys: "Ctrl+Shift+A".into(), enabled: true });
         let plan = super::plan(&stored, never);
-        assert!(plan.iter().all(|(d, o)| o.is_ok() || !d.ported || d.id == "toggleIsland"));
+        assert!(plan.iter().all(|(d, o)| o.is_ok() || !d.ported));
 
         // A disabled action doesn't hold its keys.
         stored.insert("goToAlert".into(), Binding { keys: "Ctrl+Alt+A".into(), enabled: false });
@@ -828,7 +828,7 @@ mod tests {
         let alert = effective(find("goToAlert").unwrap(), &stored);
         assert_eq!(alert, Binding { keys: "Ctrl+Alt+A".into(), enabled: true });
         let toggle = effective(find("toggleIsland").unwrap(), &stored);
-        assert!(!toggle.enabled);
+        assert_eq!(toggle, Binding { keys: "Ctrl+Alt+N".into(), enabled: true });
         let plan = plan(&stored, never);
         let mute = plan.iter().find(|(d, _)| d.id == "muteToggle").unwrap();
         assert_eq!(mute.1.as_ref().unwrap_err().status, Status::Off);

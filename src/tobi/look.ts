@@ -22,4 +22,6 @@ export const EYE_GLOW = "rgb(236,248,255)"; // #ECF8FF
 export const EYE_GLOW_RGB = [0.925, 0.973, 1] as const;
 
 /** The antenna light when nothing is going on. */
+/** The antenna stalk: dark honey, visible on the black island and on light themes. */
+export const STALK = "rgb(201,138,40)"; // #C98A28
 export const ANTENNA_IDLE_RGB = [1, 0.478, 0.239] as const; // #FF7A3D

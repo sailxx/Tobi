@@ -6,6 +6,7 @@
 // exactly as on macOS, because this canvas draws its own.
 
 import { State } from "../core/state";
+import { BODY_BOTTOM, BODY_TOP } from "../tobi/look";
 import { SCRIPT_FONTS } from "../core/fonts";
 import { N_, isRtl, t } from "../i18n/i18n";
 import {
@@ -372,8 +373,8 @@ export class UploadCanvas {
 
     // Body.
     const bg = ctx.createLinearGradient(rx * 0.7, -ry * 0.9, -rx * 0.8, ry * 0.9);
-    bg.addColorStop(0, "#EDEDEF");
-    bg.addColorStop(1, "#C4C5CA");
+    bg.addColorStop(0, BODY_TOP);
+    bg.addColorStop(1, BODY_BOTTOM);
     ctx.fillStyle = bg;
     ctx.fill();
 

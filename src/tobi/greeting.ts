@@ -6,6 +6,7 @@
 import { closeCurve } from "../core/anim";
 import { Sound } from "../core/sound";
 import { COMPACT_W, NOTCH_H, NOTCH_W } from "../core/layout";
+import { BODY_BOTTOM, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP, EYE_GLOW, STALK, VISOR_BOTTOM, VISOR_TOP } from "./look";
 
 // ── Timing (GT in the Swift file) ─────────────────────────────────────────────
 
@@ -37,7 +38,7 @@ export const GREETING_W = 640;
 export const GREETING_H = 150;
 const C0 = { x: 320, y: 90 };
 const HB = 58;
-export const ASP = 1.34;
+export const ASP = BODY_RX / BODY_RY;
 const EAR_X = 40;
 const EAR_HB = 17;
 const CARD = { x: 10, y: 36, w: 620, h: 104 };
@@ -366,7 +367,7 @@ function rr(x: CanvasRenderingContext2D, X: number, Y: number, W: number, H: num
 }
 
 function tobiPath(hw: number, hh: number): Path2D {
-  const n = 3.2;
+  const n = BODY_EXP;
   const p = new Path2D();
   const steps = 96;
   for (let i = 0; i <= steps; i++) {
@@ -382,14 +383,14 @@ function tobiPath(hw: number, hh: number): Path2D {
   return p;
 }
 
-/** White body gradient. A canvas gradient pads past its ends, so the corners are never left unpainted. */
+/** Honey body gradient. A canvas gradient pads past its ends, so the corners are never left unpainted. */
 function whiteFill(
   x: CanvasRenderingContext2D, path: Path2D,
   x0: number, y0: number, x1: number, y1: number,
 ) {
   const g = x.createLinearGradient(x0, y0, x1, y1);
-  g.addColorStop(0, "rgb(251,251,252)");
-  g.addColorStop(1, "rgb(231,233,236)");
+  g.addColorStop(0, BODY_TOP);
+  g.addColorStop(1, BODY_BOTTOM);
   x.fillStyle = g;
   x.fill(path);
 }
@@ -416,13 +417,36 @@ function drawHandR(x: CanvasRenderingContext2D, hw: number, hh: number, p: Pose)
   x.rotate(h.ang);
   rr(x, -h.L / 2, -h.T / 2, h.L, h.T, h.T / 2);
   const g = x.createLinearGradient(h.L / 2, -h.T / 2, -h.L / 2, h.T / 2);
-  g.addColorStop(0, "rgb(251,251,252)");
-  g.addColorStop(1, "rgb(231,233,236)");
+  g.addColorStop(0, BODY_TOP);
+  g.addColorStop(1, BODY_BOTTOM);
   x.fillStyle = g;
   x.fill();
   x.strokeStyle = "rgba(0,0,0,0.08)";
   x.lineWidth = 0.8;
   x.stroke();
+  x.restore();
+}
+
+/** The antenna, behind the body, with its orange light. */
+function drawAntenna(x: CanvasRenderingContext2D, hw: number, hh: number, p: Pose) {
+  const baseY = -hh * 0.8;
+  const len = hh * 0.55;
+  const tipX = p.lookX * hw * 0.2;
+  const tipY = baseY - len;
+  x.save();
+  x.strokeStyle = STALK;
+  x.lineWidth = Math.max(1, hh * 0.075);
+  x.lineCap = "round";
+  x.beginPath();
+  x.moveTo(0, baseY);
+  x.quadraticCurveTo(0, baseY - len * 0.6, tipX, tipY);
+  x.stroke();
+  x.shadowColor = "rgba(255,122,61,0.95)";
+  x.shadowBlur = hh * 0.3;
+  x.fillStyle = "rgb(255,122,61)";
+  x.beginPath();
+  x.arc(tipX, tipY, hh * 0.13, 0, Math.PI * 2);
+  x.fill();
   x.restore();
 }
 
@@ -455,6 +479,7 @@ function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
 
   drawHandL(x, hw, hh, p);
   drawHandR(x, hw, hh, p);
+  drawAntenna(x, hw, hh, p);
 
   const body = tobiPath(hw, hh);
   whiteFill(x, body, hw * 0.6, -hh, -hw * 0.6, hh);
@@ -470,12 +495,23 @@ function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
   // Eyes
   x.save();
   x.clip(body);
-  x.fillStyle = "#16171A";
-  x.strokeStyle = "#16171A";
   const er = p.hb * 0.06;
   const sp = p.hb * 0.19;
   const lx = p.lookX * hw * 0.42;
   const ly = p.lookY * hh * 0.28 + hh * 0.12 + p.eyeRoll * hh * 1.25;
+  // The visor follows the eyes, glowing eyes behind it.
+  const vw = sp * 2 + er * 5.2;
+  const vh = er * 4.4;
+  const vg = x.createLinearGradient(0, ly - vh / 2, 0, ly + vh / 2);
+  vg.addColorStop(0, VISOR_TOP);
+  vg.addColorStop(1, VISOR_BOTTOM);
+  rr(x, lx - vw / 2, ly - vh / 2, vw, vh, vh / 2);
+  x.fillStyle = vg;
+  x.fill();
+  x.fillStyle = EYE_GLOW;
+  x.strokeStyle = EYE_GLOW;
+  x.shadowColor = "rgba(140,217,255,0.9)";
+  x.shadowBlur = er * 1.6;
   for (const sd of [-1, 1]) {
     x.save();
     x.translate(sd * sp + lx, ly);
