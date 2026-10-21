@@ -5155,6 +5155,32 @@
    "id": "Tidak ada yang tersisa di atas layar selama Tobi tidak punya apa pun untuk ditampilkan. Panggil dengan Ctrl+Alt+N; permintaan agen tetap memunculkannya.",
    "de": "Oben am Bildschirm bleibt nichts, solange Tobi nichts zu zeigen hat. Ruf ihn mit Strg+Alt+N; Anfragen deiner Agenten holen ihn trotzdem hervor.",
    "tr": "Tobi'nin gösterecek bir şeyi yokken ekranın üstünde hiçbir şey kalmaz. Onu Ctrl+Alt+N ile çağır; ajanlarının istekleri onu yine de getirir."
+  },
+  "Show the pill at rest": {
+   "zh-Hans": "空闲时显示胶囊",
+   "hi": "आराम में पिल दिखाएँ",
+   "es": "Mostrar la píldora en reposo",
+   "ar": "إظهار الكبسولة عند الخمول",
+   "fr": "Afficher la pilule au repos",
+   "bn": "বিশ্রামে পিল দেখান",
+   "pt-BR": "Mostrar a pílula em repouso",
+   "ru": "Показывать пилюлю в покое",
+   "id": "Tampilkan pil saat diam",
+   "de": "Pille in Ruhe anzeigen",
+   "tr": "Hapı boştayken göster"
+  },
+  "Off: the pill only shows while you dictate or record a call.": {
+   "zh-Hans": "关闭：仅在听写或录制通话时显示胶囊。",
+   "hi": "बंद: पिल केवल डिक्टेशन या कॉल रिकॉर्ड करते समय दिखती है।",
+   "es": "Desactivado: la píldora solo aparece mientras dictas o grabas una llamada.",
+   "ar": "عند الإيقاف: تظهر الكبسولة فقط أثناء الإملاء أو تسجيل مكالمة.",
+   "fr": "Désactivé : la pilule n'apparaît que pendant la dictée ou l'enregistrement d'un appel.",
+   "bn": "বন্ধ: শুধু ডিক্টেশন বা কল রেকর্ড করার সময় পিল দেখা যায়।",
+   "pt-BR": "Desligado: a pílula só aparece enquanto você dita ou grava uma chamada.",
+   "ru": "Если выключено, пилюля видна только во время диктовки или записи звонка.",
+   "id": "Mati: pil hanya muncul saat Anda mendikte atau merekam panggilan.",
+   "de": "Aus: Die Pille erscheint nur beim Diktieren oder beim Aufnehmen eines Anrufs.",
+   "tr": "Kapalı: hap yalnızca dikte ederken veya arama kaydederken görünür."
   }
  }
 }

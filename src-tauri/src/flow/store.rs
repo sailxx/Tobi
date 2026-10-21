@@ -90,6 +90,9 @@ pub struct Prefs {
     pub enabled: bool,
     pub key: FlowKey,
     pub edge: Edge,
+    /// The pill stays on its edge while dictation waits. Off in Tobi: it only
+    /// shows while you dictate, record a call or get a message.
+    pub pill_at_rest: bool,
     /// The microphone by name; empty is the system's default.
     pub mic: String,
     /// Days the history is kept: 0 = not kept, -1 = forever.
@@ -115,6 +118,7 @@ impl Default for Prefs {
             enabled: false,
             key: FlowKey::default(),
             edge: Edge::Bottom,
+            pill_at_rest: false,
             mic: String::new(),
             keep_days: 30,
             cleanup: false,
