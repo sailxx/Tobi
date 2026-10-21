@@ -1,4 +1,4 @@
-// New versions of Coucou (src-tauri/src/update.rs): what Rust reports, and the
+// New versions of Tobi (src-tauri/src/update.rs): what Rust reports, and the
 // small rules the island applies to it. Pure, so tests/update.test.mjs checks them.
 
 import type { IslandMode, IslandViewName } from "./layout";
@@ -13,7 +13,7 @@ export type UpdatePhase =
 export type UpdateCheck = "none" | "checking" | "upToDate" | "unreachable";
 
 export interface UpdateStatus {
-  /** null: not asked yet. true: Coucou may look at GitHub on its own. */
+  /** null: not asked yet. true: Tobi may look at GitHub on its own. */
   consent: boolean | null;
   /** The version running. */
   current: string;
@@ -66,7 +66,7 @@ export function percent(fraction: number): number {
   return Math.round(Math.max(0, Math.min(1, fraction)) * 100);
 }
 
-/** The line under "Coucou X is out": the first "What's new" bullet, then "You have Y". */
+/** The line under "Tobi X is out": the first "What's new" bullet, then "You have Y". */
 export function headerLine(headline: string | null | undefined, youHave: string): string {
   const h = headline?.trim();
   return h ? `${h}  ·  ${youHave}` : youHave;

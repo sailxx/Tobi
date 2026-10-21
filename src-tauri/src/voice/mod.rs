@@ -1,11 +1,11 @@
-// « OK Coucou » on Windows and Linux: say it, then ask anything. Port of the
+// « OK Tobi » on Windows and Linux: say it, then ask anything. Port of the
 // Mac's Voice/ (VoiceEngine.swift and its friends).
 //
 // While it is on, the microphone is open and a cheap energy detector cuts what
 // you say into stretches; only a stretch of speech goes to Parakeet, on this
-// computer, and only a stretch that starts with « OK Coucou » goes further:
+// computer, and only a stretch that starts with « OK Tobi » goes further:
 // what you said after it goes to Claude with your own key (brain.rs), never
-// the audio. Mochi shows it all in the pill at the bottom of the screen —
+// the audio. Tobi shows it all in the pill at the bottom of the screen —
 // listening, thinking, then the answer, said out loud by the system's voice
 // (the pill's speechSynthesis) or ElevenLabs with your key.
 //
@@ -34,9 +34,9 @@ use crate::speech::{self, audio};
 pub struct VoiceView {
     /// "listening", "thinking", "speaking".
     pub phase: String,
-    /// What you said (after « OK Coucou »).
+    /// What you said (after « OK Tobi »).
     pub heard: String,
-    /// Coucou's answer.
+    /// Tobi's answer.
     pub answer: String,
 }
 
@@ -53,7 +53,7 @@ fn pending() -> &'static Mutex<HashMap<u64, mpsc::Sender<String>>> {
 }
 static NEXT_ID: AtomicU64 = AtomicU64::new(1);
 
-/// Whether « OK Coucou » can run: the voice model and a Claude key.
+/// Whether « OK Tobi » can run: the voice model and a Claude key.
 pub fn requirements_met() -> bool {
     speech::is_ready() && crate::secrets::present(crate::claude::KEY)
 }
@@ -67,10 +67,10 @@ pub fn sync(app: &AppHandle) {
             let stop = Arc::new(AtomicBool::new(false));
             let app2 = app.clone();
             let stop2 = stop.clone();
-            std::thread::Builder::new().name("coucou-voice".into()).spawn(move || run(app2, stop2)).ok();
+            std::thread::Builder::new().name("tobi-voice".into()).spawn(move || run(app2, stop2)).ok();
             *running = Some(Running { stop });
             speech::preload();
-            crate::log::line("voice: « OK Coucou » listening");
+            crate::log::line("voice: « OK Tobi » listening");
         }
         (false, true) => {
             if let Some(r) = running.take() {
@@ -80,13 +80,13 @@ pub fn sync(app: &AppHandle) {
             if !dictation && !crate::notes::is_recording(app) {
                 speech::unload();
             }
-            crate::log::line("voice: « OK Coucou » off");
+            crate::log::line("voice: « OK Tobi » off");
         }
         _ => {}
     }
 }
 
-/// « OK Coucou » is listening (the voice model stays loaded).
+/// « OK Tobi » is listening (the voice model stays loaded).
 pub fn is_listening() -> bool {
     RUNNING.lock().unwrap().is_some()
 }
@@ -104,11 +104,11 @@ fn show(app: &AppHandle, view: Option<VoiceView>) {
 }
 
 enum Mode {
-    /// Waiting for « OK Coucou ».
+    /// Waiting for « OK Tobi ».
     Wake,
-    /// Heard « OK Coucou » alone: what comes next is the question.
+    /// Heard « OK Tobi » alone: what comes next is the question.
     Command { text: String, until: Instant },
-    /// Coucou asked something back: an answer comes without « OK Coucou ».
+    /// Tobi asked something back: an answer comes without « OK Tobi ».
     FollowUp { until: Instant },
 }
 
@@ -150,7 +150,7 @@ fn run(app: AppHandle, stop: Arc<AtomicBool>) {
             }
             _ => {}
         }
-        // Dictation and calls have the microphone: Coucou doesn't listen meanwhile.
+        // Dictation and calls have the microphone: Tobi doesn't listen meanwhile.
         if pill::dictating(&app) || crate::notes::is_recording(&app) {
             vad.reset();
             continue;
@@ -167,7 +167,7 @@ fn run(app: AppHandle, stop: Arc<AtomicBool>) {
             let question = match &mut mode {
                 Mode::Wake => match wake::after_wake(&heard) {
                     Some(rest) => {
-                        crate::log::line("voice: « OK Coucou » heard");
+                        crate::log::line("voice: « OK Tobi » heard");
                         hide_at = None;
                         if crate::flow::text::word_count(&rest) >= 2 {
                             Some(rest)
@@ -198,7 +198,7 @@ fn run(app: AppHandle, stop: Arc<AtomicBool>) {
                 show(&app, Some(VoiceView {
                     phase: "speaking".into(),
                     heard: question,
-                    answer: if done { "✓".into() } else { crate::i18n::t("Coucou couldn't answer: check your Claude key in Notch → Chat.") },
+                    answer: if done { "✓".into() } else { crate::i18n::t("Tobi couldn't answer: check your Claude key in Notch → Chat.") },
                 }));
                 hide_at = Some(Instant::now() + Duration::from_secs(5));
                 continue;
@@ -206,7 +206,7 @@ fn run(app: AppHandle, stop: Arc<AtomicBool>) {
             show(&app, Some(VoiceView { phase: "speaking".into(), heard: question.clone(), answer: answer.clone() }));
             speak(&app, &answer);
             vad.reset();
-            // Drop what the microphone heard of Coucou's own voice.
+            // Drop what the microphone heard of Tobi's own voice.
             while rx.try_recv().is_ok() {}
             if answer.trim_end().ends_with('?') {
                 mode = Mode::FollowUp { until: Instant::now() + Duration::from_secs(8) };
@@ -538,13 +538,13 @@ mod tests {
     }
 }
 
-/// With the models downloaded: `COUCOU_TEST_WAKE_WAV=… cargo test -- --ignored wake_in`.
+/// With the models downloaded: `TOBI_TEST_WAKE_WAV=… cargo test -- --ignored wake_in`.
 #[cfg(test)]
 mod with_models {
     #[test]
     #[ignore]
     fn hears_the_wake_phrase_in_a_recording() {
-        let path = std::env::var("COUCOU_TEST_WAKE_WAV").expect("COUCOU_TEST_WAKE_WAV");
+        let path = std::env::var("TOBI_TEST_WAKE_WAV").expect("TOBI_TEST_WAKE_WAV");
         let bytes = std::fs::read(&path).unwrap();
         let rate = u32::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]]);
         let pcm: Vec<f32> = bytes[44..].chunks_exact(2).map(|b| i16::from_le_bytes([b[0], b[1]]) as f32 / 32768.0).collect();

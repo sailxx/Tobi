@@ -7,8 +7,8 @@
 // the desktop's own dialog, Ctrl+Alt+V suggested.
 //
 // The paste: Ctrl+V sent through the RemoteDesktop portal, keyboard only. The
-// desktop asks once whether Coucou may control the keyboard; the answer is
-// remembered with the restore token the portal gives back, kept in Coucou's
+// desktop asks once whether Tobi may control the keyboard; the answer is
+// remembered with the restore token the portal gives back, kept in Tobi's
 // folder. Where neither works, the words stay on the clipboard and the pill
 // says so.
 
@@ -75,7 +75,7 @@ struct Remote {
 
 /// The RemoteDesktop session, opened on the first paste and kept.
 static REMOTE: Mutex<Option<Remote>> = Mutex::new(None);
-/// Refused once: not asked again until Coucou restarts.
+/// Refused once: not asked again until Tobi restarts.
 static REFUSED: Mutex<bool> = Mutex::new(false);
 
 fn token_file() -> std::path::PathBuf {
@@ -90,7 +90,7 @@ fn variant<T: RefArg + 'static>(v: T) -> Variant<Box<dyn RefArg>> {
 /// may have a dialog to answer). The results, or why there are none.
 fn request(conn: &Connection, method: &str, args: impl FnOnce(&str) -> dbus::Message, tokens: &mut u32) -> Result<PropMap, String> {
     *tokens += 1;
-    let token = format!("coucoupaste{}_{}", std::process::id(), tokens);
+    let token = format!("tobipaste{}_{}", std::process::id(), tokens);
     let sender = conn.unique_name().to_string();
     let path = portal::request_path(&sender, &token);
     let answer: Arc<Mutex<Option<Result<PropMap, u32>>>> = Arc::new(Mutex::new(None));
@@ -122,7 +122,7 @@ fn open() -> Result<Remote, String> {
     let mut tokens = 0;
     let call = |member: &str| dbus::Message::new_method_call(DEST, OBJECT, IFACE, member).map_err(|e| e.to_string());
 
-    let session_token = format!("coucoupastes{}", std::process::id());
+    let session_token = format!("tobipastes{}", std::process::id());
     let create = call("CreateSession")?;
     let results = request(&conn, "CreateSession", |token| {
         let mut options: PropMap = HashMap::new();

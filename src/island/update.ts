@@ -61,7 +61,7 @@ class UpdateController {
     }
   }
 
-  /** Tray → "Update Coucou to X…", Settings → Install X. */
+  /** Tray → "Update Tobi to X…", Settings → Install X. */
   show() {
     this.offer("show");
   }

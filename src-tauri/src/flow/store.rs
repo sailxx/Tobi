@@ -1,7 +1,7 @@
-// Everything the Coucou window shows and edits about dictation: the history,
+// Everything the Tobi window shows and edits about dictation: the history,
 // the numbers, the dictionary, the snippets, the styles and the preferences.
-// Small JSON files in the app's folder (%LOCALAPPDATA%\Coucou\Flow or
-// ~/.local/share/coucou/Flow), on this computer only. Port of FlowStore.swift.
+// Small JSON files in the app's folder (%LOCALAPPDATA%\Tobi\Flow or
+// ~/.local/share/tobi/Flow), on this computer only. Port of FlowStore.swift.
 
 use std::collections::{BTreeMap, HashSet};
 use std::path::PathBuf;
@@ -99,11 +99,11 @@ pub struct Prefs {
     /// The style of the apps that have none of their own.
     pub default_style: Style,
     pub summary_engine: SummaryEngine,
-    /// Open the Coucou window when Coucou is opened (not when it starts with the computer).
+    /// Open the Tobi window when Tobi is opened (not when it starts with the computer).
     pub open_at_launch: bool,
-    /// « OK Coucou »: listen for it and answer with Claude (needs the Claude key).
+    /// « OK Tobi »: listen for it and answer with Claude (needs the Claude key).
     pub voice: bool,
-    /// How Coucou answers out loud: "system", "elevenlabs" or "off".
+    /// How Tobi answers out loud: "system", "elevenlabs" or "off".
     pub voice_output: String,
     /// The ElevenLabs voice: "female" or "male".
     pub voice_gender: String,
@@ -340,7 +340,7 @@ mod tests {
     use super::*;
 
     fn temp_store() -> (Store, PathBuf) {
-        let dir = std::env::temp_dir().join(format!("coucou-flow-{}-{}", std::process::id(), new_id()));
+        let dir = std::env::temp_dir().join(format!("tobi-flow-{}-{}", std::process::id(), new_id()));
         (Store::load_from(dir.clone()), dir)
     }
 

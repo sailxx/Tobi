@@ -1,4 +1,4 @@
-// What Coucou does to the words before pasting them, and the numbers of the
+// What Tobi does to the words before pasting them, and the numbers of the
 // Statistics page. Port of FlowText.swift; nothing here touches the OS, so it
 // runs in the tests as it is.
 
@@ -6,7 +6,7 @@ use std::collections::{BTreeMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
-/// A word Coucou writes another way: "cloud code" → "Claude Code".
+/// A word Tobi writes another way: "cloud code" → "Claude Code".
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Replacement {
     #[serde(default = "new_id")]

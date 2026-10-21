@@ -9,7 +9,7 @@ import "./pill.css";
 import { Bridge, onEvent } from "../core/bridge";
 import { FlowBridge, clock, type PillState } from "../core/flow";
 import type { Settings } from "../core/state";
-import { BotEngine, hexToRGB } from "../mochi/engine";
+import { BotEngine, hexToRGB } from "../tobi/engine";
 import { resolveLanguage, setLanguage, systemLanguages, t } from "../i18n/i18n";
 import { HUB_ICONS, keyLabel } from "../hub/ui";
 
@@ -45,17 +45,17 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls = "", text = ""):
   return e;
 }
 
-// ── Mochi ─────────────────────────────────────────────────────────────────────
+// ── Tobi ─────────────────────────────────────────────────────────────────────
 
-const mochi = new BotEngine();
-mochi.isMini = true;
-mochi.bodyColor = hexToRGB("#F5F6F8");
-mochi.setState("idle", true);
-const mochiCanvas = el("canvas");
+const tobi = new BotEngine();
+tobi.isMini = true;
+tobi.bodyColor = hexToRGB("#F5F6F8");
+tobi.setState("idle", true);
+const tobiCanvas = el("canvas");
 
-function mochiSlot(): HTMLElement {
-  const slot = el("span", "mochi");
-  slot.append(mochiCanvas);
+function tobiSlot(): HTMLElement {
+  const slot = el("span", "tobi");
+  slot.append(tobiCanvas);
   return slot;
 }
 
@@ -156,13 +156,13 @@ function content(l: Look): HTMLElement {
   switch (l) {
     case "toolbar": {
       c.style.gap = "4px";
-      const m = mochiSlot();
+      const m = tobiSlot();
       m.style.margin = vertical() ? "0 0 5px" : "0 5px 0 0";
       c.append(
         m,
         pillButton("mic", t("Dictate · {0}", { 0: key }), () => void FlowBridge.pillAction("dictate")),
         pillButton("record", t("Record a call"), () => void FlowBridge.pillAction("note")),
-        pillButton("window", t("Open Coucou"), () => void FlowBridge.pillAction("hub")),
+        pillButton("window", t("Open Tobi"), () => void FlowBridge.pillAction("hub")),
       );
       break;
     }
@@ -178,9 +178,9 @@ function content(l: Look): HTMLElement {
         const icon = el("span");
         icon.append(svgIcon(state.phase === "failed" ? "mic" : "copy"));
         icon.querySelector("svg")!.setAttribute("style", "width:13px;height:13px;fill:none;stroke:#e8e9ec;stroke-width:2");
-        c.append(mochiSlot(), icon);
+        c.append(tobiSlot(), icon);
       } else {
-        c.append(mochiSlot(), el("span", "message", messageText() ?? ""));
+        c.append(tobiSlot(), el("span", "message", messageText() ?? ""));
       }
       break;
     case "note": {
@@ -192,11 +192,11 @@ function content(l: Look): HTMLElement {
         e.stopPropagation();
         void FlowBridge.pillAction("stopNote");
       });
-      c.append(mochiSlot(), el("span", "rec"), noteClock(), stop);
+      c.append(tobiSlot(), el("span", "rec"), noteClock(), stop);
       break;
     }
     default:
-      c.append(mochiSlot(), barsEl);
+      c.append(tobiSlot(), barsEl);
   }
   return c;
 }
@@ -269,7 +269,7 @@ function render() {
   for (const old of root.querySelectorAll(".bubble")) old.remove();
   const b = bubble();
   root.replaceChildren(...(b ? [b] : []), capsule);
-  mochi.setState(state.phase === "thinking" || state.voice?.phase === "thinking" ? "thinking" : "idle");
+  tobi.setState(state.phase === "thinking" || state.voice?.phase === "thinking" ? "thinking" : "idle");
   wake();
   // Where the mouse is taken, once the sizes have settled.
   setTimeout(reportHot, 60);
@@ -347,7 +347,7 @@ function animating(): boolean {
   return visible && look() !== "resting";
 }
 
-/** Where dot `i` goes: the voice, a slow wave while thinking, a lively one while Coucou speaks. */
+/** Where dot `i` goes: the voice, a slow wave while thinking, a lively one while Tobi speaks. */
 function dotGoal(now: number, i: number): number {
   if (state.phase === "thinking") return 0.25 + 0.25 * Math.sin(now / 160 - i * 0.7);
   if (state.phase === "listening" || state.phase === "locked") return target[i];
@@ -377,22 +377,22 @@ function tick(now: number) {
     if (vertical()) bar.style.width = `${size}px`;
     else bar.style.height = `${size}px`;
   }
-  // Mochi: his eyes wander while you speak; still while only a call shows.
+  // Tobi: his eyes wander while you speak; still while only a call shows.
   if (l !== "note" || hovered) {
-    mochi.lookX = Math.sin(now / 900) * 0.6;
-    mochi.lookY = Math.cos(now / 1300) * 0.3;
-    mochi.update(dt);
+    tobi.lookX = Math.sin(now / 900) * 0.6;
+    tobi.lookY = Math.cos(now / 1300) * 0.3;
+    tobi.update(dt);
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const size = 22 / 0.6;
-    if (mochiCanvas.width !== Math.round(size * dpr)) {
-      mochiCanvas.width = Math.round(size * dpr);
-      mochiCanvas.height = Math.round(size * dpr);
+    if (tobiCanvas.width !== Math.round(size * dpr)) {
+      tobiCanvas.width = Math.round(size * dpr);
+      tobiCanvas.height = Math.round(size * dpr);
     }
-    const ctx = mochiCanvas.getContext("2d");
+    const ctx = tobiCanvas.getContext("2d");
     if (ctx) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, size, size);
-      mochi.draw(ctx, size, size);
+      tobi.draw(ctx, size, size);
     }
   }
   const c = root.querySelector<HTMLElement>("[data-clock]");
@@ -411,7 +411,7 @@ function wake() {
   }
 }
 
-// ── « OK Coucou » speaks ──────────────────────────────────────────────────────
+// ── « OK Tobi » speaks ──────────────────────────────────────────────────────
 
 interface Say {
   id: number;

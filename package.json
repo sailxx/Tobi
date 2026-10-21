@@ -1,7 +1,7 @@
 {
-  "name": "coucou-windows",
+  "name": "tobi",
   "private": true,
-  "version": "0.5.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,8 +10,8 @@
     "test": "node --import ./tests/setup.mjs --test \"tests/**/*.test.mjs\"",
     "icons": "node scripts/gen-icons.mjs",
     "tauri": "tauri",
-    "predev": "cargo build --release -p coucou-hook",
-    "prebuild": "cargo build --release -p coucou-hook",
+    "predev": "cargo build --release -p tobi-hook",
+    "prebuild": "cargo build --release -p tobi-hook",
     "pack": "tauri build && node scripts/pack.mjs"
   },
   "devDependencies": {

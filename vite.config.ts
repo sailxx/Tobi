@@ -4,9 +4,8 @@ import { resolve, join, extname } from "node:path";
 
 // ───────────────────────────────────────────────────────────────────────────────
 // THE one and only place the shared sound folder is declared.
-// The 29 WAVs live in the macOS app and are NOT duplicated in the repo; when they
-// move to `shared/sounds/`, change this single line.
-export const SOUNDS_DIR = resolve(__dirname, "../NotchBuddy/Resources/sounds");
+// Tobi's own 29 WAVs, made by scripts/gen-sounds.mjs.
+export const SOUNDS_DIR = resolve(__dirname, "sounds");
 // ───────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -16,7 +15,7 @@ export const SOUNDS_DIR = resolve(__dirname, "../NotchBuddy/Resources/sounds");
 function sharedSounds(): Plugin {
   const prefix = "/sounds/";
   return {
-    name: "coucou-shared-sounds",
+    name: "tobi-shared-sounds",
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         if (!req.url?.startsWith(prefix)) return next();
@@ -63,7 +62,7 @@ export default defineConfig({
       input: {
         island: resolve(__dirname, "index.html"),
         settings: resolve(__dirname, "settings.html"),
-        mochi: resolve(__dirname, "mochi.html"),
+        tobi: resolve(__dirname, "tobi.html"),
         pill: resolve(__dirname, "pill.html"),
       },
     },

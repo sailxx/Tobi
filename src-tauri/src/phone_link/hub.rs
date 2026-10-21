@@ -73,7 +73,7 @@ const STATES: &[&str] = &[
 ];
 
 /// How a decision gets back to the agent. The app's implementation answers the
-/// waiting `coucou-hook` and closes the card on the island.
+/// waiting `tobi-hook` and closes the card on the island.
 pub trait Host: Send + Sync {
     fn decide(&self, request_id: &str, allow: bool);
     /// A phone answered a question Claude Code asked: each question's text mapped to the label picked (a list of
@@ -160,7 +160,7 @@ pub struct ApprovalIn {
     pub command: String,
 }
 
-/// The values the island stores for Mochi's wardrobe ("auto" follows the seasons on the phone's own calendar).
+/// The values the island stores for Tobi's wardrobe ("auto" follows the seasons on the phone's own calendar).
 /// Same raw values as the Mac and the PC; anything else is not sent.
 pub const OUTFIT_CHOICES: [&str; 13] = [
     "auto", "none", "partyHat", "beanie", "crown", "sunglasses", "roundGlasses",
@@ -411,7 +411,7 @@ struct Sub {
     details: bool,
     /// The phone asked for `answers` and the user's switch was on when it connected.
     answers: bool,
-    /// The phone asked for `prefs` (the outfit Mochi wears on the computer).
+    /// The phone asked for `prefs` (the outfit Tobi wears on the computer).
     prefs: bool,
     /// The phone asked for `diffs` and the user's switch was on when it connected.
     diffs: bool,
@@ -444,7 +444,7 @@ struct Inner {
     sessions: Vec<Session>,
     approval: Option<Approval>,
     question: Option<Question>,
-    /// What Mochi wears on the computer: one of [`OUTFIT_CHOICES`]; None until the island has said.
+    /// What Tobi wears on the computer: one of [`OUTFIT_CHOICES`]; None until the island has said.
     outfit: Option<&'static str>,
     /// The last `usage` line (None: the island has nothing to say).
     usage: Option<Arc<str>>,
@@ -766,7 +766,7 @@ impl Hub {
         }
     }
 
-    /// What Mochi wears on the computer ("auto" or an outfit, see [`OUTFIT_CHOICES`]); anything else is ignored.
+    /// What Tobi wears on the computer ("auto" or an outfit, see [`OUTFIT_CHOICES`]); anything else is ignored.
     /// Only phones that have `prefs` hear of it, and a new one at once.
     pub fn publish_outfit(&self, outfit: &str) {
         let Some(choice) = OUTFIT_CHOICES.iter().find(|c| **c == outfit) else { return };
@@ -1152,7 +1152,7 @@ mod tests {
             step_count: 3,
             steps: vec!["Read · a.rs".into(), "Edit · a.rs".into()],
             final_line: Some("All done".into()),
-            project: Some("/home/me/work/coucou".into()),
+            project: Some("/home/me/work/tobi".into()),
             color: Some("#2DD4BF".into()),
             ..Default::default()
         }
@@ -1190,7 +1190,7 @@ mod tests {
         assert!(p.get("steps").is_none() && p.get("finalLine").is_none() && p.get("project").is_none() && p.get("color").is_none());
         assert_eq!(r["steps"], json!(["Read · a.rs", "Edit · a.rs"]));
         assert_eq!(r["finalLine"], "All done");
-        assert_eq!(r["project"], "coucou");
+        assert_eq!(r["project"], "tobi");
         assert_eq!(r["color"], "#2DD4BF");
         // and the shared fields are the same for both
         assert_eq!(p["statusText"], r["statusText"]);
@@ -1202,7 +1202,7 @@ mod tests {
         hub.publish(vec![rich("integration_claude")], None, 1_000);
         let (tx, mut rx) = mpsc::channel(8);
         hub.subscribe(tx, 1_001, true);
-        assert_eq!(first_sessions(&mut rx)[0]["project"], "coucou");
+        assert_eq!(first_sessions(&mut rx)[0]["project"], "tobi");
     }
 
     #[test]
@@ -1234,8 +1234,8 @@ mod tests {
 
     #[test]
     fn the_project_is_a_folder_name_never_a_path() {
-        assert_eq!(project_name("/home/me/work/coucou").as_deref(), Some("coucou"));
-        assert_eq!(project_name("/home/me/work/coucou/").as_deref(), Some("coucou"));
+        assert_eq!(project_name("/home/me/work/tobi").as_deref(), Some("tobi"));
+        assert_eq!(project_name("/home/me/work/tobi/").as_deref(), Some("tobi"));
         assert_eq!(project_name("C:\\Users\\me\\proj").as_deref(), Some("proj"));
         assert_eq!(project_name("C:\\Users\\me\\proj\\").as_deref(), Some("proj"));
         assert_eq!(project_name("proj").as_deref(), Some("proj"));
@@ -1291,7 +1291,7 @@ mod tests {
         assert!(!steps.is_empty() && steps.len() < MAX_STEPS);
         assert!(steps.last().unwrap().as_str().unwrap().starts_with("29: "));
         // and the short fields are all still there
-        assert_eq!(list[15]["project"], "coucou");
+        assert_eq!(list[15]["project"], "tobi");
     }
 
     #[test]
@@ -1682,7 +1682,7 @@ mod tests {
 
     #[test]
     fn the_outfit_list_is_the_one_of_the_island() {
-        let ts = include_str!("../../../src/mochi/wardrobe.ts");
+        let ts = include_str!("../../../src/tobi/wardrobe.ts");
         let body = ts.split("export const OUTFIT_SELECTIONS = [").nth(1).unwrap().split("] as const").next().unwrap();
         let ids: Vec<&str> = body.split('"').skip(1).step_by(2).collect();
         assert_eq!(ids, OUTFIT_CHOICES.to_vec());

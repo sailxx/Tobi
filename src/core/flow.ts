@@ -1,4 +1,4 @@
-// Flow dictation, the voice models and the Notetaker, as the Coucou window and
+// Flow dictation, the voice models and the Notetaker, as the Tobi window and
 // the pill see them (src-tauri/src/flow, speech, notes).
 
 import { invoke } from "@tauri-apps/api/core";
@@ -10,13 +10,13 @@ async function call<T>(cmd: string, args?: Record<string, unknown>): Promise<T |
   try {
     return await invoke<T>(cmd, args);
   } catch (err) {
-    console.error(`[coucou] ${cmd} failed`, err);
+    console.error(`[tobi] ${cmd} failed`, err);
     return null;
   }
 }
 
 async function callOrThrow<T>(cmd: string, args?: Record<string, unknown>): Promise<T> {
-  if (!IS_TAURI) throw new Error("not running inside Coucou");
+  if (!IS_TAURI) throw new Error("not running inside Tobi");
   return invoke<T>(cmd, args);
 }
 
@@ -34,7 +34,7 @@ export interface FlowPrefs {
   defaultStyle: Style;
   summaryEngine: "claude" | "off";
   openAtLaunch: boolean;
-  /** « OK Coucou »: listen for it and answer with Claude. */
+  /** « OK Tobi »: listen for it and answer with Claude. */
   voice: boolean;
   voiceOutput: VoiceOutput;
   voiceGender: "female" | "male";
@@ -170,7 +170,7 @@ export interface PillState {
   noteStartedAt: number | null;
   announcement: Announcement | null;
   enabled: boolean;
-  /** « OK Coucou » is talking with you. */
+  /** « OK Tobi » is talking with you. */
   voice: VoiceView | null;
 }
 
@@ -184,7 +184,7 @@ export type VoiceOutput = "system" | "elevenlabs" | "off";
 
 export const FlowBridge = {
   status: () => call<FlowStatus>("flow_status"),
-  /** The Coucou window is on screen (shown, not minimised); `hub-visible` tells when it changes. */
+  /** The Tobi window is on screen (shown, not minimised); `hub-visible` tells when it changes. */
   hubShown: () => call<boolean>("hub_shown"),
   setPrefs: (prefs: FlowPrefs) => call<void>("flow_set_prefs", { prefs }),
   history: () => call<FlowEntry[]>("flow_history"),
@@ -219,7 +219,7 @@ export const FlowBridge = {
   pillHot: (rects: [number, number, number, number][]) => call<void>("pill_hot", { rects }),
   pillHover: (inside: boolean) => call<void>("pill_hover", { inside }),
   pillAction: (action: string, id?: number) => call<void>("pill_action", { action, id: id ?? null }),
-  /** The pill has said what « OK Coucou » answered. */
+  /** The pill has said what « OK Tobi » answered. */
   voiceDone: (id: number) => call<void>("voice_done", { id, text: null }),
   /** speech-dispatcher or espeak-ng, where the webview has no voice. */
   sayNative: (text: string, lang: string | null) => call<boolean>("voice_say_native", { text, lang }),

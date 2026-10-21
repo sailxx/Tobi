@@ -189,11 +189,11 @@ test("a session carries its last steps, its final line, its folder name and its 
   State.appendStep(CLAUDE, makeDiffStep("src/app.ts", 3, 1, 7));
   const task = State.tasks.find((t) => t.id === CLAUDE);
   task.finalLine = "All done";
-  task.sessionCwd = "/home/me/private/coucou";
+  task.sessionCwd = "/home/me/private/tobi";
   const claude = linkSnapshot().sessions.find((s) => s.pillId === CLAUDE);
   assert.deepEqual(claude.steps.slice(-2), ["Reading the project", "src/app.ts"], "a diff step is its file name");
   assert.equal(claude.finalLine, "All done");
-  assert.equal(claude.project, "coucou", "the folder's name, not the path");
+  assert.equal(claude.project, "tobi", "the folder's name, not the path");
   assert.equal(claude.color, task.color);
   assert.ok(!JSON.stringify(claude).includes("private"));
 });
@@ -283,7 +283,7 @@ test("the outfit is published when the link comes up and whenever the wardrobe c
   assert.equal(p().length, 1);
   assert.equal(p()[0].outfit, "auto", "the default of the wardrobe");
 
-  State.settings.mochiOutfit = "beanie";
+  State.settings.tobiOutfit = "beanie";
   State.notify();
   tick(250);
   assert.equal(p().length, 2);
@@ -293,7 +293,7 @@ test("the outfit is published when the link comes up and whenever the wardrobe c
   tick(250);
   assert.equal(p().length, 2, "unchanged: not sent again");
 
-  State.settings.mochiOutfit = "topHat"; // a value no build knows: the wardrobe reads it as auto
+  State.settings.tobiOutfit = "topHat"; // a value no build knows: the wardrobe reads it as auto
   State.notify();
   tick(250);
   assert.equal(p().at(-1).outfit, "auto");

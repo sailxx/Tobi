@@ -15,7 +15,7 @@ import {
   SPOTIFY_GREEN, SPOTIFY_ID, Spotify, currentArtwork, formatTime, isAd, spotifyPosition, volumeLevel, withPlaying,
   type SpotifyTrack,
 } from "../core/spotify";
-import { createMiniBot } from "../mochi/minibots";
+import { createMiniBot } from "../tobi/minibots";
 import { pillDefinition } from "../core/pills";
 import { N_, t } from "../i18n/i18n";
 
@@ -109,7 +109,7 @@ function pillButton(color: string, icon: string, onClick: () => void): HTMLEleme
 }
 
 /**
- * SpotifyPill: the agent pill's look, with a mini Mochi that dances while
+ * SpotifyPill: the agent pill's look, with a mini Tobi that dances while
  * Spotify plays, and play/pause + next on hover when a track is loaded.
  */
 export function buildSpotifyPill(task: AgentTask, onTap: () => void): SpotifyPillHost {

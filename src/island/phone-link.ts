@@ -10,7 +10,7 @@ import { Bridge, onEvent, type PhoneLinkPlan, type PhoneLinkUsage, type PhoneLin
 import { fileName, parseDiffStep, type FileDiff } from "../core/diff";
 import type { PlanUsage, CodexPlanUsage } from "../core/plan";
 import { State } from "../core/state";
-import { parseOutfit } from "../mochi/wardrobe";
+import { parseOutfit } from "../tobi/wardrobe";
 import { dropPendingCard } from "./hooks";
 import { serviceCards } from "./phone-services";
 import type { Island } from "./island";
@@ -168,7 +168,7 @@ export function registerPhoneLink(island: Island): () => void {
   };
 
   const publishOutfit = () => {
-    const outfit = parseOutfit(State.settings.mochiOutfit);
+    const outfit = parseOutfit(State.settings.tobiOutfit);
     if (outfit === lastOutfit) return;
     lastOutfit = outfit;
     void Bridge.phoneLinkPublishPrefs(outfit);

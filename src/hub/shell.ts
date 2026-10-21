@@ -1,4 +1,4 @@
-// The Coucou window: a sidebar with Flow (dictation, the Notetaker, the
+// The Tobi window: a sidebar with Flow (dictation, the Notetaker, the
 // statistics, the dictionary, the snippets, the styles and their settings)
 // and Notch (every setting of the island), and the page on the right, under
 // its coloured band. Port of FlowHub.swift.
@@ -8,7 +8,7 @@ import { h, clear } from "../views/dom";
 import { t } from "../i18n/i18n";
 import { onEvent } from "../core/bridge";
 import { FlowBridge, type FlowPrefs, type FlowStatus, type ModelsStatus } from "../core/flow";
-import { hero, liveMochi, setWindowShown } from "./hero";
+import { hero, liveTobi, setWindowShown } from "./hero";
 import { icon, keyLabel } from "./ui";
 
 export type PageId =
@@ -34,11 +34,11 @@ export const FLOW_PAGES: PageDef[] = [
 ];
 
 export const NOTCH_PAGES: PageDef[] = [
-  { id: "general", icon: "gear", title: () => t("General"), subtitle: () => t("Mochi, his sounds and how the island behaves.") },
+  { id: "general", icon: "gear", title: () => t("General"), subtitle: () => t("Tobi, his sounds and how the island behaves.") },
   { id: "pills", icon: "grid", title: () => t("Active pills"), subtitle: () => t("The pills shown in the island, their order and their colours.") },
-  { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Mochi follows.") },
+  { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows.") },
   { id: "chat", icon: "chat", title: () => t("Chat"), subtitle: () => t("The AI of the island's chat, with your own keys.") },
-  { id: "voice", icon: "wave", title: () => "OK Coucou" },
+  { id: "voice", icon: "wave", title: () => "OK Tobi" },
   { id: "integrations", icon: "puzzle", title: () => t("Integrations"), subtitle: () => t("Stripe, GitHub, Vercel, n8n, Notion and the rest.") },
   { id: "phone", icon: "phone", title: () => t("Android phone"), subtitle: () => t("Your agents and their approvals on your Android phone, over your Wi-Fi.") },
   { id: "shortcuts", icon: "keyboard", title: () => t("Shortcuts"), subtitle: () => t("The keys that open the island and its actions.") },
@@ -54,7 +54,7 @@ export interface HubContext {
   refresh(): Promise<FlowStatus>;
   /** Saves new preferences and keeps them as the window's. */
   setPrefs(change: (p: FlowPrefs) => void): Promise<void>;
-  /** The band of a page, its Mochis walking. */
+  /** The band of a page, its Tobis walking. */
   hero(page: PageId, title: string, subtitle: string | null, actions?: HTMLElement[], compact?: boolean): HTMLElement;
   /** Set by a page: called when the page is left. */
   onLeave?: () => void;
@@ -162,8 +162,8 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   // ── The sidebar ──
   const side = h("nav", { class: "hub-side" });
   const logo = h("canvas", {});
-  side.append(h("div", { class: "hub-brand" }, logo, h("span", { text: "Coucou" })));
-  liveMochi(logo as HTMLCanvasElement);
+  side.append(h("div", { class: "hub-brand" }, logo, h("span", { text: "Tobi" })));
+  liveTobi(logo as HTMLCanvasElement);
   const group = (title: string, pages: PageDef[]) => {
     side.append(h("div", { class: "hub-group", text: title }));
     for (const p of pages) {
@@ -175,7 +175,7 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   };
   group("Flow", FLOW_PAGES);
   group(t("Notch"), NOTCH_PAGES);
-  side.append(h("div", { class: "spacer" }), statusLine, h("div", { class: "hub-version", text: `Coucou ${opts.version}` }));
+  side.append(h("div", { class: "spacer" }), statusLine, h("div", { class: "hub-version", text: `Tobi ${opts.version}` }));
 
   clear(root);
   root.append(side, h("main", { class: "hub-panel" }, scroll));

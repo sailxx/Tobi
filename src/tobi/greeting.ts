@@ -1,5 +1,5 @@
-// The launch "coucou" (greeting v2) — port of GreetingCanvasView.swift.
-// Mochi drops into the island, bounces, slides to the side and waves hello with
+// The launch "tobi" (greeting v2) — port of GreetingCanvasView.swift.
+// Tobi drops into the island, bounces, slides to the side and waves hello with
 // a quick little hand, then comes back and settles in the compact island.
 // Everything is laid out in the same 640×150 reference space as on macOS.
 
@@ -220,13 +220,13 @@ function smallPose(): Pose {
   };
 }
 
-/** Mochi's pose `t` seconds in; `tc` is when the collapse began (∞ if not yet). */
+/** Tobi's pose `t` seconds in; `tc` is when the collapse began (∞ if not yet). */
 export function greetingPose(t: number, tc = Number.POSITIVE_INFINITY): Pose {
   if (t < tc) return greetPose(Math.min(t, T.end + 10));
   const a = greetPose(tc);
   const b = smallPose();
   // Same curve and duration (340 ms) as the island shrinking around him: with
-  // the Mac's inOut ease the island got ahead of Mochi and cut his body off
+  // the Mac's inOut ease the island got ahead of Tobi and cut his body off
   // when the greeting was left early.
   const k = seg(t, tc, tc + T.COLLAPSE);
   const e = k >= 1 ? 1 : closeCurve(k);
@@ -290,10 +290,10 @@ function handRPos(hw: number, hh: number, p: Pose) {
 }
 
 /**
- * Bounding box of Mochi's body and hands in the 640×150 space — what must stay
+ * Bounding box of Tobi's body and hands in the 640×150 space — what must stay
  * inside the island so nothing of him is cut off.
  */
-export function mochiBounds(p: Pose): { left: number; right: number; top: number; bottom: number } | null {
+export function tobiBounds(p: Pose): { left: number; right: number; top: number; bottom: number } | null {
   const hh = p.hb / 2;
   const hw = hh * ASP;
   if (hh <= 0.4) return null;
@@ -365,7 +365,7 @@ function rr(x: CanvasRenderingContext2D, X: number, Y: number, W: number, H: num
   x.closePath();
 }
 
-function mochiPath(hw: number, hh: number): Path2D {
+function tobiPath(hw: number, hh: number): Path2D {
   const n = 3.2;
   const p = new Path2D();
   const steps = 96;
@@ -426,7 +426,7 @@ function drawHandR(x: CanvasRenderingContext2D, hw: number, hh: number, p: Pose)
   x.restore();
 }
 
-function drawMochi(x: CanvasRenderingContext2D, p: Pose) {
+function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
   const hh = p.hb / 2;
   const hw = hh * ASP;
   if (hh <= 0.4) return;
@@ -456,7 +456,7 @@ function drawMochi(x: CanvasRenderingContext2D, p: Pose) {
   drawHandL(x, hw, hh, p);
   drawHandR(x, hw, hh, p);
 
-  const body = mochiPath(hw, hh);
+  const body = tobiPath(hw, hh);
   whiteFill(x, body, hw * 0.6, -hh, -hw * 0.6, hh);
 
   if (p.tint > 0) {
@@ -530,7 +530,7 @@ function drawMochi(x: CanvasRenderingContext2D, p: Pose) {
 function drawParticles(x: CanvasRenderingContext2D, t: number, p: Pose) {
   if (!(p.card > 0 || p.fx < 1)) return;
 
-  // Warp streaks: white vertical lines while Mochi falls in
+  // Warp streaks: white vertical lines while Tobi falls in
   if (t < 0.55) {
     const fadeOut = 1 - seg(t, 0.4, 0.55);
     x.lineCap = "butt";
@@ -577,7 +577,7 @@ function drawMinis(x: CanvasRenderingContext2D, alpha: number) {
     const scale = alpha * COMPACT.miniGridScale;
     x.scale(scale, scale);
     x.fillStyle = MINI_COLORS[i];
-    x.fill(mochiPath(5.3, 4));
+    x.fill(tobiPath(5.3, 4));
     x.restore();
   });
 }
@@ -671,6 +671,6 @@ export class Greeting {
     }
 
     drawMinis(x, p.minis);
-    drawMochi(x, p);
+    drawTobi(x, p);
   }
 }

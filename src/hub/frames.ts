@@ -1,4 +1,4 @@
-// When the Coucou window's canvases are drawn (hub/hero.ts), kept apart from
+// When the Tobi window's canvases are drawn (hub/hero.ts), kept apart from
 // the DOM so it can be tested. The rule is the island's: nothing on screen,
 // nothing drawn, and no frame asked for.
 

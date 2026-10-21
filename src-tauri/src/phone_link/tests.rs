@@ -150,7 +150,7 @@ impl Client {
         socket.bind(format!("{source}:0").parse().unwrap()).map_err(|e| e.to_string())?;
         let tcp = socket.connect(std::net::SocketAddr::from(([127, 0, 0, 1], port))).await.map_err(|e| e.to_string())?;
         let tls = TlsConnector::from(Arc::new(config))
-            .connect(ServerName::try_from("coucou").unwrap(), tcp)
+            .connect(ServerName::try_from("tobi").unwrap(), tcp)
             .await
             .map_err(|e| e.to_string())?;
         let (r, w) = tokio::io::split(tls);
@@ -1046,7 +1046,7 @@ mod details_tests {
             step_count: 3,
             steps: vec!["Read · a.rs".into(), "Edit · a.rs".into()],
             final_line: Some("Fixed the bug".into()),
-            project: Some("/home/me/secret-folder/coucou".into()),
+            project: Some("/home/me/secret-folder/tobi".into()),
             color: Some("#2DD4BF".into()),
             ..Default::default()
         }
@@ -1079,7 +1079,7 @@ mod details_tests {
             let s = &sessions["sessions"][0];
             assert_eq!(s["steps"], json!(["Read · a.rs", "Edit · a.rs"]));
             assert_eq!(s["finalLine"], "Fixed the bug");
-            assert_eq!(s["project"], "coucou", "the folder name, never the path");
+            assert_eq!(s["project"], "tobi", "the folder name, never the path");
             assert_eq!(s["color"], "#2DD4BF");
             assert!(!sessions.to_string().contains("secret-folder"));
         });
@@ -1095,7 +1095,7 @@ mod details_tests {
             let mut keys: Vec<&str> = s.keys().map(String::as_str).collect();
             keys.sort_unstable();
             assert_eq!(keys, ["agent", "pillId", "state", "statusText", "stepCount", "stepIndex", "updatedAt"]);
-            assert!(!sessions.to_string().contains("coucou") && !sessions.to_string().contains("Fixed the bug"));
+            assert!(!sessions.to_string().contains("tobi") && !sessions.to_string().contains("Fixed the bug"));
         });
     }
 
@@ -1787,10 +1787,10 @@ fn only_the_right_window_may_call_a_command_that_changes_something() {
     use super::{caller_allowed, Caller};
     assert!(caller_allowed("settings", Caller::Settings));
     assert!(caller_allowed("island", Caller::Island));
-    for other in ["island", "mochi", "", "Settings", "settings ", "main", "settings2"] {
+    for other in ["island", "tobi", "", "Settings", "settings ", "main", "settings2"] {
         assert!(!caller_allowed(other, Caller::Settings), "{other:?} must not act as the settings window");
     }
-    for other in ["settings", "mochi", "", "Island", "island ", "main"] {
+    for other in ["settings", "tobi", "", "Island", "island ", "main"] {
         assert!(!caller_allowed(other, Caller::Island), "{other:?} must not act as the island");
     }
 }

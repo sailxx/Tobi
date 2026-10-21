@@ -101,14 +101,14 @@ body {
   flex-direction: column;
 }
 
-.mochi {
+.tobi {
   width: 22px;
   height: 22px;
   flex: 0 0 22px;
   position: relative;
 }
 
-.mochi canvas {
+.tobi canvas {
   position: absolute;
   left: -7.33px;
   top: -7.33px;

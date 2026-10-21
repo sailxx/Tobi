@@ -52,7 +52,7 @@ const OUT = {
   ...NO_UPDATE,
   consent: true,
   current: "0.5.0",
-  latest: { version: "0.6.0", headline: "Flow dictation", pageUrl: "https://github.com/Louis-CFM/coucou/releases/tag/windows-v0.6.0" },
+  latest: { version: "0.6.0", headline: "Flow dictation", pageUrl: "https://github.com/sailxx/Tobi/releases/tag/windows-v0.6.0" },
   canInstall: true,
 };
 let shown;
@@ -105,7 +105,7 @@ test("nothing opens over a waiting permission, and nothing is marked shown", () 
   assert.deepEqual(sent("update_shown"), []);
 });
 
-test("an announcement opens the card with Mochi surprised; Later snoozes it", () => {
+test("an announcement opens the card with Tobi surprised; Later snoozes it", () => {
   emit("update-status", OUT);
   assert.equal(Updates.status.latest.version, "0.6.0");
   emit("update-offer", "announce");
@@ -127,7 +127,7 @@ test("an announcement with no version known yet, or while the chat is open, wait
   assert.deepEqual(shown, []);
 });
 
-test("the tray's Update Coucou to X… opens the card without marking anything", () => {
+test("the tray's Update Tobi to X… opens the card without marking anything", () => {
   emit("update-status", OUT);
   State.mode = "expanded";
   State.view = "prompt";

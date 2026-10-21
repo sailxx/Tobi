@@ -16,7 +16,7 @@ installFakeDom();
 // ── The catalog itself ────────────────────────────────────────────────────────
 
 test("the catalog holds the Mac's pills with the Claude Code label for Windows and Linux", () => {
-  // Copied from NotchBuddy/Sources/CoucouKit/PillCatalog.swift: an ID is a
+  // Copied from NotchBuddy/Sources/TobiKit/PillCatalog.swift: an ID is a
   // contract value, and a colour or subtitle that drifts is a visible bug.
   // Windows and Linux name the Claude Code integration after the agent.
   const mac = [

@@ -146,7 +146,7 @@ pub fn listen(key: FlowKey, tx: Sender<(KeyEvent, Instant)>) -> Result<KeyListen
     *SINK.lock().unwrap() = Some(tx);
     let (ready_tx, ready_rx) = std::sync::mpsc::channel::<Result<u32, String>>();
     let thread = std::thread::Builder::new()
-        .name("coucou-flow-keys".into())
+        .name("tobi-flow-keys".into())
         .spawn(move || unsafe {
             let module = GetModuleHandleW(None).ok();
             let handle = match SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook), module.map(Into::into), 0) {
@@ -248,7 +248,7 @@ fn program_of(hwnd: HWND) -> Option<(String, String)> {
     }
 }
 
-/// The app in front: (id, name), None for Coucou itself or the desktop.
+/// The app in front: (id, name), None for Tobi itself or the desktop.
 pub fn foreground_app() -> Option<(String, String)> {
     let hwnd = unsafe { GetForegroundWindow() };
     if hwnd.0.is_null() {

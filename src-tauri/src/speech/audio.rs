@@ -264,7 +264,7 @@ impl Capture {
         let (ready_tx, ready_rx) = mpsc::channel::<Result<(), String>>();
         let (stop_tx, stop_rx) = mpsc::channel::<()>();
         let thread = std::thread::Builder::new()
-            .name("coucou-audio".into())
+            .name("tobi-audio".into())
             .spawn(move || {
                 let stream = match build_stream(&source, sink) {
                     Ok(s) => s,
@@ -541,7 +541,7 @@ mod tests {
 
     #[test]
     fn a_wav_reads_back_what_was_written() {
-        let path = std::env::temp_dir().join(format!("coucou-wav-{}.wav", std::process::id()));
+        let path = std::env::temp_dir().join(format!("tobi-wav-{}.wav", std::process::id()));
         let _cleanup = TempFile(path.clone());
         let mut w = WavWriter::create(&path).unwrap();
         w.write(&[0.0, 0.5, -0.5, 1.0]).unwrap();

@@ -718,7 +718,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "coucou"
+name = "tobi"
 version = "0.5.1"
 dependencies = [
  "arboard",
@@ -753,7 +753,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "coucou-hook"
+name = "tobi-hook"
 version = "0.5.1"
 dependencies = [
  "libc",

@@ -2,10 +2,10 @@
 // sherpa-onnx, and the small models that tell the voices of a call apart. The
 // Mac runs the same Parakeet through FluidAudio (ParakeetEngine.swift).
 //
-// Nothing is downloaded until the user clicks Download in Coucou → Settings.
+// Nothing is downloaded until the user clicks Download in Tobi → Settings.
 // The files come from Hugging Face at a pinned revision, are checked against
-// their SHA-256 and kept in %LOCALAPPDATA%\Coucou\Models (Windows) or
-// ~/.local/share/coucou/Models (Linux). From then on everything runs offline.
+// their SHA-256 and kept in %LOCALAPPDATA%\Tobi\Models (Windows) or
+// ~/.local/share/tobi/Models (Linux). From then on everything runs offline.
 
 pub mod audio;
 
@@ -206,7 +206,7 @@ async fn download_all(app: &AppHandle) -> Result<(), String> {
     let client = reqwest::Client::builder()
         .connect_timeout(Duration::from_secs(20))
         .read_timeout(Duration::from_secs(60))
-        .user_agent(concat!("Coucou/", env!("CARGO_PKG_VERSION")))
+        .user_agent(concat!("Tobi/", env!("CARGO_PKG_VERSION")))
         .build()
         .map_err(|e| e.to_string())?;
     let mut last_emit = Instant::now();
@@ -456,13 +456,13 @@ mod tests {
     }
 }
 
-/// With the models downloaded: `COUCOU_TEST_WAV=… cargo test -- --ignored speech`.
+/// With the models downloaded: `TOBI_TEST_WAV=… cargo test -- --ignored speech`.
 #[cfg(test)]
 mod with_models {
     #[test]
     #[ignore]
     fn transcribes_a_recording() {
-        let path = std::env::var("COUCOU_TEST_WAV").expect("COUCOU_TEST_WAV");
+        let path = std::env::var("TOBI_TEST_WAV").expect("TOBI_TEST_WAV");
         let bytes = std::fs::read(&path).unwrap();
         let rate = u32::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]]);
         let pcm: Vec<f32> = bytes[44..].chunks_exact(2).map(|b| i16::from_le_bytes([b[0], b[1]]) as f32 / 32768.0).collect();

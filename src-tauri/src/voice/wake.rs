@@ -1,4 +1,4 @@
-// « OK Coucou »: hearing the wake phrase in what Parakeet wrote, and telling
+// « OK Tobi »: hearing the wake phrase in what Parakeet wrote, and telling
 // speech from silence on the microphone. Nothing here touches the OS.
 
 /// Lower case, accents gone, everything but letters and digits a space.
@@ -27,16 +27,16 @@ fn is_ok(word: &str) -> bool {
     matches!(word, "ok" | "okay" | "oke" | "okey" | "hey")
 }
 
-/// How Parakeet may write "coucou", in one word.
-fn is_coucou(word: &str) -> bool {
+/// How Parakeet may write "tobi", in one word.
+fn is_tobi(word: &str) -> bool {
     matches!(
         word,
-        "coucou" | "coucous" | "cuckoo" | "cucu" | "kuku" | "koukou" | "cookoo" | "coocoo" | "cocou" | "kukuu" | "couscous"
+        "tobi" | "tobis" | "cuckoo" | "cucu" | "kuku" | "koukou" | "cookoo" | "coocoo" | "cocou" | "kukuu" | "couscous"
     )
 }
 
 /// …or in two.
-fn is_coucou_pair(a: &str, b: &str) -> bool {
+fn is_tobi_pair(a: &str, b: &str) -> bool {
     matches!((a, b), ("cou", "cou") | ("coo", "coo") | ("ku", "ku") | ("cu", "cu") | ("koo", "koo") | ("cuck", "oo"))
 }
 
@@ -55,22 +55,22 @@ pub fn after_wake(text: &str) -> Option<String> {
             ok_end = Some(if norm[i] == "o" { i + 2 } else { i + 1 });
         }
         if let Some(j) = ok_end {
-            // A word made of two ("ok coucou" written as one token is rare but happens).
+            // A word made of two ("ok tobi" written as one token is rare but happens).
             if let Some(w) = norm.get(j) {
                 let parts: Vec<&str> = w.split(' ').collect();
-                if parts.len() == 1 && is_coucou(parts[0]) {
+                if parts.len() == 1 && is_tobi(parts[0]) {
                     return Some(words[j + 1..].join(" ").trim_start_matches([',', '.', '!', ' ']).trim().to_string());
                 }
                 if let Some(next) = norm.get(j + 1) {
-                    if is_coucou_pair(w, next) {
+                    if is_tobi_pair(w, next) {
                         return Some(words[j + 2..].join(" ").trim_start_matches([',', '.', '!', ' ']).trim().to_string());
                     }
                 }
             }
         }
-        // "okcoucou" in one piece.
+        // "oktobi" in one piece.
         if let Some(rest) = norm[i].strip_prefix("okay").or_else(|| norm[i].strip_prefix("ok")) {
-            if is_coucou(rest.trim()) {
+            if is_tobi(rest.trim()) {
                 return Some(words[i + 1..].join(" ").trim().to_string());
             }
         }
@@ -169,7 +169,7 @@ impl Vad {
         done
     }
 
-    /// Forgets what is being heard (Coucou speaks, or dictation starts).
+    /// Forgets what is being heard (Tobi speaks, or dictation starts).
     pub fn reset(&mut self) {
         self.in_speech = false;
         self.speech_frames = 0;
@@ -195,13 +195,13 @@ mod tests {
 
     #[test]
     fn the_wake_phrase_however_parakeet_writes_it() {
-        assert_eq!(after_wake("OK Coucou, play some music.").as_deref(), Some("play some music."));
-        assert_eq!(after_wake("Okay, coucou! Quelle heure est-il ?").as_deref(), Some("Quelle heure est-il ?"));
+        assert_eq!(after_wake("OK Tobi, play some music.").as_deref(), Some("play some music."));
+        assert_eq!(after_wake("Okay, tobi! Quelle heure est-il ?").as_deref(), Some("Quelle heure est-il ?"));
         assert_eq!(after_wake("O.K. Cuckoo what's the weather").as_deref(), Some("what's the weather"));
         assert_eq!(after_wake("ok cou cou ajoute Stripe").as_deref(), Some("ajoute Stripe"));
-        assert_eq!(after_wake("OK Coucou.").as_deref(), Some(""));
-        assert_eq!(after_wake("Hey coucou, ça va ?").as_deref(), Some("ça va ?"));
-        assert_eq!(after_wake("on a dit coucou à Paul"), None);
+        assert_eq!(after_wake("OK Tobi.").as_deref(), Some(""));
+        assert_eq!(after_wake("Hey tobi, ça va ?").as_deref(), Some("ça va ?"));
+        assert_eq!(after_wake("on a dit tobi à Paul"), None);
         assert_eq!(after_wake("ok let's go"), None);
         assert_eq!(normalize("Ça VA, Élodie ?"), "ca va elodie");
     }

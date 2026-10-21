@@ -1,6 +1,6 @@
-/* The Coucou window: an OLED-black sidebar, a dark panel holding the pages,
-   and on top of each page a coloured band where little Mochis walk. Same
-   look as the Mac's Coucou window (FlowHub.swift). */
+/* The Tobi window: an OLED-black sidebar, a dark panel holding the pages,
+   and on top of each page a coloured band where little Tobis walk. Same
+   look as the Mac's Tobi window (FlowHub.swift). */
 
 :root {
   --hub-panel: #0e0f11;
