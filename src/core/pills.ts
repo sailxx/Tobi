@@ -172,9 +172,12 @@ export function isHookPill(id: string): boolean {
   return pillDefinition(id)?.connect.kind === "hooks";
 }
 
-/** Workspace tools that can be the main pill. */
+/** The Claude desktop app may be the main pill too: then Claude Code's own pill only shows during a terminal session. */
+const CLAUDE_DESKTOP_ID = "agent_claude-desktop";
+
+/** Workspace tools, and the Claude desktop app, that can be the main pill. */
 export function mainPillChoices(os: HostOs = HOST_OS): PillDefinition[] {
-  return availablePills(os).filter((p) => p.category === "workspace" && p.support !== "soon");
+  return availablePills(os).filter((p) => (p.category === "workspace" || p.id === CLAUDE_DESKTOP_ID) && p.support !== "soon");
 }
 
 /** PillDefinition.sessionSubtitle — next to the name in a live session's card. */

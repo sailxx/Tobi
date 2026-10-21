@@ -151,6 +151,9 @@ test("the main pill is a workspace tool that works here", () => {
   assert.deepEqual(mainPillChoices("linux").map((p) => p.id), [
     "integration_claude", "agent_cursor", "agent_antigravity", "agent_codex",
   ]);
+  assert.deepEqual(mainPillChoices("windows").map((p) => p.id), [
+    "integration_claude", "agent_cursor", "agent_antigravity", "agent_codex", "agent_claude-desktop",
+  ]);
   assert.equal(DEFAULT_MAIN_PILL, "integration_claude");
 });
 
@@ -187,8 +190,9 @@ test("a declaration from an older or edited settings file is made usable", () =>
     sanitizeDeclared({ activeIntegrations: ["integration_github"] }, "windows"),
     { mainPill: "integration_claude", activeIntegrations: ["integration_github"] },
   );
+  // Tobi: the Claude desktop app may be the main pill on Windows.
   assert.equal(sanitizeDeclared({ mainPill: "agent_claude-desktop", activeIntegrations: [] }, "windows").mainPill,
-    "integration_claude");
+    "agent_claude-desktop");
 });
 
 test("up to four pills next to the main one, never the main one itself", () => {
@@ -207,6 +211,13 @@ test("up to four pills next to the main one, never the main one itself", () => {
   // Every chat provider can be declared now that the chat talks to it.
   assert.ok(toggleDeclared(d, "ai_google", "linux").includes("ai_google"));
   assert.ok(toggleDeclared(d, "ai_ollama", "linux").includes("ai_ollama"));
+});
+
+test("Claude Desktop as the main pill keeps Claude Code's pill only for a session", () => {
+  const d = sanitizeDeclared({ mainPill: "agent_claude-desktop", activeIntegrations: ["integration_claude", "integration_github"] }, "windows");
+  assert.equal(d.mainPill, "agent_claude-desktop");
+  // Not on Linux, where the app does not exist: back to the default.
+  assert.equal(sanitizeDeclared({ mainPill: "agent_claude-desktop", activeIntegrations: [] }, "linux").mainPill, "integration_claude");
 });
 
 test("picking a main pill takes it out of the declared ones, and only workspace tools qualify", () => {
