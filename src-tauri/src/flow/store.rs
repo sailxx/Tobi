@@ -90,6 +90,9 @@ pub struct Prefs {
     pub enabled: bool,
     pub key: FlowKey,
     pub edge: Edge,
+    /// The pill exists at all. Off in Tobi: nothing on the screen's edges,
+    /// dictation still works with its key.
+    pub show_pill: bool,
     /// The pill stays on its edge while dictation waits. Off in Tobi: it only
     /// shows while you dictate, record a call or get a message.
     pub pill_at_rest: bool,
@@ -118,6 +121,7 @@ impl Default for Prefs {
             enabled: false,
             key: FlowKey::default(),
             edge: Edge::Bottom,
+            show_pill: false,
             pill_at_rest: false,
             mic: String::new(),
             keep_days: 30,

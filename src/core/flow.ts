@@ -28,6 +28,8 @@ export interface FlowPrefs {
   enabled: boolean;
   key: FlowKey;
   edge: Edge;
+  /** The pill exists at all (off: never on screen). */
+  showPill: boolean;
   /** The pill stays on its edge while dictation waits. */
   pillAtRest: boolean;
   mic: string;
@@ -174,6 +176,8 @@ export interface PillState {
   enabled: boolean;
   /** The pill shows while dictation waits. */
   atRest: boolean;
+  /** The pill may show at all. */
+  allowed: boolean;
   /** « OK Tobi » is talking with you. */
   voice: VoiceView | null;
 }

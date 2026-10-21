@@ -5233,6 +5233,32 @@
    "id": "Teks",
    "de": "Text",
    "tr": "Metin"
+  },
+  "Show the pill": {
+   "zh-Hans": "显示胶囊",
+   "hi": "पिल दिखाएँ",
+   "es": "Mostrar la píldora",
+   "ar": "إظهار الكبسولة",
+   "fr": "Afficher la pilule",
+   "bn": "পিল দেখান",
+   "pt-BR": "Mostrar a pílula",
+   "ru": "Показывать пилюлю",
+   "id": "Tampilkan pil",
+   "de": "Pille anzeigen",
+   "tr": "Hapı göster"
+  },
+  "Off: nothing on the screen's edges; the dictation key still works.": {
+   "zh-Hans": "关闭：屏幕边缘不显示任何内容；听写键仍可使用。",
+   "hi": "बंद: स्क्रीन के किनारों पर कुछ नहीं; डिक्टेशन कुंजी फिर भी काम करती है।",
+   "es": "Desactivado: nada en los bordes de la pantalla; la tecla de dictado sigue funcionando.",
+   "ar": "عند الإيقاف: لا شيء على حواف الشاشة؛ ويبقى مفتاح الإملاء يعمل.",
+   "fr": "Désactivé : rien sur les bords de l'écran ; la touche de dictée fonctionne toujours.",
+   "bn": "বন্ধ: স্ক্রিনের কিনারায় কিছু থাকে না; ডিক্টেশন কী তবুও কাজ করে।",
+   "pt-BR": "Desligado: nada nas bordas da tela; a tecla de ditado continua funcionando.",
+   "ru": "Если выключено, по краям экрана ничего нет; клавиша диктовки всё равно работает.",
+   "id": "Mati: tidak ada apa pun di tepi layar; tombol dikte tetap berfungsi.",
+   "de": "Aus: nichts an den Bildschirmrändern; die Diktiertaste funktioniert weiter.",
+   "tr": "Kapalı: ekran kenarlarında hiçbir şey olmaz; dikte tuşu yine çalışır."
   }
  }
 }

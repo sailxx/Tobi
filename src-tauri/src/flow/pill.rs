@@ -41,6 +41,8 @@ pub struct PillState {
     pub enabled: bool,
     /// The pill shows while dictation is on and waiting (Prefs::pill_at_rest).
     pub at_rest: bool,
+    /// The pill may show at all (Prefs::show_pill).
+    pub allowed: bool,
     /// « OK Tobi » is talking with you.
     pub voice: Option<crate::voice::VoiceView>,
 }
@@ -184,7 +186,7 @@ pub fn update(app: &AppHandle, change: impl FnOnce(&mut PillState)) {
         (s.clone(), s.edge != edge_before)
     };
     let _ = app.emit_to(LABEL, "pill-state", &state);
-    let visible = (state.enabled && state.at_rest) || state.note_started_at.is_some() || state.announcement.is_some() || state.voice.is_some() || state.phase != "idle";
+    let visible = state.allowed && ((state.enabled && state.at_rest) || state.note_started_at.is_some() || state.announcement.is_some() || state.voice.is_some() || state.phase != "idle");
     let was = pill.shown.swap(visible, Ordering::Relaxed);
     if visible && (!was || edge_changed) {
         place(app, &pill, &state.edge, state.phase == "listening");
