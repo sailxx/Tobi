@@ -47,6 +47,10 @@ const DROPPED_FIELDS: &[&str] = &["tool_response", "tool_output", "transcript_pa
 const MAX_FIELD_LEN: usize = 2_000;
 
 mod statusline;
+mod turn;
+
+/// Events after which Claude may have written something new this turn.
+const TURN_TEXT_EVENTS: &[&str] = &["PreToolUse", "PostToolUse", "PermissionRequest", "Notification", "Stop"];
 
 /// The live diff needs the whole text of a file edit, once it has happened:
 /// PostToolUse of these tools keeps its edit strings far longer than the rest.
@@ -177,6 +181,14 @@ fn prepare(raw: &[u8], args: &Args, env: &dyn Fn(&str) -> Option<String>, cwd: &
     let name = normalize::refine(normalize::event(&raw_event), map);
     map.insert("hook_event_name".into(), Value::String(name.clone()));
 
+    // Claude Code's own words, kept whole for the island's text card: the
+    // final answer, and what it wrote so far this turn (read here, so the
+    // transcript's path never leaves the relay). Other agents have neither.
+    let final_text = map.get("last_assistant_message").and_then(Value::as_str).map(str::to_string);
+    let turn_text = (args.agent.is_empty() && TURN_TEXT_EVENTS.contains(&name.as_str()))
+        .then(|| map.get("transcript_path").and_then(Value::as_str).and_then(turn::from_transcript))
+        .flatten();
+
     for field in DROPPED_FIELDS {
         map.remove(*field);
     }
@@ -196,6 +208,14 @@ fn prepare(raw: &[u8], args: &Args, env: &dyn Fn(&str) -> Option<String>, cwd: &
     // Every string is capped, except the edit text of a finished Edit /
     // MultiEdit / Write, which the live diff needs whole (within its own limits).
     truncate_payload(&mut payload, &name);
+    if let Some(map) = payload.as_object_mut() {
+        if let Some(text) = final_text {
+            map.insert("last_assistant_message".into(), Value::String(turn::keep_start(text, turn::MAX_TEXT_LEN)));
+        }
+        if let Some(text) = turn_text {
+            map.insert("tobi_turn_text".into(), Value::String(text));
+        }
+    }
 
     let mut line = payload.to_string();
     line.push('\n');

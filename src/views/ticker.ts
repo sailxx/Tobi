@@ -133,14 +133,15 @@ export class Ticker {
   /** True once Claude has finished: the final message holds still. */
   private still = false;
 
-  /** `onDiffTap` receives the diff id of a clicked diff row. */
-  constructor(onDiffTap?: (diffId: number) => void) {
+  /** `onDiffTap` receives the diff id of a clicked diff row; any other row calls `onTextTap`. */
+  constructor(onDiffTap?: (diffId: number) => void, onTextTap?: () => void) {
     this.el = h("div", { class: "ticker" }, this.a.el, this.b.el, this.c.el);
     // The completed and the current row answer a click, as on macOS; the
     // incoming row is only ever seen mid-slide.
     for (const row of [this.a, this.b]) {
       row.el.addEventListener("click", () => {
         if (row.diff && onDiffTap) onDiffTap(row.diff.diffId);
+        else if (!row.diff && onTextTap) onTextTap();
       });
     }
     this.rest();

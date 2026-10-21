@@ -161,3 +161,24 @@ for (const [what, event] of [
     assert.equal(task().finalLine, null);
   });
 }
+
+// ── Claude's whole text (Tobi) ────────────────────────────────────────────────
+
+test("the relay's turn text follows Claude while it works, and a new prompt clears it", () => {
+  hook({ hook_event_name: "UserPromptSubmit", cwd: "/p/proj", prompt: "fix it" });
+  assert.equal(task().turnText ?? null, null);
+  hook({ hook_event_name: "PreToolUse", cwd: "/p/proj", tool_name: "Read", tool_input: { file_path: "/p/a.ts" }, tobi_turn_text: "Looking at a.ts." });
+  assert.equal(task().turnText, "Looking at a.ts.");
+  hook({ hook_event_name: "PostToolUse", cwd: "/p/proj", tool_name: "Read", tobi_turn_text: "Looking at a.ts.\n\nFound it." });
+  assert.equal(task().turnText, "Looking at a.ts.\n\nFound it.");
+  hook({ hook_event_name: "UserPromptSubmit", cwd: "/p/proj", prompt: "next" });
+  assert.equal(task().turnText, null);
+});
+
+test("Stop keeps Claude's whole answer, Markdown and all, until the next turn", () => {
+  const answer = "**Done.** Fixed the `parser`.\n\n## Details\n- a\n- b";
+  hook({ hook_event_name: "Stop", last_assistant_message: answer });
+  assert.equal(task().finalText, answer);
+  hook({ hook_event_name: "UserPromptSubmit", prompt: "again" });
+  assert.equal(task().finalText, null);
+});

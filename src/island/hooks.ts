@@ -61,6 +61,8 @@ interface HookPayload {
   tool_input?: Record<string, unknown>;
   /** Set by the relay when an edit was too big to forward whole (> 256 KB). */
   tobi_diff_truncated?: boolean;
+  /** Set by the relay: what Claude has written so far this turn, whole. */
+  tobi_turn_text?: string;
   /** Optional agent tag: lowercase, digits and hyphens, ≤ 24 chars. */
   tobi_agent?: string;
   /** Hermes: where the session runs (telegram, discord…; "cli" in a terminal). */
@@ -214,12 +216,23 @@ function clearSession(id: string) {
   t.pillBadge = null;
   t.sessionId = null;
   t.finalLine = null;
+  t.finalText = null;
+  t.turnText = null;
 }
 
 /** The final message stays on the card until the next turn starts. */
 function clearFinalLine(id: string) {
   const t = State.tasks.find((x) => x.id === id);
-  if (t) t.finalLine = null;
+  if (t) {
+    t.finalLine = null;
+    t.finalText = null;
+  }
+}
+
+/** A new turn: the text view starts empty. */
+function clearTurnText(id: string) {
+  const t = State.tasks.find((x) => x.id === id);
+  if (t) t.turnText = null;
 }
 
 /**
@@ -326,6 +339,13 @@ function handleHook(island: Island, payload: HookPayload) {
   // back to the pill you were on.
   const focused = State.focusId === agentId;
 
+  // The relay read what Claude wrote this turn: the text view follows it.
+  if (payload.tobi_turn_text) {
+    ensurePill();
+    const task = State.tasks.find((x) => x.id === agentId);
+    if (task) task.turnText = payload.tobi_turn_text;
+  }
+
   switch (name) {
     case "SessionStart":
       ensurePill();
@@ -342,6 +362,7 @@ function handleHook(island: Island, payload: HookPayload) {
       ensurePill();
       supersedeStop();
       clearFinalLine(agentId);
+      clearTurnText(agentId);
       State.updateTask(agentId, "thinking");
       // The field is `prompt`; reading `message` meant this step was always blank.
       const asked = payload.prompt ?? payload.message;
@@ -416,7 +437,10 @@ function handleHook(island: Island, payload: HookPayload) {
       if (finalText) {
         State.appendStep(agentId, finalText);
         const t = State.tasks.find((x) => x.id === agentId);
-        if (t) t.finalLine = finalText;
+        if (t) {
+          t.finalLine = finalText;
+          t.finalText = (payload.last_assistant_message ?? payload.message ?? "").trim() || null;
+        }
       }
       Sound.play("finish");
       // A card waiting for an answer is never covered by another alert.

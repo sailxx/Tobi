@@ -17,6 +17,7 @@ import {
   PlanCard, buildPlanPill, claudePillVisible, codexPillVisible, planCardOpen, refreshCodexPlanUsage,
 } from "./usage";
 import { buildDiffCard } from "./diff";
+import { buildReply, hasReply } from "./reply";
 import { lastTextStep } from "../core/diff";
 import { Bridge } from "../core/bridge";
 import { buildRecap } from "./recap";
@@ -177,11 +178,16 @@ function buildOverview(actions: ViewActions): ViewHost {
     activeDiffId = null;
     State.notify();
   };
+  const openReply = () => {
+    if (!hasReply(State.focusTask)) return;
+    actions.blip();
+    actions.setView("result");
+  };
   const ticker = new Ticker((diffId) => {
     actions.blip();
     activeDiffId = diffId;
     State.notify();
-  });
+  }, openReply);
   const who = h("div", { class: "who" });
   const tickerBody = h("div", { class: "card-body" }, who, ticker.el);
   const leftBody = h("div", { class: "left-body" });
@@ -355,6 +361,11 @@ function buildOverview(actions: ViewActions): ViewHost {
             class: "count",
             text: `${Math.min(task.stepIndex + 1, task.steps.length)}/${task.steps.length}`,
           }));
+        }
+        // Claude's whole text, while it writes and once it is done.
+        if (hasReply(task)) {
+          who.append(h("button", { class: "read-btn", title: t("Read the whole text"), onclick: openReply },
+            svg(ICONS.doc, 9), h("span", { text: t("Text") })));
         }
         ticker.sync(task);
       } else if (task && task.id === SPOTIFY_ID) {
@@ -676,6 +687,12 @@ function buildError(actions: ViewActions): ViewHost {
 function buildFinished(actions: ViewActions): ViewHost {
   const who = h("div");
   const title = h("div", { class: "title one-line" });
+  // A click on the answer opens it whole.
+  title.addEventListener("click", () => {
+    if (!hasReply(State.focusTask)) return;
+    actions.blip();
+    actions.setView("result");
+  });
   const open = btn(tl("Open terminal"), "primary", () => actions.openTerminal());
   const row = h("div", { class: "actions" },
     open,
@@ -691,6 +708,7 @@ function buildFinished(actions: ViewActions): ViewHost {
       // The final message, else the last step that is not a diff (FinishedView).
       const task = State.focusTask;
       title.textContent = task?.finalLine || (task && lastTextStep(task.steps)) || t("Session finished");
+      title.classList.toggle("clickable", hasReply(task));
       // Sessions from the Claude desktop app live there, not in a terminal.
       const label = task?.id === "agent_claude-desktop" ? t("Open Claude") : t("Open terminal");
       const span = open.firstElementChild as HTMLElement;
@@ -826,6 +844,11 @@ export function buildViews(
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));
-  map.set("result", buildPlaceholder(tl("Result"), ""));
+  map.set("result", buildReply({
+    back: () => {
+      actions.blip();
+      actions.setView("overview");
+    },
+  }));
   return map;
 }

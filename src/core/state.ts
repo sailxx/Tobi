@@ -39,6 +39,10 @@ export interface AgentTask {
   sessionId?: string | null;
   /** Claude's final message after Stop, one line; cleared when a new turn starts. */
   finalLine?: string | null;
+  /** Claude's final message after Stop, whole (Markdown), for the text view. */
+  finalText?: string | null;
+  /** What Claude has written so far this turn (from the relay), for the text view. */
+  turnText?: string | null;
 }
 
 export interface ApprovalInfo {

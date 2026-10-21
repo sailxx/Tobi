@@ -1951,19 +1951,6 @@
    "de": "Starte OpenCode neu, um das Plugin zu laden.",
    "tr": "Eklentiyi yüklemek için OpenCode'u yeniden başlat."
   },
-  "Result": {
-   "zh-Hans": "结果",
-   "hi": "परिणाम",
-   "es": "Resultado",
-   "ar": "النتيجة",
-   "fr": "Résultat",
-   "bn": "ফলাফল",
-   "pt-BR": "Resultado",
-   "ru": "Результат",
-   "id": "Hasil",
-   "de": "Ergebnis",
-   "tr": "Sonuç"
-  },
   "Saturday": {
    "zh-Hans": "星期六",
    "hi": "शनिवार",
@@ -5181,6 +5168,71 @@
    "id": "Mati: pil hanya muncul saat Anda mendikte atau merekam panggilan.",
    "de": "Aus: Die Pille erscheint nur beim Diktieren oder beim Aufnehmen eines Anrufs.",
    "tr": "Kapalı: hap yalnızca dikte ederken veya arama kaydederken görünür."
+  },
+  "Writing…": {
+   "zh-Hans": "正在写…",
+   "hi": "लिख रहा है…",
+   "es": "Escribiendo…",
+   "ar": "يكتب…",
+   "fr": "Écrit…",
+   "bn": "লিখছে…",
+   "pt-BR": "Escrevendo…",
+   "ru": "Пишет…",
+   "id": "Menulis…",
+   "de": "Schreibt…",
+   "tr": "Yazıyor…"
+  },
+  "Answer": {
+   "zh-Hans": "回答",
+   "hi": "जवाब",
+   "es": "Respuesta",
+   "ar": "الإجابة",
+   "fr": "Réponse",
+   "bn": "উত্তর",
+   "pt-BR": "Resposta",
+   "ru": "Ответ",
+   "id": "Jawaban",
+   "de": "Antwort",
+   "tr": "Yanıt"
+  },
+  "Nothing written yet.": {
+   "zh-Hans": "还没有写任何内容。",
+   "hi": "अभी कुछ नहीं लिखा।",
+   "es": "Aún no ha escrito nada.",
+   "ar": "لم يُكتب شيء بعد.",
+   "fr": "Rien d'écrit pour l'instant.",
+   "bn": "এখনো কিছু লেখা হয়নি।",
+   "pt-BR": "Nada escrito ainda.",
+   "ru": "Пока ничего не написано.",
+   "id": "Belum ada yang ditulis.",
+   "de": "Noch nichts geschrieben.",
+   "tr": "Henüz bir şey yazılmadı."
+  },
+  "Read the whole text": {
+   "zh-Hans": "阅读全文",
+   "hi": "पूरा टेक्स्ट पढ़ें",
+   "es": "Leer el texto completo",
+   "ar": "اقرأ النص كاملًا",
+   "fr": "Lire tout le texte",
+   "bn": "পুরো লেখা পড়ুন",
+   "pt-BR": "Ler o texto inteiro",
+   "ru": "Прочитать весь текст",
+   "id": "Baca seluruh teks",
+   "de": "Den ganzen Text lesen",
+   "tr": "Metnin tamamını oku"
+  },
+  "Text": {
+   "zh-Hans": "文本",
+   "hi": "टेक्स्ट",
+   "es": "Texto",
+   "ar": "النص",
+   "fr": "Texte",
+   "bn": "লেখা",
+   "pt-BR": "Texto",
+   "ru": "Текст",
+   "id": "Teks",
+   "de": "Text",
+   "tr": "Metin"
   }
  }
 }
