@@ -226,6 +226,8 @@ body {
   display: flex;
   align-items: center;
   margin: 0 -10px;
+  /* Closer to the top edge of the screen; only drawn higher, the layout below stays. */
+  transform: translateY(-7px);
   transition: opacity 0.2s ease-in-out;
 }
 
