@@ -82,10 +82,9 @@ cargo test --release --workspace        # Rust tests
 
 Needs Node 24, Rust (MSVC) and Visual Studio Build Tools with C++. A `vX.Y.Z` tag releases; CI builds the installers.
 
-The icon, the sounds and the README images are drawn in code; don’t edit them by hand:
+The icon is the logo in `assets/logo.png` (cut into `src-tauri/icons/`). The sounds and the README images are generated; don’t edit them by hand:
 
 ```bash
-npm run icons                                      # src-tauri/icons/
 npm run sounds                                     # sounds/
 cd tools/readme && npm install && node build.mjs   # assets/readme/
 ```

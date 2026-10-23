@@ -46,12 +46,6 @@ pub enum KeyEvent {
     /// Another key while the dictation key is held: a shortcut.
     Other,
     Escape,
-    /// The pill's microphone: hands-free straight away.
-    HandsFree,
-    /// The pill's ✓: paste now.
-    Finish,
-    /// The pill's ✕.
-    Cancel,
     Quit,
 }
 
@@ -64,14 +58,6 @@ struct Running {
     tx: Sender<(KeyEvent, Instant)>,
     /// The OS's key listener (or, on Wayland, the portal's shortcut); dropping it stops it.
     _listener: Option<Box<dyn std::any::Any + Send>>,
-}
-
-impl Flow {
-    fn send(&self, event: KeyEvent) {
-        if let Some(r) = self.running.lock().unwrap().as_ref() {
-            let _ = r.tx.send((event, Instant::now()));
-        }
-    }
 }
 
 pub fn get(app: &AppHandle) -> Option<Arc<Flow>> {
@@ -120,25 +106,10 @@ pub fn setup(app: &AppHandle) {
     app.manage(flow.clone());
     pill::setup(app);
     let prefs = flow.store.lock().unwrap().prefs.clone();
-    pill::update(app, |s| {
-        s.edge = pill::edge_name(prefs.edge).into();
-        s.at_rest = prefs.pill_at_rest;
-        s.allowed = prefs.show_pill;
-        s.key = key_id(prefs.key);
-    });
     if prefs.enabled {
         enable(app, &flow);
     }
     crate::voice::sync(app);
-}
-
-/// The key as the pages write it ("right_ctrl"…), or "wayland" where the
-/// desktop holds the shortcut.
-fn key_id(key: logic::FlowKey) -> String {
-    if os::keys_supported() == Err("wayland") {
-        return "wayland".into();
-    }
-    serde_json::to_value(key).ok().and_then(|v| v.as_str().map(String::from)).unwrap_or_default()
 }
 
 fn enable(app: &AppHandle, flow: &Arc<Flow>) {
@@ -228,35 +199,6 @@ fn run(app: AppHandle, flow: Arc<Flow>, rx: mpsc::Receiver<(KeyEvent, Instant)>)
             Some((KeyEvent::Up, at)) => logic.key_up(secs(at)),
             Some((KeyEvent::Other, _)) => logic.other_key(),
             Some((KeyEvent::Escape, _)) => logic.escape(),
-            Some((KeyEvent::HandsFree, _)) => {
-                if logic.is_active() {
-                    Action::None
-                } else {
-                    logic.lock();
-                    if listening.is_none() {
-                        listening = begin(&app, &flow);
-                        if listening.is_none() {
-                            logic.reset();
-                        }
-                    }
-                    if listening.is_some() {
-                        pill::update(&app, |s| s.phase = "locked".into());
-                    }
-                    Action::None
-                }
-            }
-            Some((KeyEvent::Finish, _)) => {
-                if logic.is_active() || listening.is_some() {
-                    logic.reset();
-                    Action::Finish
-                } else {
-                    Action::None
-                }
-            }
-            Some((KeyEvent::Cancel, _)) => {
-                logic.reset();
-                Action::Cancel
-            }
             None => logic.tick(secs(Instant::now())),
         };
         match action {
@@ -286,11 +228,6 @@ fn run(app: AppHandle, flow: Arc<Flow>, rx: mpsc::Receiver<(KeyEvent, Instant)>)
                     pill::update(&app, |s| s.phase = "idle".into());
                 }
             }
-        }
-        // The pill's dots, about 30 times a second while you speak.
-        if let Some(l) = &listening {
-            let levels = l.take.lock().unwrap().meter.levels;
-            let _ = app.emit_to(pill::LABEL, "pill-bands", levels);
         }
     }
     pill::update(&app, |s| s.phase = "idle".into());
@@ -489,12 +426,6 @@ pub fn flow_set_prefs(app: AppHandle, flow: State<Arc<Flow>>, prefs: Prefs) {
         }
         before
     };
-    pill::update(&app, |s| {
-        s.edge = pill::edge_name(prefs.edge).into();
-        s.at_rest = prefs.pill_at_rest;
-        s.allowed = prefs.show_pill;
-        s.key = key_id(prefs.key);
-    });
     let restart = before.key != prefs.key;
     if before.enabled && (!prefs.enabled || restart) {
         disable(&app, &flow);
@@ -656,55 +587,3 @@ pub fn flow_models_remove(app: AppHandle) {
     speech::remove(&app);
 }
 
-// ── The pill's page ───────────────────────────────────────────────────────────
-
-#[tauri::command]
-pub fn pill_state(app: AppHandle) -> Option<pill::PillState> {
-    pill::get(&app).map(|p| p.state())
-}
-
-#[tauri::command]
-pub fn pill_hot(app: AppHandle, rects: Vec<(f64, f64, f64, f64)>) {
-    pill::set_hot(&app, rects);
-}
-
-#[tauri::command]
-pub fn pill_hover(app: AppHandle, inside: bool) {
-    if let Some(p) = pill::get(&app) {
-        p.hovered.store(inside, Ordering::Relaxed);
-    }
-}
-
-#[tauri::command]
-pub fn pill_action(app: AppHandle, flow: State<Arc<Flow>>, action: String, id: Option<u64>) {
-    let flow = flow.inner().clone();
-    match action.as_str() {
-        "dictate" => {
-            if flow.running.lock().unwrap().is_none() {
-                // Dictation off: the pill only shows for a call or a message.
-                return;
-            }
-            flow.send(KeyEvent::HandsFree);
-        }
-        "finish" => flow.send(KeyEvent::Finish),
-        "cancel" => flow.send(KeyEvent::Cancel),
-        "note" => crate::notes::toggle(&app),
-        "stopNote" => crate::notes::stop(&app),
-        "hub" => crate::show_hub(&app, None),
-        "announcement" | "dismiss" => {
-            let state = pill::get(&app).map(|p| p.state());
-            let current = state.and_then(|s| s.announcement).filter(|a| Some(a.id) == id);
-            if let Some(a) = current {
-                pill::dismiss(&app, a.id);
-                if action == "announcement" {
-                    match a.action_id.as_deref() {
-                        Some("openSettings") => crate::show_hub(&app, Some("settings")),
-                        Some("openNotes") => crate::show_hub(&app, Some("notes")),
-                        _ => {}
-                    }
-                }
-            }
-        }
-        _ => {}
-    }
-}

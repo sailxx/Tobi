@@ -10,8 +10,8 @@ import type { BotEmoteName, BotStateName } from "../core/layout";
 import { PUMPKIN_BODY, drawOutfitBehind, drawOutfitFront, makeHead } from "./outfits";
 import type { Outfit } from "./wardrobe";
 import {
-  ANTENNA_IDLE_RGB, BODY_BOTTOM_RGB, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP_RGB,
-  EYE_GLOW, STALK, VISOR_BOTTOM, VISOR_TOP,
+  BODY_BOTTOM_RGB, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP_RGB,
+  EYE_INK, MOUTH_INK, MOUTH_TONGUE, PHONE_BOTTOM, PHONE_RGB, PHONE_TOP,
 } from "./look";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -73,7 +73,7 @@ const EYE_SP = 0.37;
 const EYE_P = -0.12;
 const BASE_TOP: RGB = BODY_TOP_RGB;
 const BASE_BOTTOM: RGB = BODY_BOTTOM_RGB;
-const INK = "rgb(26,20,18)"; // #1A1412
+const INK = EYE_INK;
 const MINI_INK = "rgb(16,19,26)"; // #10131A
 
 const C = {
@@ -801,7 +801,7 @@ export class BotEngine {
     const head = dressed ? makeHead(R, this.yaw, this.pitch, this.physDx, this.physDy) : null;
     const outfitState = { presence: this.outfitPresence, morph: this.morph };
     if (head) drawOutfitBehind(x, this.outfit, head, outfitState);
-    else this.drawAntenna(x, R, rx, ry);
+    else this.drawHeadphonesBand(x, R, rx, ry);
 
     const body = this.bodyPath(rx, ry, R);
     this.drawBody(x, body, R, rx, ry);
@@ -822,6 +822,7 @@ export class BotEngine {
 
     this.drawEyes(x, body, R, rx, ry);
     if (this.morph > 0.05) this.drawMouth(x, body, R);
+    if (!head) this.drawHeadphonesCups(x, R, rx, ry);
 
     if (head) drawOutfitFront(x, this.outfit, head, outfitState);
 
@@ -931,19 +932,9 @@ export class BotEngine {
 
     x.save();
     x.clip(body);
-    // The visor: a dark glass band across the face that turns with the head.
-    // It fades while Tobi turns into a box, and minis keep plain ink eyes.
-    const visor = this.isMini ? 0 : Math.max(0, 1 - this.morph * 1.6);
-    if (visor > 0.01) this.drawVisor(x, R, rx, ry, visor);
-    const glowing = visor > 0.5;
-    const ink = glowing ? EYE_GLOW : this.isMini ? MINI_INK : INK;
+    const ink = this.isMini ? MINI_INK : INK;
     x.fillStyle = ink;
     x.strokeStyle = ink;
-    if (glowing) {
-      const glow = this.tint > 0.05 ? mix3([0.55, 0.85, 1], this.col, Math.min(1, this.tint)) : ([0.55, 0.85, 1] as RGB);
-      x.shadowColor = rgba(glow, 0.9);
-      x.shadowBlur = R * 0.14;
-    }
 
     for (const sd of [-1, 1]) {
       const eyeYaw = sd * EYE_SP + this.yaw;
@@ -967,70 +958,113 @@ export class BotEngine {
       this.drawEyeShape(x, shape, ew, eh, sd, ink);
       x.restore();
     }
+    if (!this.isMini && this.morph < 0.3 && (shape === "pill" || shape === "wide" || shape === "happy" || shape === "dot")) {
+      this.drawSmile(x, R, rx, ry);
+    }
     x.restore();
   }
 
-  private drawVisor(x: CanvasRenderingContext2D, R: number, rx: number, ry: number, alpha: number) {
-    const pitch = EYE_P + this.pitch;
-    const cp = Math.cos(pitch);
-    const face = Math.max(0.3, Math.cos(this.yaw));
-    const vx = Math.sin(this.yaw) * cp * rx * 0.9;
-    const vy = -Math.sin(pitch) * ry;
-    const vw = (2 * Math.sin(EYE_SP) * rx + R * 0.72) * (0.5 + 0.5 * face);
-    const vh = R * 0.58 * Math.max(0.35, cp);
+  /** The little open smile under the eyes. */
+  private drawSmile(x: CanvasRenderingContext2D, R: number, rx: number, ry: number) {
+    const face = Math.cos(this.yaw);
+    if (face < 0.25) return;
+    const mx = Math.sin(this.yaw) * rx * 0.95;
+    const my = ry * 0.34 - Math.sin(this.pitch) * ry * 0.5;
+    const w = R * 0.2 * (0.5 + 0.5 * face);
+    const h = R * 0.15;
     x.save();
-    x.globalAlpha = alpha;
-    const g = x.createLinearGradient(0, vy - vh / 2, 0, vy + vh / 2);
-    g.addColorStop(0, VISOR_TOP);
-    g.addColorStop(1, VISOR_BOTTOM);
-    roundRectPath(x, vx - vw / 2, vy - vh / 2, vw, vh, vh / 2);
-    x.fillStyle = g;
-    x.fill();
-    // A thin reflection along the top of the glass.
-    x.strokeStyle = "rgba(255,255,255,0.16)";
-    x.lineWidth = Math.max(0.6, R * 0.03);
-    x.lineCap = "round";
+    x.translate(mx, my);
     x.beginPath();
-    x.moveTo(vx - vw * 0.28, vy - vh * 0.32);
-    x.lineTo(vx + vw * 0.18, vy - vh * 0.32);
-    x.stroke();
+    x.moveTo(-w, -h * 0.25);
+    x.quadraticCurveTo(0, -h * 0.55, w, -h * 0.3);
+    x.quadraticCurveTo(w * 0.55, h * 1.25, -w * 0.2, h * 0.85);
+    x.quadraticCurveTo(-w * 0.85, h * 0.45, -w, -h * 0.25);
+    x.closePath();
+    x.fillStyle = MOUTH_INK;
+    x.fill();
+    x.clip();
+    x.fillStyle = MOUTH_TONGUE;
+    x.beginPath();
+    x.ellipse(-w * 0.05, h * 0.78, w * 0.55, h * 0.4, 0, 0, Math.PI * 2);
+    x.fill();
     x.restore();
   }
 
-  /** The antenna, behind the body: its light shows the state's colour and pulses while he works. */
-  private drawAntenna(x: CanvasRenderingContext2D, R: number, rx: number, ry: number) {
+  /** The headphones' colour: blue, taking on the state's colour while Tobi is busy with something. */
+  private phoneColors(): [string, string, RGB] {
+    if (this.tint <= 0.05) return [PHONE_TOP, PHONE_BOTTOM, PHONE_RGB as RGB];
+    const k = Math.min(0.85, this.tint);
+    const base = mix3(PHONE_RGB as RGB, this.col, k);
+    return [rgba(mix3(base, [1, 1, 1], 0.25)), rgba(mix3(base, [0, 0, 0], 0.2)), base];
+  }
+
+  /** The band over his head, behind the body. */
+  private drawHeadphonesBand(x: CanvasRenderingContext2D, R: number, rx: number, ry: number) {
     if (R <= 6) return;
     const fade = 1 - Math.min(1, this.morph / 0.5);
     if (fade <= 0.01) return;
-    const t = now();
-    const lean = Math.sin(this.yaw) * 0.45 + this.physDx * 0.35;
-    const len = R * (this.isMini ? 0.42 : 0.52);
-    const baseX = Math.sin(this.yaw) * rx * 0.22;
-    const baseY = -ry * 0.8;
-    const tipX = baseX + lean * len;
-    const tipY = baseY - len * (1 - Math.abs(lean) * 0.2) + this.physDy * len * 0.25;
+    const [top, bottom] = this.phoneColors();
+    const shift = Math.sin(this.yaw) * rx * 0.2 + this.physDx * R * 0.1;
     x.save();
     x.globalAlpha = fade;
-    x.strokeStyle = STALK;
-    x.lineWidth = Math.max(1, R * 0.07);
+    const g = x.createLinearGradient(0, -ry * 1.3, 0, 0);
+    g.addColorStop(0, top);
+    g.addColorStop(1, bottom);
+    x.strokeStyle = g;
+    x.lineWidth = Math.max(1.5, R * 0.17);
     x.lineCap = "round";
     x.beginPath();
-    x.moveTo(baseX, baseY);
-    x.quadraticCurveTo(baseX, baseY - len * 0.6, tipX, tipY);
+    x.ellipse(shift, -ry * 0.06, rx * 1.1, ry * 1.12, 0, Math.PI * 1.1, Math.PI * 1.9);
     x.stroke();
+    x.restore();
+  }
+
+  /** The two ear cups, on the body's sides; they glow while he works. */
+  private drawHeadphonesCups(x: CanvasRenderingContext2D, R: number, rx: number, ry: number) {
+    if (R <= 6) return;
+    const fade = 1 - Math.min(1, this.morph / 0.5);
+    if (fade <= 0.01) return;
+    const [top, bottom, base] = this.phoneColors();
     const busy = this.state === "working" || this.state === "thinking" || this.state === "searching";
-    const light = this.tint > 0.05 ? mix3(ANTENNA_IDLE_RGB, this.col, Math.min(1, this.tint * 1.5)) : (ANTENNA_IDLE_RGB as RGB);
-    const pulse = busy ? 0.5 + 0.5 * Math.sin(t * 6) : this.state === "sleeping" ? 0 : 0.35;
-    x.shadowColor = rgba(light, 0.95);
-    x.shadowBlur = R * (0.12 + 0.3 * pulse);
-    x.fillStyle = rgba(mix3(light, [1, 1, 1], 0.15 * pulse));
+    const pulse = busy ? 0.5 + 0.5 * Math.sin(now() * 6) : 0;
+    const shift = Math.sin(this.yaw) * rx * 0.28;
+    x.save();
+    x.globalAlpha = fade;
+    for (const sd of [-1, 1]) {
+      // The cup on the side he turns away from gets narrower.
+      const squeeze = 1 - 0.45 * Math.max(0, sd * Math.sin(this.yaw));
+      const w = R * 0.15 * squeeze * 2;
+      const h = R * 0.6;
+      x.save();
+      x.translate(sd * rx * 0.98 + shift, ry * 0.1);
+      if (busy) {
+        x.shadowColor = rgba(base, 0.9);
+        x.shadowBlur = R * (0.1 + 0.3 * pulse);
+      }
+      const g = x.createLinearGradient(-w, -h / 2, w, h / 2);
+      g.addColorStop(0, top);
+      g.addColorStop(1, bottom);
+      roundRectPath(x, -w, -h / 2, w * 2, h, Math.min(w, h / 2));
+      x.fillStyle = g;
+      x.fill();
+      x.shadowBlur = 0;
+      x.strokeStyle = "rgba(255,255,255,0.28)";
+      x.lineWidth = Math.max(0.6, R * 0.025);
+      x.beginPath();
+      x.ellipse(-sd * w * 0.1, -h * 0.12, w * 0.55, h * 0.3, 0, Math.PI * 1.05, Math.PI * 1.75);
+      x.stroke();
+      x.restore();
+    }
+    x.restore();
+  }
+
+  /** The white highlight of a glossy eye. */
+  private eyeShine(x: CanvasRenderingContext2D, w: number, h: number) {
+    if (this.isMini || h < w * 0.5) return;
+    x.save();
+    x.fillStyle = "rgba(255,255,255,0.95)";
     x.beginPath();
-    x.arc(tipX, tipY, R * 0.12, 0, Math.PI * 2);
-    x.fill();
-    x.shadowBlur = 0;
-    x.fillStyle = "rgba(255,255,255,0.7)";
-    x.beginPath();
-    x.arc(tipX + R * 0.035, tipY - R * 0.035, R * 0.035, 0, Math.PI * 2);
+    x.arc(w * 0.14, -h * 0.2, w * 0.17, 0, Math.PI * 2);
     x.fill();
     x.restore();
   }
@@ -1048,12 +1082,14 @@ export class BotEngine {
         const hh = Math.max(h * this.open, w * 0.3);
         roundRectPath(x, -w / 2, -hh / 2, w, hh, Math.min(w / 2, hh / 2));
         x.fill();
+        this.eyeShine(x, w, hh);
         break;
       }
       case "dot":
         x.beginPath();
         x.arc(0, 0, w * 0.45, 0, Math.PI * 2);
         x.fill();
+        this.eyeShine(x, w, w * 0.9);
         break;
       case "line":
         x.rotate(-sd * 0.2);

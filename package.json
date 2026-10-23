@@ -1,14 +1,13 @@
 {
   "name": "tobi",
   "private": true,
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "node --import ./tests/setup.mjs --test \"tests/**/*.test.mjs\"",
-    "icons": "node scripts/gen-icons.mjs",
     "sounds": "node scripts/gen-sounds.mjs",
     "tauri": "tauri",
     "predev": "cargo build --release -p tobi-hook",

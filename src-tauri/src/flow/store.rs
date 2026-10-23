@@ -67,15 +67,6 @@ pub struct AppStyle {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "lowercase")]
-pub enum Edge {
-    #[default]
-    Bottom,
-    Left,
-    Right,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
-#[serde(rename_all = "lowercase")]
 pub enum SummaryEngine {
     #[default]
     Claude,
@@ -89,13 +80,6 @@ pub struct Prefs {
     /// Hold a key to dictate anywhere. Off until the user turns it on.
     pub enabled: bool,
     pub key: FlowKey,
-    pub edge: Edge,
-    /// The pill exists at all. Off in Tobi: nothing on the screen's edges,
-    /// dictation still works with its key.
-    pub show_pill: bool,
-    /// The pill stays on its edge while dictation waits. Off in Tobi: it only
-    /// shows while you dictate, record a call or get a message.
-    pub pill_at_rest: bool,
     /// The microphone by name; empty is the system's default.
     pub mic: String,
     /// Days the history is kept: 0 = not kept, -1 = forever.
@@ -120,9 +104,6 @@ impl Default for Prefs {
         Self {
             enabled: false,
             key: FlowKey::default(),
-            edge: Edge::Bottom,
-            show_pill: false,
-            pill_at_rest: false,
             mic: String::new(),
             keep_days: 30,
             cleanup: false,

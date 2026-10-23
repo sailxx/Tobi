@@ -21,17 +21,11 @@ async function callOrThrow<T>(cmd: string, args?: Record<string, unknown>): Prom
 }
 
 export type FlowKey = "right_ctrl" | "right_alt" | "right_shift" | "left_ctrl_super";
-export type Edge = "bottom" | "left" | "right";
 export type Style = "verbatim" | "natural" | "polished";
 
 export interface FlowPrefs {
   enabled: boolean;
   key: FlowKey;
-  edge: Edge;
-  /** The pill exists at all (off: never on screen). */
-  showPill: boolean;
-  /** The pill stays on its edge while dictation waits. */
-  pillAtRest: boolean;
   mic: string;
   keepDays: number;
   cleanup: boolean;
@@ -157,31 +151,6 @@ export interface NotesState {
   working: string[];
 }
 
-export interface Announcement {
-  id: number;
-  icon: string;
-  tint: string;
-  text: string;
-  action?: string | null;
-  actionId?: string | null;
-}
-
-export interface PillState {
-  phase: "idle" | "listening" | "thinking" | "locked" | "copied" | "failed" | "pastedAgain";
-  edge: Edge;
-  /** "wayland" where the desktop holds the shortcut. */
-  key: FlowKey | "wayland" | "";
-  noteStartedAt: number | null;
-  announcement: Announcement | null;
-  enabled: boolean;
-  /** The pill shows while dictation waits. */
-  atRest: boolean;
-  /** The pill may show at all. */
-  allowed: boolean;
-  /** « OK Tobi » is talking with you. */
-  voice: VoiceView | null;
-}
-
 export interface VoiceView {
   phase: "listening" | "thinking" | "speaking";
   heard: string;
@@ -223,11 +192,7 @@ export const FlowBridge = {
   markdown: (id: string) => call<string>("notes_markdown", { id }),
   exportNote: (id: string) => callOrThrow<string>("notes_export", { id }),
 
-  pillState: () => call<PillState>("pill_state"),
-  pillHot: (rects: [number, number, number, number][]) => call<void>("pill_hot", { rects }),
-  pillHover: (inside: boolean) => call<void>("pill_hover", { inside }),
-  pillAction: (action: string, id?: number) => call<void>("pill_action", { action, id: id ?? null }),
-  /** The pill has said what « OK Tobi » answered. */
+  /** « OK Tobi » has said what « OK Tobi » answered. */
   voiceDone: (id: number) => call<void>("voice_done", { id, text: null }),
   /** speech-dispatcher or espeak-ng, where the webview has no voice. */
   sayNative: (text: string, lang: string | null) => call<boolean>("voice_say_native", { text, lang }),

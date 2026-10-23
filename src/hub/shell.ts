@@ -1,7 +1,6 @@
-// The Tobi window: a sidebar with Flow (dictation, the Notetaker, the
-// statistics, the dictionary, the snippets, the styles and their settings)
-// and Notch (every setting of the island), and the page on the right, under
-// its coloured band. Port of FlowHub.swift.
+// The Tobi window: a short sidebar (dictation, the Notetaker, words, the
+// island, agents, chat and settings) and the page on the right. A page with
+// several parts shows them as tabs.
 
 import "./hub.css";
 import { h, clear } from "../views/dom";
@@ -12,39 +11,62 @@ import { hero, liveTobi, setWindowShown } from "./hero";
 import { icon, keyLabel } from "./ui";
 
 export type PageId =
-  | "dictation" | "notes" | "insights" | "dictionary" | "snippets" | "styles" | "flowsettings"
+  | "dictation" | "notes" | "dictionary" | "snippets" | "styles" | "flowsettings"
   | "general" | "pills" | "agents" | "chat" | "voice" | "integrations" | "phone" | "shortcuts";
 
-interface PageDef {
+interface Tab {
   id: PageId;
-  icon: string;
   title: () => string;
-  /** The band's line; none for pages that draw their own band. */
+  /** The line under the title (Notch pages draw it for themselves). */
   subtitle?: () => string;
 }
 
-export const FLOW_PAGES: PageDef[] = [
-  { id: "dictation", icon: "mic", title: () => t("Dictation") },
-  { id: "notes", icon: "record", title: () => t("Notetaker") },
-  { id: "insights", icon: "chart", title: () => t("Statistics") },
-  { id: "dictionary", icon: "book", title: () => t("Dictionary") },
-  { id: "snippets", icon: "bolt", title: () => t("Snippets") },
-  { id: "styles", icon: "text", title: () => t("Styles") },
-  { id: "flowsettings", icon: "sliders", title: () => t("Settings") },
+/** One entry of the sidebar: a page, or several pages as tabs. */
+interface Section {
+  id: string;
+  icon: string;
+  title: () => string;
+  tabs: Tab[];
+}
+
+export const SECTIONS: Section[] = [
+  { id: "home", icon: "mic", title: () => t("Dictation"), tabs: [{ id: "dictation", title: () => t("Dictation") }] },
+  { id: "notes", icon: "record", title: () => t("Notetaker"), tabs: [{ id: "notes", title: () => t("Notetaker") }] },
+  {
+    id: "words", icon: "book", title: () => t("Dictionary"),
+    tabs: [
+      { id: "dictionary", title: () => t("Dictionary") },
+      { id: "snippets", title: () => t("Snippets") },
+      { id: "styles", title: () => t("Styles") },
+    ],
+  },
+  {
+    id: "island", icon: "gear", title: () => t("Notch"),
+    tabs: [
+      { id: "general", title: () => t("General"), subtitle: () => t("Tobi, his sounds and how the island behaves.") },
+      { id: "pills", title: () => t("Active pills"), subtitle: () => t("The pills shown in the island, their order and their colours.") },
+      { id: "shortcuts", title: () => t("Shortcuts"), subtitle: () => t("The keys that open the island and its actions.") },
+    ],
+  },
+  {
+    id: "agents", icon: "terminal", title: () => t("Agents"),
+    tabs: [
+      { id: "agents", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows.") },
+      { id: "integrations", title: () => t("Integrations"), subtitle: () => t("Stripe, GitHub, Vercel, n8n, Notion and the rest.") },
+      { id: "phone", title: () => t("Android phone"), subtitle: () => t("Your agents and their approvals on your Android phone, over your Wi-Fi.") },
+    ],
+  },
+  {
+    id: "assistant", icon: "chat", title: () => t("Chat"),
+    tabs: [
+      { id: "chat", title: () => t("Chat"), subtitle: () => t("The AI of the island's chat, with your own keys.") },
+      { id: "voice", title: () => "OK Tobi" },
+    ],
+  },
+  { id: "settings", icon: "sliders", title: () => t("Settings"), tabs: [{ id: "flowsettings", title: () => t("Settings") }] },
 ];
 
-export const NOTCH_PAGES: PageDef[] = [
-  { id: "general", icon: "gear", title: () => t("General"), subtitle: () => t("Tobi, his sounds and how the island behaves.") },
-  { id: "pills", icon: "grid", title: () => t("Active pills"), subtitle: () => t("The pills shown in the island, their order and their colours.") },
-  { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows.") },
-  { id: "chat", icon: "chat", title: () => t("Chat"), subtitle: () => t("The AI of the island's chat, with your own keys.") },
-  { id: "voice", icon: "wave", title: () => "OK Tobi" },
-  { id: "integrations", icon: "puzzle", title: () => t("Integrations"), subtitle: () => t("Stripe, GitHub, Vercel, n8n, Notion and the rest.") },
-  { id: "phone", icon: "phone", title: () => t("Android phone"), subtitle: () => t("Your agents and their approvals on your Android phone, over your Wi-Fi.") },
-  { id: "shortcuts", icon: "keyboard", title: () => t("Shortcuts"), subtitle: () => t("The keys that open the island and its actions.") },
-];
-
-const ALL = [...FLOW_PAGES, ...NOTCH_PAGES];
+const sectionOf = (page: PageId) => SECTIONS.find((s) => s.tabs.some((x) => x.id === page)) ?? SECTIONS[0];
 
 /** What a page gets to draw itself and reach the rest of the window. */
 export interface HubContext {
@@ -55,7 +77,7 @@ export interface HubContext {
   /** Saves new preferences and keeps them as the window's. */
   setPrefs(change: (p: FlowPrefs) => void): Promise<void>;
   /** The band of a page, its Tobis walking. */
-  hero(page: PageId, title: string, subtitle: string | null, actions?: HTMLElement[], compact?: boolean): HTMLElement;
+  hero(page: PageId, title: string, subtitle: string | null, actions?: HTMLElement[]): HTMLElement;
   /** Set by a page: called when the page is left. */
   onLeave?: () => void;
 }
@@ -71,8 +93,8 @@ export interface HubOptions {
 
 const DEFAULT_STATUS: FlowStatus = {
   prefs: {
-    enabled: false, key: "right_ctrl", edge: "bottom", mic: "", keepDays: 30, cleanup: false,
-    defaultStyle: "natural", summaryEngine: "claude", openAtLaunch: true, showPill: false, pillAtRest: false, voice: false, voiceOutput: "system", voiceGender: "female",
+    enabled: false, key: "right_ctrl", mic: "", keepDays: 30, cleanup: false,
+    defaultStyle: "natural", summaryEngine: "claude", openAtLaunch: true, voice: false, voiceOutput: "system", voiceGender: "female",
   },
   models: { parakeet: { state: "missing" }, downloadMb: 700 },
   keys: "ok",
@@ -91,7 +113,7 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   if (shown !== null) setWindowShown(shown);
   let current: PageId = "dictation";
   let status: FlowStatus = (await FlowBridge.status()) ?? DEFAULT_STATUS;
-  const items = new Map<PageId, HTMLElement>();
+  const items = new Map<string, HTMLElement>();
   const statusLine = h("div", { class: "hub-status" });
   const scroll = h("div", { class: "hub-scroll" });
   let rendering = 0;
@@ -113,7 +135,11 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
       drawStatus();
       await FlowBridge.setPrefs(next);
     },
-    hero: (page, title, subtitle, actions = [], compact = false) => hero(page, title, subtitle, actions, compact),
+    hero: (page, title, subtitle, actions = []) => {
+      // On a page with tabs the tab bar is the title.
+      const tabbed = sectionOf(page).tabs.length > 1;
+      return hero(page, tabbed ? "" : title, subtitle, actions);
+    },
   };
 
   function drawStatus() {
@@ -128,7 +154,7 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
       text = models === "downloading" ? t("Downloading the voice model…") : t("Download the voice model to dictate");
     } else if (status.keys !== "ok" && status.keys !== "wayland") {
       color = "#f7b32b";
-      text = t("Use the pill's microphone to dictate");
+      text = t("Tobi can't watch the keyboard here");
     } else {
       color = "#34d399";
       text = t("Ready · hold {0}", { 0: keyLabel(status.keys === "wayland" ? "wayland" : status.prefs.key, status.platform) });
@@ -137,18 +163,25 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   }
 
   async function show(page: PageId) {
-    const def = ALL.find((p) => p.id === page) ?? FLOW_PAGES[0];
+    const section = sectionOf(page);
+    const def = section.tabs.find((x) => x.id === page) ?? section.tabs[0];
     ctx.onLeave?.();
     ctx.onLeave = undefined;
     current = def.id;
-    for (const [id, el] of items) el.classList.toggle("on", id === current);
+    for (const [id, el] of items) el.classList.toggle("on", id === section.id);
     const token = ++rendering;
     const page_ = h("div", { class: "hub-page" });
+    if (section.tabs.length > 1) {
+      page_.append(h("div", { class: "hub-tabs" }, ...section.tabs.map((x) =>
+        h("button", { class: x.id === def.id ? "on" : "", text: x.title(), onclick: () => void show(x.id) }),
+      )));
+    }
     const renderer = opts.flowPages[def.id];
     if (renderer) {
       await renderer(page_, ctx);
     } else {
-      page_.append(hero(def.id, def.title(), def.subtitle?.() ?? null));
+      const sub = def.subtitle?.();
+      if (sub) page_.append(h("p", { class: "hub-lead", text: sub }));
       const container = h("div", { id: "settings-root" });
       page_.append(container);
       await opts.renderNotch(def.id, container);
@@ -164,17 +197,12 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   const logo = h("canvas", {});
   side.append(h("div", { class: "hub-brand" }, logo, h("span", { text: "Tobi" })));
   liveTobi(logo as HTMLCanvasElement);
-  const group = (title: string, pages: PageDef[]) => {
-    side.append(h("div", { class: "hub-group", text: title }));
-    for (const p of pages) {
-      const b = h("button", { class: "hub-item", onclick: () => void show(p.id) });
-      b.append(icon(p.icon), h("span", { text: p.title() }));
-      items.set(p.id, b);
-      side.append(b);
-    }
-  };
-  group("Flow", FLOW_PAGES);
-  group(t("Notch"), NOTCH_PAGES);
+  for (const section of SECTIONS) {
+    const b = h("button", { class: "hub-item", onclick: () => void show(section.tabs[0].id) });
+    b.append(icon(section.icon), h("span", { text: section.title() }));
+    items.set(section.id, b);
+    side.append(b);
+  }
   side.append(h("div", { class: "spacer" }), statusLine, h("div", { class: "hub-version", text: `Tobi ${opts.version}` }));
 
   clear(root);
@@ -184,7 +212,7 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
 
   void onEvent<string>("hub-page", (page) => {
     const id = (page === "settings" ? "flowsettings" : page) as PageId;
-    if (ALL.some((p) => p.id === id)) void show(id);
+    if (SECTIONS.some((s) => s.tabs.some((x) => x.id === id))) void show(id);
   });
   void onEvent<FlowPrefs>("flow-prefs", (prefs) => {
     status = { ...status, prefs };

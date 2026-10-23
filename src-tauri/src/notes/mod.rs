@@ -230,20 +230,6 @@ pub fn setup(app: &AppHandle) {
     }
 }
 
-/// The pill's record button: starts or stops, and says what is missing.
-pub fn toggle(app: &AppHandle) {
-    if is_recording(app) {
-        stop(app);
-    } else if let Err(err) = start(app) {
-        let (text, action) = if err == "models" {
-            (t("Download the voice model first, in Tobi → Settings → Recognition."), Some((t("Open Settings"), "openSettings")))
-        } else {
-            (err, None)
-        };
-        pill::announce(app, "error", "#FF6B6B", text, action, 8);
-    }
-}
-
 pub fn start(app: &AppHandle) -> Result<String, String> {
     let taker = get(app).ok_or("not ready")?;
     if taker.recording.lock().unwrap().is_some() || taker.starting.swap(true, Ordering::Relaxed) {

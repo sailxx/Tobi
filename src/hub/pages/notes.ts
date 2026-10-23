@@ -23,7 +23,7 @@ export async function notesPage(page: HTMLElement, ctx: HubContext) {
   let tab: "summary" | "transcript" = "summary";
   let startError = "";
 
-  page.append(ctx.hero("notes", t("Notetaker"), t("Your calls transcribed person by person, with a summary and the to-dos. No bot in the meeting."), [], true));
+  page.append(ctx.hero("notes", t("Notetaker"), t("Your calls transcribed person by person, with a summary and the to-dos. No bot in the meeting.")));
   if (ctx.status.models.parakeet.state !== "ready") {
     page.append(glowCard(
       "#3B9EFF",

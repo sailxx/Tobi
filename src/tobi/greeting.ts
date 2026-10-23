@@ -6,7 +6,7 @@
 import { closeCurve } from "../core/anim";
 import { Sound } from "../core/sound";
 import { COMPACT_W, NOTCH_H, NOTCH_W } from "../core/layout";
-import { BODY_BOTTOM, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP, EYE_GLOW, STALK, VISOR_BOTTOM, VISOR_TOP } from "./look";
+import { BODY_BOTTOM, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP, EYE_INK, MOUTH_INK, MOUTH_TONGUE, PHONE_BOTTOM, PHONE_TOP } from "./look";
 
 // ── Timing (GT in the Swift file) ─────────────────────────────────────────────
 
@@ -383,7 +383,7 @@ function tobiPath(hw: number, hh: number): Path2D {
   return p;
 }
 
-/** Honey body gradient. A canvas gradient pads past its ends, so the corners are never left unpainted. */
+/** White body gradient. A canvas gradient pads past its ends, so the corners are never left unpainted. */
 function whiteFill(
   x: CanvasRenderingContext2D, path: Path2D,
   x0: number, y0: number, x1: number, y1: number,
@@ -427,27 +427,36 @@ function drawHandR(x: CanvasRenderingContext2D, hw: number, hh: number, p: Pose)
   x.restore();
 }
 
-/** The antenna, behind the body, with its orange light. */
-function drawAntenna(x: CanvasRenderingContext2D, hw: number, hh: number, p: Pose) {
-  const baseY = -hh * 0.8;
-  const len = hh * 0.55;
-  const tipX = p.lookX * hw * 0.2;
-  const tipY = baseY - len;
+/** The headphones' band, behind the body. */
+function drawBand(x: CanvasRenderingContext2D, hw: number, hh: number, p: Pose) {
+  const g = x.createLinearGradient(0, -hh * 1.3, 0, 0);
+  g.addColorStop(0, PHONE_TOP);
+  g.addColorStop(1, PHONE_BOTTOM);
   x.save();
-  x.strokeStyle = STALK;
-  x.lineWidth = Math.max(1, hh * 0.075);
+  x.strokeStyle = g;
+  x.lineWidth = Math.max(1.5, hh * 0.17);
   x.lineCap = "round";
   x.beginPath();
-  x.moveTo(0, baseY);
-  x.quadraticCurveTo(0, baseY - len * 0.6, tipX, tipY);
+  x.ellipse(p.lookX * hw * 0.1, -hh * 0.06, hw * 1.1, hh * 1.12, 0, Math.PI * 1.1, Math.PI * 1.9);
   x.stroke();
-  x.shadowColor = "rgba(255,122,61,0.95)";
-  x.shadowBlur = hh * 0.3;
-  x.fillStyle = "rgb(255,122,61)";
-  x.beginPath();
-  x.arc(tipX, tipY, hh * 0.13, 0, Math.PI * 2);
-  x.fill();
   x.restore();
+}
+
+/** The ear cups, on the body's sides. */
+function drawCups(x: CanvasRenderingContext2D, hw: number, hh: number) {
+  const w = hh * 0.15;
+  const h = hh * 0.6;
+  for (const sd of [-1, 1]) {
+    x.save();
+    x.translate(sd * hw * 0.98, hh * 0.1);
+    const g = x.createLinearGradient(-w, -h / 2, w, h / 2);
+    g.addColorStop(0, PHONE_TOP);
+    g.addColorStop(1, PHONE_BOTTOM);
+    rr(x, -w, -h / 2, w * 2, h, w);
+    x.fillStyle = g;
+    x.fill();
+    x.restore();
+  }
 }
 
 function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
@@ -479,7 +488,7 @@ function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
 
   drawHandL(x, hw, hh, p);
   drawHandR(x, hw, hh, p);
-  drawAntenna(x, hw, hh, p);
+  drawBand(x, hw, hh, p);
 
   const body = tobiPath(hw, hh);
   whiteFill(x, body, hw * 0.6, -hh, -hw * 0.6, hh);
@@ -499,19 +508,8 @@ function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
   const sp = p.hb * 0.19;
   const lx = p.lookX * hw * 0.42;
   const ly = p.lookY * hh * 0.28 + hh * 0.12 + p.eyeRoll * hh * 1.25;
-  // The visor follows the eyes, glowing eyes behind it.
-  const vw = sp * 2 + er * 5.2;
-  const vh = er * 4.4;
-  const vg = x.createLinearGradient(0, ly - vh / 2, 0, ly + vh / 2);
-  vg.addColorStop(0, VISOR_TOP);
-  vg.addColorStop(1, VISOR_BOTTOM);
-  rr(x, lx - vw / 2, ly - vh / 2, vw, vh, vh / 2);
-  x.fillStyle = vg;
-  x.fill();
-  x.fillStyle = EYE_GLOW;
-  x.strokeStyle = EYE_GLOW;
-  x.shadowColor = "rgba(140,217,255,0.9)";
-  x.shadowBlur = er * 1.6;
+  x.fillStyle = EYE_INK;
+  x.strokeStyle = EYE_INK;
   for (const sd of [-1, 1]) {
     x.save();
     x.translate(sd * sp + lx, ly);
@@ -530,12 +528,38 @@ function drawTobi(x: CanvasRenderingContext2D, p: Pose) {
     } else {
       x.scale(1, Math.max(0.12, p.open));
       x.beginPath();
-      x.arc(0, 0, er, 0, Math.PI * 2);
+      x.arc(0, 0, er * 1.25, 0, Math.PI * 2);
       x.fill();
+      if (p.open > 0.5) {
+        x.fillStyle = "rgba(255,255,255,0.95)";
+        x.beginPath();
+        x.arc(er * 0.35, -er * 0.45, er * 0.38, 0, Math.PI * 2);
+        x.fill();
+        x.fillStyle = EYE_INK;
+      }
     }
     x.restore();
   }
+  if (p.eye !== "happy" && p.eye !== "content" && p.open > 0.5) {
+    x.translate(lx, 0);
+    x.beginPath();
+    const mw = er * 1.6;
+    const my = ly + er * 3.4;
+    x.moveTo(-mw, my);
+    x.quadraticCurveTo(0, my - er * 0.5, mw, my - er * 0.2);
+    x.quadraticCurveTo(mw * 0.55, my + er * 2, -mw * 0.2, my + er * 1.5);
+    x.quadraticCurveTo(-mw * 0.85, my + er, -mw, my);
+    x.closePath();
+    x.fillStyle = MOUTH_INK;
+    x.fill();
+    x.clip();
+    x.fillStyle = MOUTH_TONGUE;
+    x.beginPath();
+    x.ellipse(0, my + er * 1.5, mw * 0.55, er * 0.8, 0, 0, Math.PI * 2);
+    x.fill();
+  }
   x.restore();
+  drawCups(x, hw, hh);
 
   // Activity badge
   if (p.badge > 0.01) {

@@ -12,24 +12,23 @@ const OUT = path.join(REPO, 'assets/readme');
 const VERSION = JSON.parse(fs.readFileSync(path.join(REPO, 'package.json'), 'utf8')).version;
 const STR = JSON.parse(fs.readFileSync(path.join(HERE, 'strings.json'), 'utf8'));
 
-// Те же цвета, что в src/tobi/look.ts
-const HONEY = '#F5B83D', HONEY_HI = '#FFE7A3', HONEY_LO = '#F2B84B', LIGHT = '#FF7A3D', STALK = '#C98A28';
+// Акцент — синий наушников Tobi (src/tobi/look.ts)
+const HONEY = '#2E9BFF', HONEY_HI = '#7CC4FF', HONEY_LO = '#1478F0', LIGHT = '#5AB8FF';
+const ICON_PNG = fs.readFileSync(path.join(REPO, 'src-tauri/icons/128x128.png')).toString('base64');
 const K = createKit({
   golos: path.join(HERE, '.font/golos.ttf'),
   mono: path.join(HERE, '.font/jbmono.ttf'),
-  accent: { hi: HONEY, grad: [HONEY_HI, '#F2A33A'], on: '#2A1A00', glow: HONEY_LO, glow2: LIGHT, glowOpacity: 0.22, btn: ['#FFD27A', '#F2A93B'] },
+  accent: { hi: HONEY, grad: [HONEY_HI, HONEY_LO], on: '#021226', glow: HONEY_LO, glow2: LIGHT, glowOpacity: 0.22, btn: ['#6CBBFF', '#1F7BF0'] },
 });
 const { P, T, card, chip, sectionHead, badge, lines, wrap, one, fitSize, fitText, delay, svg } = K;
 
-// ---------- Tobi: тот же рисунок, что в движке (тело-суперэллипс, визор, глаза, антенна) ----------
+// ---------- Tobi: тот же рисунок, что в движке (белое тело, глаза с бликом, улыбка, наушники) ----------
 const STATE = { idle: null, thinking: '#8B5CF6', working: '#3B9EFF', approval: '#F5A524', finished: '#34D399', sleeping: '#94A2B8' };
-const TOBI_DEFS = `<linearGradient id="tb" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${HONEY_HI}"/><stop offset="1" stop-color="${HONEY_LO}"/></linearGradient>
-<linearGradient id="tv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262A36"/><stop offset="1" stop-color="#0E1016"/></linearGradient>
-<radialGradient id="tsh" cx=".5" cy=".5" r=".5"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></radialGradient>
+const TOBI_DEFS = `<linearGradient id="tb" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#CDD5F6"/></linearGradient>
+<linearGradient id="tp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2EA8FF"/><stop offset="1" stop-color="#085CE8"/></linearGradient>
+<radialGradient id="tsh" cx=".5" cy=".5" r=".5"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></radialGradient>
 <radialGradient id="thl" cx=".67" cy=".27" r=".25"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-${Object.entries(STATE).filter(([, c]) => c).map(([k, c]) => `<linearGradient id="tt-${k}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${c}" stop-opacity=".62"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient>`).join('\n')}
-<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<filter id="glowL" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+${Object.entries(STATE).filter(([, c]) => c).map(([k, c]) => `<linearGradient id="tt-${k}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${c}" stop-opacity=".5"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient>`).join('\n')}`;
 
 function bodyPath(R) {
   const rx = R, ry = R * 0.96, e = 2 / 2.2;
@@ -45,24 +44,32 @@ function bodyPath(R) {
 /** Tobi с центром тела в (cx, cy), радиус R. state — ключ STATE, eye — 'pill' | 'happy' | 'closed'. */
 function tobi(cx, cy, R, { state = 'idle', eye = 'pill', badge: bd = null, look = 0 } = {}) {
   const ry = R * 0.96, col = STATE[state];
-  const light = col || LIGHT;
-  const tipY = -ry - R * 0.42, tipX = look * R * 0.18;
-  let s = `<path d="M0 ${(-ry * 0.8).toFixed(2)}Q0 ${(-ry - R * 0.1).toFixed(2)} ${tipX.toFixed(2)} ${tipY.toFixed(2)}" fill="none" stroke="${STALK}" stroke-width="${(R * 0.08).toFixed(2)}" stroke-linecap="round"/>`;
-  s += `<circle cx="${tipX.toFixed(2)}" cy="${tipY.toFixed(2)}" r="${(R * 0.13).toFixed(2)}" fill="${light}" filter="url(#glowL)"/>`;
+  const phone = col || 'url(#tp)';
+  const f = (n) => n.toFixed(2);
+  // дужка наушников — за телом
+  const bx = look * R * 0.1, bw = R * 1.1, bh = ry * 1.12, by = -ry * 0.06;
+  const pt = (a) => [bx + bw * Math.cos(a), by + bh * Math.sin(a)];
+  const [x0, y0] = pt(Math.PI * 1.1), [x1, y1] = pt(Math.PI * 1.9);
+  let s = `<path d="M${f(x0)} ${f(y0)}A${f(bw)} ${f(bh)} 0 0 1 ${f(x1)} ${f(y1)}" fill="none" stroke="${phone}" stroke-width="${f(R * 0.17)}" stroke-linecap="round"/>`;
   const body = bodyPath(R);
   s += `<path d="${body}" fill="url(#tb)"/>`;
   if (col) s += `<path d="${body}" fill="url(#tt-${state})"/>`;
   s += `<path d="${body}" fill="url(#tsh)"/><path d="${body}" fill="url(#thl)"/>`;
-  // визор и глаза
-  const vy = ry * 0.12, vw = R * 1.44, vh = R * 0.57, ex = R * 0.358 + look * R * 0.08;
-  s += `<rect x="${(-vw / 2 + look * R * 0.12).toFixed(2)}" y="${(vy - vh / 2).toFixed(2)}" width="${vw.toFixed(2)}" height="${vh.toFixed(2)}" rx="${(vh / 2).toFixed(2)}" fill="url(#tv)"/>`;
-  const ew = R * 0.23, eh = R * 0.27;
+  // глаза и улыбка
+  const vy = ry * 0.06, ex = R * 0.37 + look * R * 0.08;
+  const ew = R * 0.125, eh = R * 0.15, ink = '#120E18';
   for (const sd of [-1, 1]) {
-    const x = sd * R * 0.358 + (ex - R * 0.358);
-    if (eye === 'happy') s += `<path d="M${(x - ew * 0.7).toFixed(2)} ${(vy + eh * 0.15).toFixed(2)}Q${x.toFixed(2)} ${(vy - eh * 0.75).toFixed(2)} ${(x + ew * 0.7).toFixed(2)} ${(vy + eh * 0.15).toFixed(2)}" fill="none" stroke="#ECF8FF" stroke-width="${(ew * 0.45).toFixed(2)}" stroke-linecap="round" filter="url(#glow)"/>`;
-    else if (eye === 'closed') s += `<path d="M${(x - ew * 0.65).toFixed(2)} ${(vy - eh * 0.05).toFixed(2)}Q${x.toFixed(2)} ${(vy + eh * 0.55).toFixed(2)} ${(x + ew * 0.65).toFixed(2)} ${(vy - eh * 0.05).toFixed(2)}" fill="none" stroke="#ECF8FF" stroke-width="${(ew * 0.35).toFixed(2)}" stroke-linecap="round" filter="url(#glow)"/>`;
-    else s += `<rect x="${(x - ew / 2).toFixed(2)}" y="${(vy - eh / 2).toFixed(2)}" width="${ew.toFixed(2)}" height="${eh.toFixed(2)}" rx="${(ew / 2).toFixed(2)}" fill="#ECF8FF" filter="url(#glow)"/>`;
+    const x = sd * R * 0.37 + (ex - R * 0.37);
+    if (eye === 'happy') s += `<path d="M${f(x - ew * 1.3)} ${f(vy + eh * 0.2)}Q${f(x)} ${f(vy - eh * 1.3)} ${f(x + ew * 1.3)} ${f(vy + eh * 0.2)}" fill="none" stroke="${ink}" stroke-width="${f(ew * 0.8)}" stroke-linecap="round"/>`;
+    else if (eye === 'closed') s += `<path d="M${f(x - ew * 1.2)} ${f(vy - eh * 0.1)}Q${f(x)} ${f(vy + eh * 0.9)} ${f(x + ew * 1.2)} ${f(vy - eh * 0.1)}" fill="none" stroke="${ink}" stroke-width="${f(ew * 0.6)}" stroke-linecap="round"/>`;
+    else s += `<ellipse cx="${f(x)}" cy="${f(vy)}" rx="${f(ew)}" ry="${f(eh)}" fill="${ink}"/><circle cx="${f(x + ew * 0.3)}" cy="${f(vy - eh * 0.3)}" r="${f(ew * 0.34)}" fill="#fff"/>`;
   }
+  if (eye === 'pill') {
+    const mx = look * R * 0.1, my = ry * 0.34, mw = R * 0.2, mh = R * 0.15;
+    s += `<path d="M${f(mx - mw)} ${f(my - mh * 0.25)}Q${f(mx)} ${f(my - mh * 0.55)} ${f(mx + mw)} ${f(my - mh * 0.3)}Q${f(mx + mw * 0.55)} ${f(my + mh * 1.25)} ${f(mx - mw * 0.2)} ${f(my + mh * 0.85)}Q${f(mx - mw * 0.85)} ${f(my + mh * 0.45)} ${f(mx - mw)} ${f(my - mh * 0.25)}Z" fill="#300C18"/>`;
+  }
+  // ушки наушников — перед телом
+  for (const sd of [-1, 1]) s += `<rect x="${f(sd * R * 0.98 - R * 0.15)}" y="${f(ry * 0.1 - R * 0.3)}" width="${f(R * 0.3)}" height="${f(R * 0.6)}" rx="${f(R * 0.15)}" fill="${phone}"/>`;
   // значок состояния
   if (bd) {
     const bx = -R * 0.74, by = -R * 0.72, br = R * 0.24;
@@ -73,8 +80,8 @@ function tobi(cx, cy, R, { state = 'idle', eye = 'pill', badge: bd = null, look 
   return `<g transform="translate(${cx} ${cy})">${s}</g>`;
 }
 
-// ---------- логотип: Tobi на чёрной плитке ----------
-const logo = (x, y, s) => `<g transform="translate(${x} ${y})"><rect width="${s}" height="${s}" rx="${s * 0.26}" fill="#000" stroke="#2a2418"/>${tobi(s / 2, s * 0.58, s * 0.3)}</g>`;
+// ---------- логотип: иконка приложения ----------
+const logo = (x, y, s) => `<image x="${x}" y="${y}" width="${s}" height="${s}" href="data:image/png;base64,${ICON_PNG}"/>`;
 
 // ---------- клавиша ----------
 function keycap(x, y, label, h = 30) {
@@ -116,11 +123,11 @@ function island(x, y, t) {
   s += `<rect x="20" y="188" width="${bw}" height="32" rx="10" fill="#1a1a1a" stroke="#333"/>`;
   s += fitText(20 + bw / 2, 209, sc.deny, bw - 16, { size: 13, weight: 700, anchor: 'middle' });
   s += `<rect x="${32 + bw}" y="188" width="${bw}" height="32" rx="10" fill="url(#btnh)"/>`;
-  s += fitText(32 + bw * 1.5, 209, sc.allow, bw - 16, { size: 13, weight: 700, anchor: 'middle', fill: '#2A1A00' });
+  s += fitText(32 + bw * 1.5, 209, sc.allow, bw - 16, { size: 13, weight: 700, anchor: 'middle', fill: '#021226' });
   return `<g transform="translate(${x} ${y})">${s}</g>`;
 }
 const HERO_DEFS = `${TOBI_DEFS}
-<linearGradient id="btnh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD27A"/><stop offset="1" stop-color="#F2A93B"/></linearGradient>`;
+<linearGradient id="btnh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CBBFF"/><stop offset="1" stop-color="#1F7BF0"/></linearGradient>`;
 
 // ---------- HERO ----------
 function hero(t) {

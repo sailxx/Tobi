@@ -126,7 +126,8 @@ impl KeyLogic {
         }
     }
 
-    /// Hands-free straight away (the pill's microphone button).
+    /// Hands-free straight away.
+    #[cfg(test)]
     pub fn lock(&mut self) {
         self.phase = Phase::Locked;
     }

@@ -647,16 +647,3 @@ pub fn set_layer_overlay(_win: &WebviewWindow, _on: bool) {}
 pub fn layer_display(_island: &WebviewWindow, _tobi: &WebviewWindow) -> Option<(f64, f64)> {
     None
 }
-
-// ── Flow dictation's pill ─────────────────────────────────────────────────────
-// On Windows the pill is placed with set_position and a cursor poll decides
-// click-through (flow/pill.rs), like the island.
-
-pub fn prepare_pill_window(win: &WebviewWindow, _mode: super::DesktopMode) -> bool {
-    make_non_activating(win);
-    true
-}
-
-pub fn set_pill_edge(_win: &WebviewWindow, _edge: &str) {}
-
-pub fn set_pill_input(_win: &WebviewWindow, _rects: Vec<(f64, f64, f64, f64)>) {}

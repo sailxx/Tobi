@@ -4298,19 +4298,6 @@
    "de": "Erneut einfügen",
    "tr": "Yeniden yapıştır"
   },
-  "Tobi can't watch the keyboard here: use the pill's microphone to dictate.": {
-   "zh-Hans": "Tobi 在这里无法监听键盘：请用胶囊上的麦克风听写。",
-   "hi": "Tobi यहाँ कीबोर्ड नहीं देख सकता: बोलकर लिखने के लिए पिल का माइक्रोफ़ोन इस्तेमाल करें।",
-   "es": "Tobi no puede vigilar el teclado aquí: usa el micrófono de la píldora para dictar.",
-   "ar": "لا يستطيع Tobi مراقبة لوحة المفاتيح هنا: استخدم ميكروفون الكبسولة للإملاء.",
-   "fr": "Tobi ne peut pas surveiller le clavier ici : utilise le micro de la pilule pour dicter.",
-   "bn": "Tobi এখানে কিবোর্ড দেখতে পারে না: ডিক্টেট করতে পিলের মাইক্রোফোন ব্যবহার করুন।",
-   "pt-BR": "O Tobi não consegue observar o teclado aqui: use o microfone da pílula para ditar.",
-   "ru": "Здесь Tobi не может следить за клавиатурой: диктуйте через микрофон на пилюле.",
-   "id": "Tobi tidak bisa memantau keyboard di sini: gunakan mikrofon pil untuk mendikte.",
-   "de": "Tobi kann hier die Tastatur nicht überwachen: Nutze zum Diktieren das Mikrofon der Kapsel.",
-   "tr": "Tobi burada klavyeyi izleyemiyor: dikte etmek için aracın mikrofonunu kullan."
-  },
   "Microphone": {
    "zh-Hans": "麦克风",
    "hi": "माइक्रोफ़ोन",
@@ -4414,32 +4401,6 @@
    "id": "Riwayat, statistik, dan catatanmu tetap di komputer ini, di folder Tobi. Dikte tidak pernah disimpan sebagai audio; audio panggilan dihapus begitu transkripnya ditulis.",
    "de": "Verlauf, Statistik und Notizen bleiben auf diesem Computer im Tobi-Ordner. Diktate werden nie als Audio gespeichert; die Gesprächsaufnahme wird gelöscht, sobald das Transkript geschrieben ist.",
    "tr": "Geçmiş, istatistikler ve notların bu bilgisayarda, Tobi klasöründe kalır. Dikteler asla ses olarak kaydedilmez; görüşmenin sesi, dökümü yazılır yazılmaz silinir."
-  },
-  "{0} h {1}": {
-   "zh-Hans": "{0} 小时 {1}",
-   "hi": "{0} घं {1}",
-   "es": "{0} h {1}",
-   "ar": "{0} س {1}",
-   "fr": "{0} h {1}",
-   "bn": "{0} ঘ {1}",
-   "pt-BR": "{0} h {1}",
-   "ru": "{0} ч {1}",
-   "id": "{0} j {1}",
-   "de": "{0} Std. {1}",
-   "tr": "{0} sa {1}"
-  },
-  "Counted on this computer, never sent anywhere.": {
-   "zh-Hans": "在这台电脑上统计，从不发送到任何地方。",
-   "hi": "इसी कंप्यूटर पर गिना गया, कहीं भेजा नहीं जाता।",
-   "es": "Contado en este ordenador, nunca se envía a ningún sitio.",
-   "ar": "تُحسب على هذا الحاسوب، ولا تُرسل إلى أي مكان.",
-   "fr": "Compté sur cet ordinateur, jamais envoyé nulle part.",
-   "bn": "এই কম্পিউটারেই গোনা হয়, কোথাও পাঠানো হয় না।",
-   "pt-BR": "Contado neste computador, nunca enviado para lugar nenhum.",
-   "ru": "Считается на этом компьютере и никуда не отправляется.",
-   "id": "Dihitung di komputer ini, tidak pernah dikirim ke mana pun.",
-   "de": "Wird auf diesem Computer erfasst und nirgendwohin gesendet.",
-   "tr": "Bu bilgisayarda hesaplanır, hiçbir yere gönderilmez."
   },
   "Tobi writes your calls on this computer with Parakeet, and tells the voices apart with a second small model. Both are downloaded once (about {0} MB), then everything works offline.": {
    "zh-Hans": "Tobi 用 Parakeet 在这台电脑上转写你的通话，并用另一个小模型区分不同的声音。两者只需下载一次（约 {0} MB），之后一切都可离线运行。",
@@ -4570,32 +4531,6 @@
    "id": "Unduh model suara untuk mendikte",
    "de": "Sprachmodell zum Diktieren herunterladen",
    "tr": "Dikte etmek için ses modelini indir"
-  },
-  "Use the pill's microphone to dictate": {
-   "zh-Hans": "用胶囊上的麦克风听写",
-   "hi": "डिक्टेट करने के लिए पिल का माइक्रोफ़ोन इस्तेमाल करें",
-   "es": "Usa el micrófono de la píldora para dictar",
-   "ar": "استخدم ميكروفون الكبسولة للإملاء",
-   "fr": "Utilise le micro de la pilule pour dicter",
-   "bn": "ডিক্টেট করতে পিলের মাইক্রোফোন ব্যবহার করুন",
-   "pt-BR": "Use o microfone da pílula para ditar",
-   "ru": "Диктуйте через микрофон на пилюле",
-   "id": "Gunakan mikrofon pil untuk mendikte",
-   "de": "Zum Diktieren das Mikrofon der Kapsel verwenden",
-   "tr": "Dikte etmek için aracın mikrofonunu kullan"
-  },
-  "Copied · press Ctrl+V to paste": {
-   "zh-Hans": "已复制 · 按 Ctrl+V 粘贴",
-   "hi": "कॉपी हुआ · पेस्ट करने के लिए Ctrl+V दबाएँ",
-   "es": "Copiado · pulsa Ctrl+V para pegar",
-   "ar": "تم النسخ · اضغط Ctrl+V للصق",
-   "fr": "Copié · Ctrl+V pour coller",
-   "bn": "কপি হয়েছে · পেস্ট করতে Ctrl+V চাপুন",
-   "pt-BR": "Copiado · pressione Ctrl+V para colar",
-   "ru": "Скопировано · Ctrl+V, чтобы вставить",
-   "id": "Disalin · tekan Ctrl+V untuk menempel",
-   "de": "Kopiert · zum Einfügen Ctrl+V drücken",
-   "tr": "Kopyalandı · yapıştırmak için Ctrl+V tuşlarına bas"
   },
   "Download the voice model first, in Tobi → Settings → Recognition.": {
    "zh-Hans": "请先在“Tobi → 设置 → 识别”中下载语音模型。",
@@ -5143,32 +5078,6 @@
    "de": "Oben am Bildschirm bleibt nichts, solange Tobi nichts zu zeigen hat. Ruf ihn mit Strg+Alt+N; Anfragen deiner Agenten holen ihn trotzdem hervor.",
    "tr": "Tobi'nin gösterecek bir şeyi yokken ekranın üstünde hiçbir şey kalmaz. Onu Ctrl+Alt+N ile çağır; ajanlarının istekleri onu yine de getirir."
   },
-  "Show the pill at rest": {
-   "zh-Hans": "空闲时显示胶囊",
-   "hi": "आराम में पिल दिखाएँ",
-   "es": "Mostrar la píldora en reposo",
-   "ar": "إظهار الكبسولة عند الخمول",
-   "fr": "Afficher la pilule au repos",
-   "bn": "বিশ্রামে পিল দেখান",
-   "pt-BR": "Mostrar a pílula em repouso",
-   "ru": "Показывать пилюлю в покое",
-   "id": "Tampilkan pil saat diam",
-   "de": "Pille in Ruhe anzeigen",
-   "tr": "Hapı boştayken göster"
-  },
-  "Off: the pill only shows while you dictate or record a call.": {
-   "zh-Hans": "关闭：仅在听写或录制通话时显示胶囊。",
-   "hi": "बंद: पिल केवल डिक्टेशन या कॉल रिकॉर्ड करते समय दिखती है।",
-   "es": "Desactivado: la píldora solo aparece mientras dictas o grabas una llamada.",
-   "ar": "عند الإيقاف: تظهر الكبسولة فقط أثناء الإملاء أو تسجيل مكالمة.",
-   "fr": "Désactivé : la pilule n'apparaît que pendant la dictée ou l'enregistrement d'un appel.",
-   "bn": "বন্ধ: শুধু ডিক্টেশন বা কল রেকর্ড করার সময় পিল দেখা যায়।",
-   "pt-BR": "Desligado: a pílula só aparece enquanto você dita ou grava uma chamada.",
-   "ru": "Если выключено, пилюля видна только во время диктовки или записи звонка.",
-   "id": "Mati: pil hanya muncul saat Anda mendikte atau merekam panggilan.",
-   "de": "Aus: Die Pille erscheint nur beim Diktieren oder beim Aufnehmen eines Anrufs.",
-   "tr": "Kapalı: hap yalnızca dikte ederken veya arama kaydederken görünür."
-  },
   "Writing…": {
    "zh-Hans": "正在写…",
    "hi": "लिख रहा है…",
@@ -5234,31 +5143,18 @@
    "de": "Text",
    "tr": "Metin"
   },
-  "Show the pill": {
-   "zh-Hans": "显示胶囊",
-   "hi": "पिल दिखाएँ",
-   "es": "Mostrar la píldora",
-   "ar": "إظهار الكبسولة",
-   "fr": "Afficher la pilule",
-   "bn": "পিল দেখান",
-   "pt-BR": "Mostrar a pílula",
-   "ru": "Показывать пилюлю",
-   "id": "Tampilkan pil",
-   "de": "Pille anzeigen",
-   "tr": "Hapı göster"
-  },
-  "Off: nothing on the screen's edges; the dictation key still works.": {
-   "zh-Hans": "关闭：屏幕边缘不显示任何内容；听写键仍可使用。",
-   "hi": "बंद: स्क्रीन के किनारों पर कुछ नहीं; डिक्टेशन कुंजी फिर भी काम करती है।",
-   "es": "Desactivado: nada en los bordes de la pantalla; la tecla de dictado sigue funcionando.",
-   "ar": "عند الإيقاف: لا شيء على حواف الشاشة؛ ويبقى مفتاح الإملاء يعمل.",
-   "fr": "Désactivé : rien sur les bords de l'écran ; la touche de dictée fonctionne toujours.",
-   "bn": "বন্ধ: স্ক্রিনের কিনারায় কিছু থাকে না; ডিক্টেশন কী তবুও কাজ করে।",
-   "pt-BR": "Desligado: nada nas bordas da tela; a tecla de ditado continua funcionando.",
-   "ru": "Если выключено, по краям экрана ничего нет; клавиша диктовки всё равно работает.",
-   "id": "Mati: tidak ada apa pun di tepi layar; tombol dikte tetap berfungsi.",
-   "de": "Aus: nichts an den Bildschirmrändern; die Diktiertaste funktioniert weiter.",
-   "tr": "Kapalı: ekran kenarlarında hiçbir şey olmaz; dikte tuşu yine çalışır."
+  "Tobi can't watch the keyboard here": {
+   "zh-Hans": "Tobi 在这里无法监听键盘",
+   "hi": "Tobi यहाँ कीबोर्ड नहीं देख सकता",
+   "es": "Tobi no puede vigilar el teclado aquí",
+   "ar": "لا يستطيع Tobi مراقبة لوحة المفاتيح هنا",
+   "fr": "Tobi ne peut pas surveiller le clavier ici",
+   "bn": "Tobi এখানে কিবোর্ড দেখতে পারে না",
+   "pt-BR": "O Tobi não consegue observar o teclado aqui",
+   "ru": "Здесь Tobi не может следить за клавиатурой",
+   "id": "Tobi tidak bisa memantau keyboard di sini",
+   "de": "Tobi kann hier die Tastatur nicht überwachen",
+   "tr": "Tobi burada klavyeyi izleyemiyor"
   }
  }
 }

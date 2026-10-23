@@ -1,13 +1,13 @@
-// Flow → Settings: the key, where the pill is, the microphone, the voice
+// Flow → Settings: the key, the microphone, the voice
 // model, the Notetaker's summaries, the window and the history. Port of
 // FlowHubSettings.swift.
 
 import { h, clear } from "../../views/dom";
 import { t } from "../../i18n/i18n";
 import { onEvent } from "../../core/bridge";
-import { FlowBridge, type Edge, type FlowKey, type ModelsStatus } from "../../core/flow";
+import { FlowBridge, type FlowKey, type ModelsStatus } from "../../core/flow";
 import type { HubContext } from "../shell";
-import { button, card, divider, keyKeycap, keycap, label, number, row, segmented, select, toggle } from "../ui";
+import { button, card, divider, keyKeycap, keycap, label, number, row, select, toggle } from "../ui";
 
 /** Download / progress / installed, for the voice model. Redraws itself. */
 export function modelsControl(ctx: HubContext, onReady?: () => void): HTMLElement {
@@ -67,7 +67,6 @@ export async function flowSettingsPage(page: HTMLElement, ctx: HubContext) {
     ["right_shift", t("Right {0}", { 0: "Shift" })],
     ["left_ctrl_super", status.platform === "windows" ? "Ctrl + Win" : "Ctrl + Super"],
   ];
-  const edges: [Edge, string][] = [["bottom", t("Bottom")], ["left", t("Left")], ["right", t("Right")]];
   page.append(label(t("Keys")));
   const keysCard = card(
     row(t("Hold a key to dictate anywhere"), null, toggle(prefs.enabled, (on) => void ctx.setPrefs((p) => (p.enabled = on)))),
@@ -76,12 +75,6 @@ export async function flowSettingsPage(page: HTMLElement, ctx: HubContext) {
       ? row(t("Hold to dictate"), null, keyKeycap("wayland", status.platform))
       : row(t("Hold to dictate"), prefs.key === "right_alt" ? t("On a keyboard with AltGr, the right Alt types characters: pick another key.") : null,
         select(keys, prefs.key, (key) => void ctx.setPrefs((p) => (p.key = key)).then(() => ctx.navigate("flowsettings")))),
-    divider(),
-    row(t("Where the pill is"), null, segmented(edges, prefs.edge, (edge) => void ctx.setPrefs((p) => (p.edge = edge)))),
-    divider(),
-    row(t("Show the pill"), t("Off: nothing on the screen's edges; the dictation key still works."), toggle(prefs.showPill, (on) => void ctx.setPrefs((p) => (p.showPill = on)))),
-    divider(),
-    row(t("Show the pill at rest"), t("Off: the pill only shows while you dictate or record a call."), toggle(prefs.pillAtRest, (on) => void ctx.setPrefs((p) => (p.pillAtRest = on)))),
     divider(),
     row(t("Hands-free"), t("Tap twice, speak as long as you like, tap once to paste."), keyKeycap(status.keys === "wayland" ? "wayland" : prefs.key, status.platform, true)),
     divider(),
@@ -95,7 +88,7 @@ export async function flowSettingsPage(page: HTMLElement, ctx: HubContext) {
       text: t("On Wayland, the desktop holds the dictation key for Tobi: Ctrl+Alt+V, or the keys you picked when it asked. The first paste asks once to let Tobi type for you."),
     }));
   } else if (status.keys !== "ok") {
-    keysCard.append(h("div", { class: "hub-warn", text: t("Tobi can't watch the keyboard here: use the pill's microphone to dictate.") }));
+    keysCard.append(h("div", { class: "hub-warn", text: t("Tobi can't watch the keyboard here") }));
   }
   page.append(keysCard);
 

@@ -63,7 +63,6 @@ export default defineConfig({
         island: resolve(__dirname, "index.html"),
         settings: resolve(__dirname, "settings.html"),
         tobi: resolve(__dirname, "tobi.html"),
-        pill: resolve(__dirname, "pill.html"),
       },
     },
   },

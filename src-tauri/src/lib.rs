@@ -923,10 +923,6 @@ pub fn run() {
             flow::flow_paste_again,
             flow::flow_models_download,
             flow::flow_models_remove,
-            flow::pill_state,
-            flow::pill_hot,
-            flow::pill_hover,
-            flow::pill_action,
             notes::notes_state,
             notes::notes_start,
             notes::notes_stop,
@@ -956,7 +952,7 @@ pub fn run() {
             tray::build(&handle)?;
             // Before the island: see create_settings_window.
             create_settings_window(&handle);
-            // Same rule for Tobi's desktop window and the dictation pill.
+            // Same rule for Tobi's desktop window.
             desktop::setup(&handle);
             flow::setup(&handle);
             notes::setup(&handle);

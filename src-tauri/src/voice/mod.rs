@@ -250,7 +250,7 @@ fn speak(app: &AppHandle, text: &str) {
     let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
     let (tx, rx) = mpsc::channel();
     pending().lock().unwrap().insert(id, tx);
-    let _ = app.emit_to(pill::LABEL, "voice-say", Say { id, text: text.into(), lang: wake::speech_lang(text), audio, gender });
+    let _ = app.emit_to(crate::island::WINDOW_LABEL, "voice-say", Say { id, text: text.into(), lang: wake::speech_lang(text), audio, gender });
     let words = crate::flow::text::word_count(text) as u64;
     let _ = rx.recv_timeout(Duration::from_millis(4000 + words * 600));
     pending().lock().unwrap().remove(&id);

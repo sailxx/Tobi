@@ -1,6 +1,4 @@
-/* The Tobi window: an OLED-black sidebar, a dark panel holding the pages,
-   and on top of each page a coloured band where little Tobis walk. Same
-   look as the Mac's Tobi window (FlowHub.swift). */
+/* The Tobi window: an OLED-black sidebar and a dark panel holding the pages. */
 
 :root {
   --hub-panel: #0e0f11;
@@ -34,12 +32,12 @@ body.hub-window {
 /* ── Sidebar ──────────────────────────────────────────────────────────────── */
 
 .hub-side {
-  width: 228px;
-  flex: 0 0 228px;
+  width: 208px;
+  flex: 0 0 208px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 18px 12px 12px;
+  gap: 2px;
+  padding: 18px 12px 14px;
   overflow-y: auto;
 }
 
@@ -70,8 +68,8 @@ body.hub-window {
   gap: 11px;
   width: 100%;
   padding: 0 12px;
-  height: 32px;
-  border-radius: 9px;
+  height: 36px;
+  border-radius: 10px;
   background: transparent;
   color: #c7cad0;
   font: 500 13.5px var(--font);
@@ -167,69 +165,75 @@ body.hub-window {
   padding: 0;
 }
 
-/* ── Hero band ────────────────────────────────────────────────────────────── */
+/* ── Page head and tabs ───────────────────────────────────────────────────── */
 
-.hub-hero {
-  position: relative;
-  height: 170px;
-  border-radius: 18px;
-  overflow: hidden;
-  flex: 0 0 auto;
-  border: 1px solid var(--hero-line, rgba(255, 255, 255, 0.1));
-}
-
-.hub-hero.compact {
-  height: 116px;
-}
-
-.hub-hero canvas.backdrop,
-.hub-hero canvas.troupe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.hub-hero .copy {
-  position: relative;
+.hub-head {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 26px;
-  max-width: calc(100% - 340px);
-  height: 100%;
-  pointer-events: none;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 0 0 auto;
+  padding: 4px 2px 6px;
 }
 
-.hub-hero.compact .copy {
-  padding: 20px;
-}
-
-.hub-hero .copy > * {
-  pointer-events: auto;
-}
-
-.hub-hero h1 {
-  font: 700 30px var(--font);
+.hub-head h1 {
+  font: 700 28px var(--font);
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
-.hub-hero.compact h1 {
-  font-size: 24px;
-}
-
-.hub-hero p {
+.hub-head p,
+.hub-lead {
   font-size: 14px;
-  color: #b7bbc2;
-  max-width: 420px;
+  color: var(--hub-secondary);
+  margin-top: 4px;
 }
 
-.hub-hero .actions {
-  margin-top: auto;
+.hub-lead {
+  margin: -6px 2px 0;
+}
+
+.hub-head .actions {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.hub-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.05);
+  align-self: flex-start;
+}
+
+.hub-tabs button {
+  padding: 6px 16px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--hub-secondary);
+  font: 600 13px var(--font);
+}
+
+.hub-tabs button:hover:not(:disabled) {
+  color: var(--hub-text);
+  background: transparent;
+}
+
+.hub-tabs button.on {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--hub-text);
+}
+
+.hub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hub-page > .hub-input[type="search"] {
+  width: 100%;
 }
 
 /* ── Cards, rows and controls of the Flow pages ───────────────────────────── */
@@ -521,43 +525,12 @@ button.hub-icon svg {
   opacity: 1;
 }
 
-.hub-big-number {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-.hub-big-number b {
-  font: 700 32px var(--font);
-  letter-spacing: -0.02em;
-}
-
-.hub-big-number span {
-  color: var(--hub-secondary);
-  font-size: 13px;
-}
-
-/* A card in a colour: the band's black and particles. */
+/* A card that asks for attention. */
 .hub-glow {
-  position: relative;
   border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--glow-line, rgba(255, 255, 255, 0.1));
-}
-
-.hub-glow canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.hub-glow .inner {
-  position: relative;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  background: var(--hub-card);
+  border: 1px solid rgba(251, 146, 60, 0.35);
 }
 
 .hub-link {
@@ -587,102 +560,6 @@ button.hub-icon svg {
 .hub-empty canvas {
   width: 64px;
   height: 64px;
-}
-
-/* ── Statistics ───────────────────────────────────────────────────────────── */
-
-.hub-stat-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.hub-stat {
-  background: var(--hub-card);
-  border: 1px solid var(--hub-line);
-  border-radius: 14px;
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.hub-stat .label {
-  color: var(--hub-secondary);
-  font-size: 12.5px;
-}
-
-.hub-stat b {
-  font: 700 28px var(--font);
-  letter-spacing: -0.02em;
-}
-
-.hub-stat .sub {
-  color: var(--hub-muted);
-  font-size: 12px;
-}
-
-.hub-chart-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: 14px;
-  align-items: start;
-}
-
-.hub-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 180px;
-  border-bottom: 1px dashed rgba(251, 146, 60, 0.35);
-}
-
-.hub-bars i {
-  flex: 1 1 0;
-  border-radius: 4px 4px 1px 1px;
-  background: var(--hub-accent);
-  min-height: 0;
-}
-
-.hub-bars i.zero {
-  background: transparent;
-}
-
-.hub-axis {
-  display: flex;
-  justify-content: space-between;
-  color: var(--hub-muted);
-  font-size: 11px;
-}
-
-.hub-app-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.hub-app-bar .top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-}
-
-.hub-app-bar .top span {
-  color: var(--hub-secondary);
-}
-
-.hub-app-bar .track {
-  height: 5px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-
-.hub-app-bar .track i {
-  display: block;
-  height: 100%;
-  background: var(--hub-accent);
-  border-radius: 3px;
 }
 
 /* ── Dictionary, snippets and styles ──────────────────────────────────────── */
@@ -906,15 +783,6 @@ button.hub-icon svg {
 @media (max-width: 1000px) {
   .hub-columns {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .hub-stat-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .hub-chart-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .hub-hero .copy {
-    max-width: 100%;
   }
 }
 
