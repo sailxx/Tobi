@@ -5169,32 +5169,6 @@
    "de": "Claude (Abo)",
    "tr": "Claude (abonelik)"
   },
-  "Claude Code is not signed in. Open a terminal, run claude, and sign in with /login.": {
-   "zh-Hans": "Claude Code 未登录。打开终端，运行 claude，并用 /login 登录。",
-   "hi": "Claude Code साइन इन नहीं है। टर्मिनल खोलें, claude चलाएँ और /login से साइन इन करें।",
-   "es": "Claude Code no ha iniciado sesión. Abre una terminal, ejecuta claude e inicia sesión con /login.",
-   "ar": "Claude Code غير مسجّل الدخول. افتح الطرفية، شغّل claude وسجّل الدخول عبر /login.",
-   "fr": "Claude Code n’est pas connecté. Ouvrez un terminal, lancez claude et connectez-vous avec /login.",
-   "bn": "Claude Code সাইন ইন করা নেই। টার্মিনাল খুলে claude চালান এবং /login দিয়ে সাইন ইন করুন।",
-   "pt-BR": "O Claude Code não está conectado. Abra um terminal, execute claude e entre com /login.",
-   "ru": "Claude Code не авторизован. Откройте терминал, запустите claude и войдите командой /login.",
-   "id": "Claude Code belum masuk. Buka terminal, jalankan claude, lalu masuk dengan /login.",
-   "de": "Claude Code ist nicht angemeldet. Öffne ein Terminal, starte claude und melde dich mit /login an.",
-   "tr": "Claude Code oturum açmamış. Bir terminal açın, claude komutunu çalıştırın ve /login ile giriş yapın."
-  },
-  "Claude Code is not installed. Install it from claude.com/claude-code and sign in.": {
-   "zh-Hans": "未安装 Claude Code。请从 claude.com/claude-code 安装并登录。",
-   "hi": "Claude Code इंस्टॉल नहीं है। इसे claude.com/claude-code से इंस्टॉल करें और साइन इन करें।",
-   "es": "Claude Code no está instalado. Instálalo desde claude.com/claude-code e inicia sesión.",
-   "ar": "Claude Code غير مثبّت. ثبّته من claude.com/claude-code وسجّل الدخول.",
-   "fr": "Claude Code n’est pas installé. Installez-le depuis claude.com/claude-code et connectez-vous.",
-   "bn": "Claude Code ইনস্টল করা নেই। claude.com/claude-code থেকে ইনস্টল করে সাইন ইন করুন।",
-   "pt-BR": "O Claude Code não está instalado. Instale em claude.com/claude-code e entre.",
-   "ru": "Claude Code не установлен. Установите его с claude.com/claude-code и войдите.",
-   "id": "Claude Code belum terpasang. Pasang dari claude.com/claude-code lalu masuk.",
-   "de": "Claude Code ist nicht installiert. Installiere es von claude.com/claude-code und melde dich an.",
-   "tr": "Claude Code yüklü değil. claude.com/claude-code adresinden yükleyip giriş yapın."
-  },
   "Claude Code failed: {error}": {
    "zh-Hans": "Claude Code 出错：{error}",
    "hi": "Claude Code विफल: {error}",
@@ -5220,6 +5194,97 @@
    "id": "Claude Code terlalu lama menjawab.",
    "de": "Claude Code hat zu lange für die Antwort gebraucht.",
    "tr": "Claude Code yanıt vermekte çok gecikti."
+  },
+  "Claude Code is not signed in. Open the model picker and press Sign in.": {
+   "zh-Hans": "Claude Code 未登录。打开模型选择器并点击“登录”。",
+   "hi": "Claude Code साइन इन नहीं है। मॉडल चुनने वाला खोलें और “साइन इन” दबाएँ।",
+   "es": "Claude Code no ha iniciado sesión. Abre el selector de modelos y pulsa Iniciar sesión.",
+   "ar": "Claude Code غير مسجّل الدخول. افتح منتقي النماذج واضغط تسجيل الدخول.",
+   "fr": "Claude Code n’est pas connecté. Ouvrez le sélecteur de modèle et appuyez sur Se connecter.",
+   "bn": "Claude Code সাইন ইন করা নেই। মডেল পিকার খুলে “সাইন ইন” চাপুন।",
+   "pt-BR": "O Claude Code não está conectado. Abra o seletor de modelo e toque em Entrar.",
+   "ru": "Claude Code не авторизован. Откройте выбор модели и нажмите «Войти».",
+   "id": "Claude Code belum masuk. Buka pemilih model dan tekan Masuk.",
+   "de": "Claude Code ist nicht angemeldet. Öffne die Modellauswahl und tippe auf Anmelden.",
+   "tr": "Claude Code oturum açmamış. Model seçiciyi açıp Giriş yap düğmesine basın."
+  },
+  "Claude Code is not installed. Open the model picker to get it.": {
+   "zh-Hans": "未安装 Claude Code。打开模型选择器获取它。",
+   "hi": "Claude Code इंस्टॉल नहीं है। इसे पाने के लिए मॉडल चुनने वाला खोलें।",
+   "es": "Claude Code no está instalado. Abre el selector de modelos para obtenerlo.",
+   "ar": "Claude Code غير مثبّت. افتح منتقي النماذج للحصول عليه.",
+   "fr": "Claude Code n’est pas installé. Ouvrez le sélecteur de modèle pour l’obtenir.",
+   "bn": "Claude Code ইনস্টল করা নেই। পেতে মডেল পিকার খুলুন।",
+   "pt-BR": "O Claude Code não está instalado. Abra o seletor de modelo para obtê-lo.",
+   "ru": "Claude Code не установлен. Откройте выбор модели, чтобы получить его.",
+   "id": "Claude Code belum terpasang. Buka pemilih model untuk mendapatkannya.",
+   "de": "Claude Code ist nicht installiert. Öffne die Modellauswahl, um es zu holen.",
+   "tr": "Claude Code yüklü değil. Almak için model seçiciyi açın."
+  },
+  "Claude Code is not installed.": {
+   "zh-Hans": "未安装 Claude Code。",
+   "hi": "Claude Code इंस्टॉल नहीं है।",
+   "es": "Claude Code no está instalado.",
+   "ar": "Claude Code غير مثبّت.",
+   "fr": "Claude Code n’est pas installé.",
+   "bn": "Claude Code ইনস্টল করা নেই।",
+   "pt-BR": "O Claude Code não está instalado.",
+   "ru": "Claude Code не установлен.",
+   "id": "Claude Code belum terpasang.",
+   "de": "Claude Code ist nicht installiert.",
+   "tr": "Claude Code yüklü değil."
+  },
+  "Get Claude Code": {
+   "zh-Hans": "获取 Claude Code",
+   "hi": "Claude Code पाएँ",
+   "es": "Obtener Claude Code",
+   "ar": "احصل على Claude Code",
+   "fr": "Obtenir Claude Code",
+   "bn": "Claude Code নিন",
+   "pt-BR": "Obter o Claude Code",
+   "ru": "Скачать Claude Code",
+   "id": "Dapatkan Claude Code",
+   "de": "Claude Code holen",
+   "tr": "Claude Code’u edinin"
+  },
+  "Sign in with your Claude account to chat on your subscription.": {
+   "zh-Hans": "用 Claude 账号登录，即可使用你的订阅聊天。",
+   "hi": "अपने सब्सक्रिप्शन पर चैट करने के लिए Claude खाते से साइन इन करें।",
+   "es": "Inicia sesión con tu cuenta de Claude para chatear con tu suscripción.",
+   "ar": "سجّل الدخول بحساب Claude للدردشة عبر اشتراكك.",
+   "fr": "Connectez-vous avec votre compte Claude pour discuter avec votre abonnement.",
+   "bn": "আপনার সাবস্ক্রিপশনে চ্যাট করতে Claude অ্যাকাউন্টে সাইন ইন করুন।",
+   "pt-BR": "Entre com sua conta Claude para conversar pela sua assinatura.",
+   "ru": "Войдите в аккаунт Claude, чтобы общаться по вашей подписке.",
+   "id": "Masuk dengan akun Claude untuk mengobrol dengan langganan Anda.",
+   "de": "Melde dich mit deinem Claude-Konto an, um mit deinem Abo zu chatten.",
+   "tr": "Aboneliğinizle sohbet etmek için Claude hesabınızla giriş yapın."
+  },
+  "Sign in": {
+   "zh-Hans": "登录",
+   "hi": "साइन इन",
+   "es": "Iniciar sesión",
+   "ar": "تسجيل الدخول",
+   "fr": "Se connecter",
+   "bn": "সাইন ইন",
+   "pt-BR": "Entrar",
+   "ru": "Войти",
+   "id": "Masuk",
+   "de": "Anmelden",
+   "tr": "Giriş yap"
+  },
+  "Waiting for the browser…": {
+   "zh-Hans": "正在等待浏览器…",
+   "hi": "ब्राउज़र की प्रतीक्षा…",
+   "es": "Esperando al navegador…",
+   "ar": "في انتظار المتصفح…",
+   "fr": "En attente du navigateur…",
+   "bn": "ব্রাউজারের অপেক্ষায়…",
+   "pt-BR": "Aguardando o navegador…",
+   "ru": "Ждём браузер…",
+   "id": "Menunggu browser…",
+   "de": "Warte auf den Browser…",
+   "tr": "Tarayıcı bekleniyor…"
   }
  }
 }

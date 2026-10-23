@@ -26,6 +26,8 @@ pub const WINDOW_LABEL: &str = "island";
 /// Margin around the island that still counts as "on the island", in logical px.
 /// Wider than the macOS 6 pt because a click must never be swallowed.
 const HIT_MARGIN: f64 = 14.0;
+/// How far around the island a file drag is still taken (see the cursor poll).
+const DROP_MARGIN: f64 = 48.0;
 
 #[derive(Serialize, Clone)]
 pub struct CursorPayload {
@@ -483,8 +485,8 @@ pub fn spawn_cursor_poll(app: AppHandle, gate: Arc<PollGate>) {
                 // WindowFromPoint, so OLE finds no drop target and shows the "no
                 // drop" cursor. macOS has no such problem: AppKit delivers drags to
                 // registered destinations whatever ignoresMouseEvents says. So while
-                // a button is held anywhere over the panel, the whole panel takes
-                // the mouse, which also makes the drop zone as forgiving as the Mac's.
+                // a button is held near the island, the panel takes the mouse,
+                // which also makes the drop zone as forgiving as the Mac's.
                 // A press may be the start of a drag: make sure the drop target is
                 // ours before the file arrives.
                 let down = left_button_down();
@@ -494,11 +496,21 @@ pub fn spawn_cursor_poll(app: AppHandle, gate: Arc<PollGate>) {
                 }
                 was_down = down;
 
+                // Only near the island, though: the rest of the panel is empty
+                // screen, and a drag of desktop icons across it must stay the
+                // desktop's. The wake strip (collapsed) is small enough to take whole.
+                let strip = size.1 <= STRIP_H + 1.0;
+                let near_island = r.w > 0.0
+                    && x >= r.x - DROP_MARGIN
+                    && x <= r.x + r.w + DROP_MARGIN
+                    && y >= r.y - DROP_MARGIN
+                    && y <= r.y + r.h + DROP_MARGIN;
                 let dragging = down
                     && x >= 0.0
                     && x <= size.0
                     && y >= 0.0
-                    && y <= size.1;
+                    && y <= size.1
+                    && (strip || near_island);
 
                 let accept = on_island || dragging;
                 if gate.ignoring.load(Ordering::Relaxed) == accept {

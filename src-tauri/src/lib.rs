@@ -545,6 +545,18 @@ async fn chat_models(shared: State<'_, Shared>, provider: String) -> Result<Vec<
     chat::models(&settings, &provider).await
 }
 
+/// Claude (subscription): is Claude Code installed, and signed in?
+#[tauri::command]
+async fn claude_code_status() -> claude_cli::Status {
+    claude_cli::status().await
+}
+
+/// Claude (subscription): opens the browser to sign in, and waits.
+#[tauri::command]
+async fn claude_code_login() -> claude_cli::Status {
+    claude_cli::login().await
+}
+
 /// Settings → Local models → Connect: does the server answer, and with which models?
 #[tauri::command]
 async fn local_connect(provider: String, url: String) -> Result<local_chat::Connected, String> {
@@ -841,6 +853,8 @@ pub fn run() {
             log_line,
             chat_send,
             chat_models,
+            claude_code_status,
+            claude_code_login,
             local_connect,
             local_set_key,
             chat_reset,

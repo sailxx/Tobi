@@ -27,6 +27,11 @@ const STRINGS = {
   loading: N_("Loading models…"),
   noKey: N_("No API key — add it in Settings."),
   openSettings: N_("Open Settings"),
+  notInstalled: N_("Claude Code is not installed."),
+  getIt: N_("Get Claude Code"),
+  signInLine: N_("Sign in with your Claude account to chat on your subscription."),
+  signIn: N_("Sign in"),
+  waiting: N_("Waiting for the browser…"),
 };
 
 let nextId = 1;
@@ -121,6 +126,34 @@ function buildPicker(onChange: () => void): Picker {
     list.append(line);
   }
 
+  /** Claude (subscription): the way to get Claude Code, or to sign in, without a terminal. */
+  function claudeCodeSetup(text: string, button: string, act: () => void) {
+    clear(list);
+    const line = h("div", { class: "picker-status", text });
+    line.append(h("button", { class: "picker-link", text: button, onclick: act }));
+    list.append(line);
+  }
+
+  async function loadClaudeCode(ticket: number) {
+    status(t(STRINGS.loading));
+    const state = await Bridge.claudeCodeStatus();
+    if (ticket !== request) return;
+    if (state && !state.installed) {
+      claudeCodeSetup(t(STRINGS.notInstalled), t(STRINGS.getIt), () => void Bridge.openUrl("https://claude.com/claude-code"));
+      return;
+    }
+    if (state && !state.signedIn) {
+      claudeCodeSetup(t(STRINGS.signInLine), t(STRINGS.signIn), () => {
+        status(t(STRINGS.waiting));
+        void Bridge.claudeCodeLogin().then(() => {
+          if (ticket === request) void loadModels();
+        });
+      });
+      return;
+    }
+    drawModels(providerDef("claude-code"), await Bridge.chatModels("claude-code"));
+  }
+
   function drawModels(p: ProviderDef, models: ModelInfo[]) {
     clear(list);
     const current = activeModel(State.settings);
@@ -146,6 +179,10 @@ function buildPicker(onChange: () => void): Picker {
   async function loadModels() {
     const p = providerDef(State.settings.chatProvider);
     const ticket = ++request;
+    if (p.id === "claude-code") {
+      void loadClaudeCode(ticket);
+      return;
+    }
     const cached = p.urlField ? undefined : cache.get(p.id);
     if (cached) {
       drawModels(p, cached);

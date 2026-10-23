@@ -343,6 +343,10 @@ export const Bridge = {
    * the provider only when it has a key (or a server address).
    */
   chatModels: (provider: string) => callOrThrow<ModelInfo[]>("chat_models", { provider }),
+  /** Claude (subscription): is Claude Code installed, and signed in? */
+  claudeCodeStatus: () => call<{ installed: boolean; signedIn: boolean }>("claude_code_status"),
+  /** Opens the browser to sign in with a Claude account; answers once it is done. */
+  claudeCodeLogin: () => call<{ installed: boolean; signedIn: boolean }>("claude_code_login"),
   /** Settings → Local models → Connect: does the server answer, and with which models? */
   /** The custom server's key, bound to the address it is entered for. */
   localSetKey: (url: string, key: string) => call<void>("local_set_key", { url, key }),

@@ -78,12 +78,69 @@ fn kill(pid: u32) {
     }
 }
 
+/// Whether Claude Code is there, and signed in, for the chat's picker.
+#[derive(Debug, Clone, Copy, serde::Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct Status {
+    pub installed: bool,
+    pub signed_in: bool,
+}
+
+fn logged_in(json: &str) -> bool {
+    serde_json::from_str::<Value>(json).ok().and_then(|v| v["loggedIn"].as_bool()).unwrap_or(false)
+}
+
+fn run_auth(exe: &PathBuf, arg: &str, wait: Duration) -> Option<String> {
+    let mut cmd = Command::new(exe);
+    cmd.args(["auth", arg]).current_dir(std::env::temp_dir());
+    cmd.stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::null());
+    crate::platform::no_console(&mut cmd);
+    let child = cmd.spawn().ok()?;
+    let pid = child.id();
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        let _ = tx.send(child.wait_with_output());
+    });
+    match rx.recv_timeout(wait) {
+        Ok(Ok(output)) => Some(String::from_utf8_lossy(&output.stdout).to_string()),
+        Ok(Err(_)) => None,
+        Err(_) => {
+            kill(pid);
+            None
+        }
+    }
+}
+
+/// Asked when the picker opens on Claude (subscription).
+pub async fn status() -> Status {
+    tokio::task::spawn_blocking(|| {
+        let Some(exe) = executable() else { return Status { installed: false, signed_in: false } };
+        let signed_in = run_auth(&exe, "status", Duration::from_secs(20)).is_some_and(|out| logged_in(&out));
+        Status { installed: true, signed_in }
+    })
+    .await
+    .unwrap_or(Status { installed: false, signed_in: false })
+}
+
+/// Opens the browser to sign in with a Claude account (`claude auth login`)
+/// and waits for the answer, up to five minutes.
+pub async fn login() -> Status {
+    tokio::task::spawn_blocking(|| {
+        let Some(exe) = executable() else { return Status { installed: false, signed_in: false } };
+        let _ = run_auth(&exe, "login", Duration::from_secs(300));
+        let signed_in = run_auth(&exe, "status", Duration::from_secs(20)).is_some_and(|out| logged_in(&out));
+        Status { installed: true, signed_in }
+    })
+    .await
+    .unwrap_or(Status { installed: false, signed_in: false })
+}
+
 /// What the CLI says on failure, in a line the chat can show.
 fn failure(stderr: &str, stdout: &str) -> String {
     let said = format!("{stderr}\n{stdout}");
     let lower = said.to_lowercase();
     if lower.contains("not logged in") || lower.contains("/login") || lower.contains("authentication") {
-        return t("Claude Code is not signed in. Open a terminal, run claude, and sign in with /login.");
+        return t("Claude Code is not signed in. Open the model picker and press Sign in.");
     }
     let line = said.lines().map(str::trim).find(|l| !l.is_empty()).unwrap_or("");
     tf("Claude Code failed: {error}", &[("error", line)])
@@ -91,7 +148,7 @@ fn failure(stderr: &str, stdout: &str) -> String {
 
 /// One chat turn through the installed Claude Code.
 pub async fn send(chat: &Chat, model: &str, query: String, context: Option<ChatContext>) -> Result<ChatReply, String> {
-    let exe = executable().ok_or_else(|| t("Claude Code is not installed. Install it from claude.com/claude-code and sign in."))?;
+    let exe = executable().ok_or_else(|| t("Claude Code is not installed. Open the model picker to get it."))?;
     let turn = chat.begin(ID);
     let text = question(turn.first, context.as_ref(), &query);
     let input = prompt(&turn.history, &text);
@@ -153,6 +210,13 @@ mod tests {
     fn a_missing_login_is_said_plainly() {
         assert!(failure("", "Not logged in · Please run /login").contains("signed in"));
         assert!(failure("boom\nmore", "").contains("boom"));
+    }
+
+    #[test]
+    fn the_login_state_is_read_from_the_status_json() {
+        assert!(logged_in(r#"{"loggedIn": true, "authMethod": "claude.ai"}"#));
+        assert!(!logged_in(r#"{"loggedIn": false}"#));
+        assert!(!logged_in("not json"));
     }
 
     #[test]
