@@ -5155,6 +5155,71 @@
    "id": "Tobi tidak bisa memantau keyboard di sini",
    "de": "Tobi kann hier die Tastatur nicht überwachen",
    "tr": "Tobi burada klavyeyi izleyemiyor"
+  },
+  "Claude (subscription)": {
+   "zh-Hans": "Claude（订阅）",
+   "hi": "Claude (सब्सक्रिप्शन)",
+   "es": "Claude (suscripción)",
+   "ar": "Claude (الاشتراك)",
+   "fr": "Claude (abonnement)",
+   "bn": "Claude (সাবস্ক্রিপশন)",
+   "pt-BR": "Claude (assinatura)",
+   "ru": "Claude (подписка)",
+   "id": "Claude (langganan)",
+   "de": "Claude (Abo)",
+   "tr": "Claude (abonelik)"
+  },
+  "Claude Code is not signed in. Open a terminal, run claude, and sign in with /login.": {
+   "zh-Hans": "Claude Code 未登录。打开终端，运行 claude，并用 /login 登录。",
+   "hi": "Claude Code साइन इन नहीं है। टर्मिनल खोलें, claude चलाएँ और /login से साइन इन करें।",
+   "es": "Claude Code no ha iniciado sesión. Abre una terminal, ejecuta claude e inicia sesión con /login.",
+   "ar": "Claude Code غير مسجّل الدخول. افتح الطرفية، شغّل claude وسجّل الدخول عبر /login.",
+   "fr": "Claude Code n’est pas connecté. Ouvrez un terminal, lancez claude et connectez-vous avec /login.",
+   "bn": "Claude Code সাইন ইন করা নেই। টার্মিনাল খুলে claude চালান এবং /login দিয়ে সাইন ইন করুন।",
+   "pt-BR": "O Claude Code não está conectado. Abra um terminal, execute claude e entre com /login.",
+   "ru": "Claude Code не авторизован. Откройте терминал, запустите claude и войдите командой /login.",
+   "id": "Claude Code belum masuk. Buka terminal, jalankan claude, lalu masuk dengan /login.",
+   "de": "Claude Code ist nicht angemeldet. Öffne ein Terminal, starte claude und melde dich mit /login an.",
+   "tr": "Claude Code oturum açmamış. Bir terminal açın, claude komutunu çalıştırın ve /login ile giriş yapın."
+  },
+  "Claude Code is not installed. Install it from claude.com/claude-code and sign in.": {
+   "zh-Hans": "未安装 Claude Code。请从 claude.com/claude-code 安装并登录。",
+   "hi": "Claude Code इंस्टॉल नहीं है। इसे claude.com/claude-code से इंस्टॉल करें और साइन इन करें।",
+   "es": "Claude Code no está instalado. Instálalo desde claude.com/claude-code e inicia sesión.",
+   "ar": "Claude Code غير مثبّت. ثبّته من claude.com/claude-code وسجّل الدخول.",
+   "fr": "Claude Code n’est pas installé. Installez-le depuis claude.com/claude-code et connectez-vous.",
+   "bn": "Claude Code ইনস্টল করা নেই। claude.com/claude-code থেকে ইনস্টল করে সাইন ইন করুন।",
+   "pt-BR": "O Claude Code não está instalado. Instale em claude.com/claude-code e entre.",
+   "ru": "Claude Code не установлен. Установите его с claude.com/claude-code и войдите.",
+   "id": "Claude Code belum terpasang. Pasang dari claude.com/claude-code lalu masuk.",
+   "de": "Claude Code ist nicht installiert. Installiere es von claude.com/claude-code und melde dich an.",
+   "tr": "Claude Code yüklü değil. claude.com/claude-code adresinden yükleyip giriş yapın."
+  },
+  "Claude Code failed: {error}": {
+   "zh-Hans": "Claude Code 出错：{error}",
+   "hi": "Claude Code विफल: {error}",
+   "es": "Claude Code falló: {error}",
+   "ar": "فشل Claude Code: {error}",
+   "fr": "Claude Code a échoué : {error}",
+   "bn": "Claude Code ব্যর্থ: {error}",
+   "pt-BR": "O Claude Code falhou: {error}",
+   "ru": "Ошибка Claude Code: {error}",
+   "id": "Claude Code gagal: {error}",
+   "de": "Claude Code ist fehlgeschlagen: {error}",
+   "tr": "Claude Code başarısız: {error}"
+  },
+  "Claude Code took too long to answer.": {
+   "zh-Hans": "Claude Code 响应时间过长。",
+   "hi": "Claude Code ने जवाब देने में बहुत देर की।",
+   "es": "Claude Code tardó demasiado en responder.",
+   "ar": "استغرق Claude Code وقتًا طويلًا للرد.",
+   "fr": "Claude Code a mis trop de temps à répondre.",
+   "bn": "Claude Code উত্তর দিতে অনেক সময় নিয়েছে।",
+   "pt-BR": "O Claude Code demorou demais para responder.",
+   "ru": "Claude Code слишком долго отвечал.",
+   "id": "Claude Code terlalu lama menjawab.",
+   "de": "Claude Code hat zu lange für die Antwort gebraucht.",
+   "tr": "Claude Code yanıt vermekte çok gecikti."
   }
  }
 }

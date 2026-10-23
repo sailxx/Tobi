@@ -13,7 +13,7 @@ use serde_json::{json, Value};
 use tauri::AppHandle;
 
 use crate::settings::Settings;
-use crate::{claude, local_chat, openai_compat, secrets};
+use crate::{claude, claude_cli, local_chat, openai_compat, secrets};
 
 pub const ANTHROPIC: &str = "anthropic";
 
@@ -159,6 +159,10 @@ pub fn plain_question(first: bool, context: Option<&ChatContext>, query: &str) -
 
 /// The model chosen for `provider`, or its default.
 pub fn model_for(settings: &Settings, provider: &str) -> String {
+    if provider == claude_cli::ID {
+        let m = settings.chat_models.get(provider).map(|m| m.trim()).unwrap_or("");
+        return if m.is_empty() { claude_cli::DEFAULT_MODEL.to_string() } else { m.to_string() };
+    }
     if provider == ANTHROPIC {
         let m = settings.model.trim();
         return if m.is_empty() { claude::DEFAULT_MODEL.to_string() } else { m.to_string() };
@@ -210,6 +214,9 @@ pub async fn send(
     if provider == ANTHROPIC || provider.is_empty() {
         return claude::send(chat, &model, query, context).await;
     }
+    if provider == claude_cli::ID {
+        return claude_cli::send(chat, &model, query, context).await;
+    }
     if let Some(p) = openai_compat::provider(provider) {
         return openai_compat::send(chat, p, &model, query, context).await;
     }
@@ -233,6 +240,9 @@ pub async fn send_for_phone(
     if provider == ANTHROPIC {
         return claude::send(chat, model, query, None).await;
     }
+    if provider == claude_cli::ID {
+        return claude_cli::send(chat, model, query, None).await;
+    }
     if let Some(p) = openai_compat::provider(provider) {
         return openai_compat::send(chat, p, model, query, None).await;
     }
@@ -247,6 +257,9 @@ pub async fn send_for_phone(
 /// address): nothing is sent anywhere before that.
 pub async fn models(settings: &Settings, provider: &str) -> Result<Vec<ModelInfo>, String> {
     let no_key = || crate::i18n::t("No API key — add it in Settings.");
+    if provider == claude_cli::ID {
+        return Ok(claude_cli::models());
+    }
     if provider == ANTHROPIC {
         let key = secrets::get(claude::KEY).ok_or_else(no_key)?;
         return claude::models(&key).await;

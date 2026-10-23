@@ -4,6 +4,7 @@ mod agent_hooks;
 mod agents;
 mod chat;
 mod claude;
+mod claude_cli;
 mod codex_plan;
 mod config_file;
 mod desktop;
