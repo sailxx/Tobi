@@ -1,0 +1,12 @@
+# Эти пакеты приходят только в Linux-сборку (GTK3 в Tauri для трея, zbus в
+# tauri-plugin-single-instance). В Windows-сборке их нет: проверено командой
+# `cargo tree --target x86_64-pc-windows-msvc`. Убрать их можно только после
+# перехода самого Tauri на GTK4 и новый zbus, поэтому игнорируем осознанно.
+[advisories]
+ignore = [
+    "RUSTSEC-2024-0370", # proc-macro-error — через glib-macros (GTK3, Linux)
+    "RUSTSEC-2024-0429", # glib 0.18 — через gtk/tray-icon (Linux)
+    "RUSTSEC-2026-0370", # zvariant 4.x — через zbus 4 (Linux)
+    "RUSTSEC-2026-0371", # zbus_names — через zbus (Linux)
+    "RUSTSEC-2026-0372", # zvariant_derive — через zbus (Linux)
+]
