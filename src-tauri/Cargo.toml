@@ -45,7 +45,7 @@ futures-util = { version = "0.3", default-features = false, features = ["sink"] 
 # Flow dictation and the Notetaker (flow/, notes/, speech/). Speech to text runs
 # on this computer: sherpa-onnx (Apache-2.0) with NVIDIA's Parakeet, linked
 # statically (onnxruntime included), the models downloaded on the user's click.
-sherpa-onnx = { version = "1.13.8", default-features = false, features = ["static"] }
+sherpa-onnx = { version = "2.0.0", default-features = false, features = ["static"] }
 # The microphone, and the computer's own sound for the Notetaker (WASAPI
 # loopback on Windows, a PulseAudio/PipeWire monitor on Linux). Apache-2.0.
 cpal = "0.18"
