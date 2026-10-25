@@ -1,0 +1,103 @@
+{
+  "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
+  "releases": [
+    {
+      "version": "0.2.0",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "WhatsApp in the island",
+            "zh-Hans": "岛中的 WhatsApp",
+            "hi": "आइलैंड में WhatsApp",
+            "es": "WhatsApp en la isla",
+            "ar": "واتساب في الشريط",
+            "fr": "WhatsApp dans l’île",
+            "bn": "আইল্যান্ডে WhatsApp",
+            "pt-BR": "WhatsApp na ilha",
+            "ru": "WhatsApp на острове",
+            "id": "WhatsApp di pulau",
+            "de": "WhatsApp in der Insel",
+            "tr": "Adada WhatsApp"
+          },
+          "detail": {
+            "en": "Your chats in the island, and replies without opening WhatsApp. Experimental.",
+            "zh-Hans": "在岛中查看聊天，不打开 WhatsApp 也能回复。实验性功能。",
+            "hi": "आइलैंड में आपकी चैट, और WhatsApp खोले बिना जवाब। प्रायोगिक।",
+            "es": "Tus chats en la isla y respuestas sin abrir WhatsApp. Experimental.",
+            "ar": "محادثاتك في الشريط، والرد دون فتح واتساب. تجريبي.",
+            "fr": "Tes conversations dans l’île, et tes réponses sans ouvrir WhatsApp. Expérimental.",
+            "bn": "আইল্যান্ডে আপনার চ্যাট, আর WhatsApp না খুলেই উত্তর। পরীক্ষামূলক।",
+            "pt-BR": "Suas conversas na ilha e respostas sem abrir o WhatsApp. Experimental.",
+            "ru": "Чаты на острове и ответы без открытия WhatsApp. Экспериментально.",
+            "id": "Obrolanmu di pulau, dan balas tanpa membuka WhatsApp. Eksperimental.",
+            "de": "Deine Chats in der Insel und Antworten, ohne WhatsApp zu öffnen. Experimentell.",
+            "tr": "Sohbetlerin adada; WhatsApp’ı açmadan yanıtla. Deneysel."
+          }
+        },
+        {
+          "icon": "download",
+          "title": {
+            "en": "Set up in one click",
+            "zh-Hans": "一键设置",
+            "hi": "एक क्लिक में सेटअप",
+            "es": "Listo en un clic",
+            "ar": "الإعداد بنقرة واحدة",
+            "fr": "Installé en un clic",
+            "bn": "এক ক্লিকে সেটআপ",
+            "pt-BR": "Pronto em um clique",
+            "ru": "Настройка в один клик",
+            "id": "Siap dalam sekali klik",
+            "de": "Eingerichtet mit einem Klick",
+            "tr": "Tek tıkla kurulum"
+          },
+          "detail": {
+            "en": "Coucou installs the gateway, checks it and shows the QR code to scan.",
+            "zh-Hans": "Coucou 安装网关、进行校验，并显示要扫描的二维码。",
+            "hi": "Coucou गेटवे इंस्टॉल करता है, जाँचता है और स्कैन के लिए QR कोड दिखाता है।",
+            "es": "Coucou instala la pasarela, la comprueba y muestra el código QR.",
+            "ar": "يثبّت Coucou البوابة ويتحقق منها ويعرض رمز QR للمسح.",
+            "fr": "Coucou installe la passerelle, la vérifie et affiche le QR code à scanner.",
+            "bn": "Coucou গেটওয়ে ইনস্টল করে, যাচাই করে, তারপর স্ক্যানের QR কোড দেখায়।",
+            "pt-BR": "O Coucou instala o gateway, verifica e mostra o QR code para escanear.",
+            "ru": "Coucou ставит шлюз, проверяет его и показывает QR-код.",
+            "id": "Coucou memasang gateway, memeriksanya, dan menampilkan kode QR.",
+            "de": "Coucou installiert das Gateway, prüft es und zeigt den QR-Code.",
+            "tr": "Coucou ağ geçidini kurar, doğrular ve taranacak QR kodunu gösterir."
+          }
+        },
+        {
+          "icon": "shield",
+          "title": {
+            "en": "Nothing leaves your computer",
+            "zh-Hans": "数据不离开你的电脑",
+            "hi": "कुछ भी कंप्यूटर से बाहर नहीं जाता",
+            "es": "Nada sale de tu equipo",
+            "ar": "لا شيء يغادر حاسوبك",
+            "fr": "Rien ne quitte ton ordinateur",
+            "bn": "কিছুই কম্পিউটারের বাইরে যায় না",
+            "pt-BR": "Nada sai do seu computador",
+            "ru": "Ничего не покидает компьютер",
+            "id": "Tak ada yang keluar dari komputermu",
+            "de": "Nichts verlässt deinen Computer",
+            "tr": "Hiçbir şey bilgisayarından çıkmaz"
+          },
+          "detail": {
+            "en": "Messages stay in memory and are gone when Coucou quits.",
+            "zh-Hans": "消息只保存在内存中，退出 Coucou 后即消失。",
+            "hi": "संदेश सिर्फ़ मेमोरी में रहते हैं और Coucou बंद होते ही मिट जाते हैं।",
+            "es": "Los mensajes quedan en memoria y se borran al cerrar Coucou.",
+            "ar": "تبقى الرسائل في الذاكرة وتُمحى عند إغلاق Coucou.",
+            "fr": "Les messages restent en mémoire et disparaissent quand Coucou quitte.",
+            "bn": "বার্তা শুধু মেমোরিতে থাকে, Coucou বন্ধ হলেই মুছে যায়।",
+            "pt-BR": "As mensagens ficam na memória e somem quando o Coucou fecha.",
+            "ru": "Сообщения хранятся только в памяти и исчезают при выходе из Coucou.",
+            "id": "Pesan hanya di memori dan hilang saat Coucou ditutup.",
+            "de": "Nachrichten bleiben im Speicher und sind weg, wenn Coucou beendet wird.",
+            "tr": "Mesajlar bellekte kalır, Coucou kapanınca silinir."
+          }
+        }
+      ]
+    }
+  ]
+}
