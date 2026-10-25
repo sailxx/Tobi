@@ -41,14 +41,19 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "msi"],
+    "targets": [
+      "nsis",
+      "msi"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.ico"
     ],
-    "resources": { "../target/release/tobi-hook.exe": "tobi-hook.exe" },
+    "resources": {
+      "../target/release/tobi-hook.exe": "tobi-hook.exe"
+    },
     "copyright": "© sailxx",
     "category": "DeveloperTool",
     "shortDescription": "Tobi lives at the top of your screen",
@@ -56,8 +61,15 @@
     "windows": {
       "nsis": {
         "installMode": "currentUser",
-        "languages": ["Russian", "English"],
-        "installerHooks": "nsis/hooks.nsh"
+        "languages": [
+          "Russian",
+          "English"
+        ],
+        "installerHooks": "nsis/hooks.nsh",
+        "template": "nsis/installer.nsi",
+        "sidebarImage": "nsis/sidebar.bmp",
+        "headerImage": "nsis/header.bmp",
+        "installerIcon": "icons/icon.ico"
       }
     }
   }
