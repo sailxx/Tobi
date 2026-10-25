@@ -14,6 +14,12 @@ Coucou by Louis Raillé. The Tobi character, name, icon and sounds are Tobi's ow
 2. On the computer, Tobi 0.2.0 or later: Settings > Android phone > turn on *Phone link*, then *Show pairing code*.
 3. Scan it with the app (or paste the `tobi://pair` link). Phone and computer on the same Wi-Fi; away from home through your own relay (optional).
 
+## Widgets
+
+Ten to pick from on the home screen, all on one dark card with a glow in the colour of the state: Agents summary, Tobi at a glance,
+All your agents, Tobi, big, One-line status, Approvals waiting, Plan usage, Finished today, Tobi's mood and Your team. They show
+agent names and state words only; a request is always decided in the app, behind your fingerprint.
+
 ## Build and test
 
 JDK 17 or 21 and the Android SDK (platform 35). From this folder:
