@@ -81,6 +81,17 @@ pub const INTERNAL_KEYS: &[&str] = &[
     "whatsapp-url",
     "whatsapp-api-key",
     "whatsapp-webhook-secret",
+    // Telegram: the API id and hash from my.telegram.org and the login session in pieces (telegram/store.rs).
+    "telegram-api-id",
+    "telegram-api-hash",
+    "telegram-session-0",
+    "telegram-session-1",
+    "telegram-session-2",
+    "telegram-session-3",
+    "telegram-session-4",
+    "telegram-session-5",
+    "telegram-session-6",
+    "telegram-session-7",
 ];
 
 /// Whether the keystore would accept this key through `get_internal` / `set_internal`.

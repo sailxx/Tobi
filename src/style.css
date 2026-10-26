@@ -2756,11 +2756,11 @@ input[type="range"]::-webkit-slider-thumb {
 
 .wa-unread {
   font: 600 10px var(--font);
-  color: #25d366;
+  color: var(--chat-accent, #25d366);
   font-variant-numeric: tabular-nums;
   padding: 1px 6px;
   border-radius: 999px;
-  background: rgba(37, 211, 102, 0.14);
+  background: color-mix(in srgb, var(--chat-accent, #25d366) 14%, transparent);
 }
 
 .wa-empty {
@@ -2804,11 +2804,11 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .wa-row.unread {
-  background: rgba(37, 211, 102, 0.08);
+  background: color-mix(in srgb, var(--chat-accent, #25d366) 8%, transparent);
 }
 
 .wa-row.unread:hover {
-  background: rgba(37, 211, 102, 0.14);
+  background: color-mix(in srgb, var(--chat-accent, #25d366) 14%, transparent);
 }
 
 .wa-row-name {
@@ -2832,7 +2832,7 @@ input[type="range"]::-webkit-slider-thumb {
 .wa-count {
   font: 700 9px var(--font);
   color: #0b0c0e;
-  background: #25d366;
+  background: var(--chat-accent, #25d366);
   border-radius: 999px;
   padding: 1px 5px;
   font-variant-numeric: tabular-nums;
@@ -2850,8 +2850,8 @@ input[type="range"]::-webkit-slider-thumb {
   display: inline-grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(37, 211, 102, 0.22);
-  color: #25d366;
+  background: color-mix(in srgb, var(--chat-accent, #25d366) 22%, transparent);
+  color: var(--chat-accent, #25d366);
   font-family: var(--font);
   font-weight: 700;
   line-height: 1;
@@ -2911,12 +2911,12 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .wa-bubble.mine {
-  background: rgba(37, 211, 102, 0.16);
+  background: color-mix(in srgb, var(--chat-accent, #25d366) 16%, transparent);
 }
 
 .wa-sender {
   font: 600 9px var(--font);
-  color: rgba(37, 211, 102, 0.8);
+  color: color-mix(in srgb, var(--chat-accent, #25d366) 80%, transparent);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2972,7 +2972,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 16px;
   border: 0;
   border-radius: 50%;
-  background: rgba(37, 211, 102, 0.3);
+  background: color-mix(in srgb, var(--chat-accent, #25d366) 30%, transparent);
   display: grid;
   place-items: center;
   cursor: default;
@@ -2980,7 +2980,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .wa-send.ready {
-  background: #25d366;
+  background: var(--chat-accent, #25d366);
 }
 
 .wa-note {

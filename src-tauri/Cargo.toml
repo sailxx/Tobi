@@ -53,6 +53,8 @@ cpal = "0.18"
 # the raw DEFLATE decoder only, already in the tree through png (the same 0.8.9), so nothing new is
 # downloaded or compiled. MIT/Zlib/Apache-2.0.
 miniz_oxide = "0.8"
+grammers-client = "0.11"
+grammers-session = { version = "0.11", default-features = false, features = ["serde"] }
 
 [target.'cfg(windows)'.dependencies]
 keyring = { version = "3", features = ["windows-native"] }

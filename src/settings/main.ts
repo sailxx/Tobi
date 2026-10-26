@@ -24,6 +24,8 @@ import { agentsSection } from "./agents";
 import { phoneSection } from "./phone";
 import { whatsappSection } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
+import { telegramSection } from "./telegram";
+import { TELEGRAM_ID } from "../core/telegram";
 import { updateRows, updatesListener } from "./updates";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
@@ -915,6 +917,27 @@ function whatsappSections(): HTMLElement[] {
   })];
 }
 
+/** Telegram (experimental), next to WhatsApp: its pill is turned on from its own switch. */
+function telegramSections(): HTMLElement[] {
+  if (!availablePills().some((p) => p.id === TELEGRAM_ID)) return [];
+  return [telegramSection({
+    toggle,
+    maxPills: MAX_ACTIVE,
+    pillActive: () => settings.activeIntegrations.includes(TELEGRAM_ID),
+    setPill: (on) => {
+      const has = settings.activeIntegrations.includes(TELEGRAM_ID);
+      if (on && !has && settings.activeIntegrations.length < MAX_ACTIVE) {
+        settings.activeIntegrations = [...settings.activeIntegrations, TELEGRAM_ID];
+      } else if (!on && has) {
+        settings.activeIntegrations = settings.activeIntegrations.filter((x) => x !== TELEGRAM_ID);
+      } else {
+        return;
+      }
+      declaredChanged();
+    },
+  })];
+}
+
 // ── General section ───────────────────────────────────────────────────────────
 
 function generalSection(): HTMLElement {
@@ -1407,7 +1430,7 @@ async function render() {
     pills: () => [activePillsSection(connected)],
     agents: () => [claudeSection(status), agentsSection(agents), planSection(status)],
     chat: () => [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)],
-    integrations: () => [integrationsSection(present), ...whatsappSections()],
+    integrations: () => [integrationsSection(present), ...whatsappSections(), ...telegramSections()],
     phone: () => [phoneSection(settings.phoneLink ?? false, toggle, settings)],
     shortcuts: () => [shortcutsSection(shortcutReport)],
   };
