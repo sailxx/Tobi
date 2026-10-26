@@ -26,6 +26,8 @@ import { whatsappSection } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
 import { telegramSection } from "./telegram";
 import { TELEGRAM_ID } from "../core/telegram";
+import { gmailSection } from "./gmail";
+import { GMAIL_ID } from "../core/gmail";
 import { updateRows, updatesListener } from "./updates";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
@@ -938,6 +940,27 @@ function telegramSections(): HTMLElement[] {
   })];
 }
 
+/** Gmail (experimental), next to Telegram: its pill is turned on from its own switch. */
+function gmailSections(): HTMLElement[] {
+  if (!availablePills().some((p) => p.id === GMAIL_ID)) return [];
+  return [gmailSection({
+    toggle,
+    maxPills: MAX_ACTIVE,
+    pillActive: () => settings.activeIntegrations.includes(GMAIL_ID),
+    setPill: (on) => {
+      const has = settings.activeIntegrations.includes(GMAIL_ID);
+      if (on && !has && settings.activeIntegrations.length < MAX_ACTIVE) {
+        settings.activeIntegrations = [...settings.activeIntegrations, GMAIL_ID];
+      } else if (!on && has) {
+        settings.activeIntegrations = settings.activeIntegrations.filter((x) => x !== GMAIL_ID);
+      } else {
+        return;
+      }
+      declaredChanged();
+    },
+  })];
+}
+
 // ── General section ───────────────────────────────────────────────────────────
 
 function generalSection(): HTMLElement {
@@ -1430,7 +1453,7 @@ async function render() {
     pills: () => [activePillsSection(connected)],
     agents: () => [claudeSection(status), agentsSection(agents), planSection(status)],
     chat: () => [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)],
-    integrations: () => [integrationsSection(present), ...whatsappSections(), ...telegramSections()],
+    integrations: () => [integrationsSection(present), ...whatsappSections(), ...telegramSections(), ...gmailSections()],
     phone: () => [phoneSection(settings.phoneLink ?? false, toggle, settings)],
     shortcuts: () => [shortcutsSection(shortcutReport)],
   };

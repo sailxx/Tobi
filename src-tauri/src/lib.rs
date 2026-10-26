@@ -39,6 +39,7 @@ mod update;
 mod voice;
 #[cfg(windows)]
 mod webview_drop;
+mod gmail;
 mod telegram;
 mod whatsapp;
 
@@ -135,6 +136,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
     spotify::sync(&app, &settings.active_integrations);
     whatsapp::sync(&settings.active_integrations);
     telegram::sync(&settings.active_integrations);
+    gmail::sync(&settings.active_integrations);
     if shortcuts_changed {
         shortcuts::apply(&app, &settings.shortcuts);
     }
@@ -953,6 +955,20 @@ pub fn run() {
             telegram::telegram_submit_code,
             telegram::telegram_submit_password,
             telegram::telegram_sign_out,
+            gmail::gmail_island,
+            gmail::gmail_refresh,
+            gmail::gmail_open,
+            gmail::gmail_close,
+            gmail::gmail_mark_read,
+            gmail::gmail_archive,
+            gmail::gmail_trash,
+            gmail::gmail_reply,
+            gmail::gmail_send,
+            gmail::gmail_settings,
+            gmail::gmail_set_options,
+            gmail::gmail_save_client,
+            gmail::gmail_sign_in,
+            gmail::gmail_sign_out,
             flow::flow_status,
             flow::flow_set_prefs,
             flow::flow_history,
@@ -1038,6 +1054,8 @@ pub fn run() {
             whatsapp::start(&handle, &loaded.active_integrations);
             // Telegram (experimental): the same, through the user's own account.
             telegram::start(&handle, &loaded.active_integrations);
+            // Gmail (experimental): the user's own Google sign-in, polled only while on.
+            gmail::start(&handle, &loaded.active_integrations);
             shortcuts::apply(&handle, &loaded.shortcuts);
             // New versions: nothing goes to GitHub until the user agrees (update.rs).
             update::start(handle.clone());
@@ -1062,6 +1080,7 @@ pub fn run() {
                 // GOWA started by Tobi stops with it; the conversations were only in memory.
                 whatsapp::shutdown();
                 telegram::shutdown();
+                gmail::shutdown();
             }
         });
 }

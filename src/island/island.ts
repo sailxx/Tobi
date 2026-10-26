@@ -198,6 +198,7 @@ export class Island {
           // No WhatsApp app to bring forward here as on the Mac: WhatsApp Web, in the browser.
           integration_whatsapp: "https://web.whatsapp.com",
           integration_telegram: "https://web.telegram.org",
+          integration_gmail: "https://mail.google.com",
         };
         if (task.id === CLAUDE_DESKTOP_ID) void Bridge.openClaudeDesktop();
         else if (task.id === "integration_claude" || task.sessionId) {

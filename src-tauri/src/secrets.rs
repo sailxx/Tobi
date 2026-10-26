@@ -82,6 +82,10 @@ pub const INTERNAL_KEYS: &[&str] = &[
     "whatsapp-api-key",
     "whatsapp-webhook-secret",
     // Telegram: the API id and hash from my.telegram.org and the login session in pieces (telegram/store.rs).
+    // Gmail: the user's own OAuth client and the refresh token (gmail/mod.rs).
+    "gmail-client-id",
+    "gmail-client-secret",
+    "gmail-refresh-token",
     "telegram-api-id",
     "telegram-api-hash",
     "telegram-session-0",

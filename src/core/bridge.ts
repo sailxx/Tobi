@@ -11,6 +11,7 @@ import type { SpotifyState } from "./spotify";
 import type { UpdateStatus } from "./update";
 import type { WaIslandView, WaSettingsView, WaTestResult } from "./whatsapp";
 import type { TgIslandView, TgSettingsView } from "./telegram";
+import type { MailIslandView, MailSettingsView } from "./gmail";
 
 export const IS_TAURI =
   typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
@@ -492,6 +493,29 @@ export const Bridge = {
   telegramSubmitCode: (code: string) => callOrThrow<void>("telegram_submit_code", { code }),
   telegramSubmitPassword: (password: string) => callOrThrow<void>("telegram_submit_password", { password }),
   telegramSignOut: () => call<void>("telegram_sign_out"),
+
+  // ── Gmail (src-tauri/src/gmail) ───────────────────────────────────────────
+  /** The island's copy, asked once at start (then the "gmail" event). Island only. */
+  gmailIsland: () => call<MailIslandView>("gmail_island"),
+  /** Look at the inbox now. */
+  gmailRefresh: () => call<void>("gmail_refresh"),
+  /** A message opened in the card: its plain text is fetched, and it is marked read if Settings says so. */
+  gmailOpen: (id: string) => call<boolean>("gmail_open", { id }),
+  gmailClose: () => call<void>("gmail_close"),
+  gmailMarkRead: (id: string) => call<boolean>("gmail_mark_read", { id }),
+  gmailArchive: (id: string) => call<boolean>("gmail_archive", { id }),
+  gmailTrash: (id: string) => call<boolean>("gmail_trash", { id }),
+  /** Enter or the send button only. True once Gmail took it. */
+  gmailReply: (id: string, text: string) => call<boolean>("gmail_reply", { id, text }),
+  gmailSend: (to: string, subject: string, text: string) => call<boolean>("gmail_send", { to, subject, text }),
+  /** Settings only, from here down. */
+  gmailSettings: () => call<MailSettingsView>("gmail_settings"),
+  gmailSetOptions: (enabled: boolean, markReadOnOpen: boolean) => callOrThrow<void>("gmail_set_options", { enabled, markReadOnOpen }),
+  /** The OAuth client from Google Cloud Console. Rust keeps the secret. */
+  gmailSaveClient: (clientId: string, clientSecret: string) => callOrThrow<void>("gmail_save_client", { clientId, clientSecret }),
+  /** Opens Google's page in the browser. */
+  gmailSignIn: () => callOrThrow<void>("gmail_sign_in"),
+  gmailSignOut: () => call<void>("gmail_sign_out"),
 
   // ── New versions (src-tauri/src/update.rs) ────────────────────────────────
   updateStatus: () => call<UpdateStatus>("update_status"),
