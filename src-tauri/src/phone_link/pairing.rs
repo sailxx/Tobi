@@ -150,14 +150,61 @@ fn unhex(s: &str) -> Option<Vec<u8>> {
     (0..s.len()).step_by(2).map(|i| u8::from_str_radix(&s[i..i + 2], 16).ok()).collect()
 }
 
-/// This computer's address on the local network: the one the OS would use to
-/// reach the outside. Connecting a UDP socket sends nothing; it only makes the
-/// OS pick the interface.
-pub fn lan_address() -> Option<std::net::IpAddr> {
+/// The address the OS would use to reach the outside. Connecting a UDP socket sends nothing; it only makes the OS
+/// pick the interface.
+fn default_route_address() -> Option<std::net::IpAddr> {
     let socket = std::net::UdpSocket::bind("0.0.0.0:0").ok()?;
     socket.connect("192.0.2.1:9").ok()?;
     let ip = socket.local_addr().ok()?.ip();
     (!ip.is_unspecified() && !ip.is_loopback()).then_some(ip)
+}
+
+/// Adapters that exist only inside the computer (WSL, Hyper-V, Docker, VMs, VPN tunnels): the phone cannot reach them.
+fn is_virtual_adapter(name: &str) -> bool {
+    let n = name.to_ascii_lowercase();
+    ["vethernet", "wsl", "hyper-v", "docker", "virtualbox", "vmware", "vmnet", "vboxnet", "veth", "br-", "tailscale", "zerotier", "tun", "tap", "wireguard", "loopback"]
+        .iter()
+        .any(|w| n.contains(w))
+}
+
+/// Picks the address to put in the pairing link from `(adapter name, address)` pairs: the default-route address when
+/// it is on a real adapter; otherwise the real adapter's private address, 192.168/16 and 10/8 before 172.16/12.
+fn pick_lan_address(default: Option<std::net::IpAddr>, adapters: &[(String, std::net::Ipv4Addr)]) -> Option<std::net::IpAddr> {
+    let real = |ip: &std::net::Ipv4Addr| {
+        ip.is_private() && adapters.iter().any(|(name, a)| a == ip && !is_virtual_adapter(name))
+    };
+    if let Some(std::net::IpAddr::V4(v4)) = default {
+        if real(&v4) {
+            return default;
+        }
+    }
+    let rank = |ip: &std::net::Ipv4Addr| match ip.octets() {
+        [192, 168, ..] => 0,
+        [10, ..] => 1,
+        _ => 2,
+    };
+    adapters
+        .iter()
+        .map(|(_, ip)| ip)
+        .filter(|ip| real(ip))
+        .min_by_key(|ip| rank(ip))
+        .map(|ip| std::net::IpAddr::V4(*ip))
+        .or(default)
+}
+
+/// This computer's address on the local network, as the phone can reach it. The OS's default route can lead through a
+/// virtual adapter (WSL, Hyper-V, Docker, a VPN), whose address is useless to the phone.
+pub fn lan_address() -> Option<std::net::IpAddr> {
+    let adapters: Vec<(String, std::net::Ipv4Addr)> = if_addrs::get_if_addrs()
+        .unwrap_or_default()
+        .into_iter()
+        .filter(|i| !i.is_loopback())
+        .filter_map(|i| match i.ip() {
+            std::net::IpAddr::V4(v4) => Some((i.name, v4)),
+            _ => None,
+        })
+        .collect();
+    pick_lan_address(default_route_address(), &adapters)
 }
 
 /// The name the phone shows for this computer.
@@ -175,6 +222,21 @@ pub fn computer_name() -> String {
 #[cfg(test)]
 pub mod tests {
     use super::*;
+
+    #[test]
+    fn a_virtual_adapter_is_not_put_in_the_pairing_link() {
+        use std::net::{IpAddr, Ipv4Addr};
+        let wsl = ("vEthernet (WSL)".to_string(), Ipv4Addr::new(172, 19, 80, 1));
+        let wifi = ("Wi-Fi".to_string(), Ipv4Addr::new(192, 168, 1, 20));
+        let both = [wsl.clone(), wifi.clone()];
+        let default_wsl = Some(IpAddr::V4(wsl.1));
+        assert_eq!(pick_lan_address(default_wsl, &both), Some(IpAddr::V4(wifi.1)));
+        // a real default route stays
+        assert_eq!(pick_lan_address(Some(IpAddr::V4(wifi.1)), &both), Some(IpAddr::V4(wifi.1)));
+        // nothing real to choose: the default route is kept
+        assert_eq!(pick_lan_address(default_wsl, &[wsl]), default_wsl);
+    }
+
     use std::collections::HashMap;
     use std::sync::Mutex;
 
