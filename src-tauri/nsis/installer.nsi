@@ -123,10 +123,17 @@ ${StrLoc}
       Goto dk_loop
     dk_button:
       System::Call 'uxtheme::SetWindowTheme(p r1, w "DarkMode_Explorer", p 0)'
-      ; рамка-группа (BS_GROUPBOX = 7): подпись без белой подложки
+      ; Всё, что не обычная кнопка (BS_PUSHBUTTON 0, BS_DEFPUSHBUTTON 1): рамка-группа, флажки, радиокнопки —
+      ; подпись без белой подложки
       System::Call 'user32::GetWindowLong(p r1, i -16) i .r3'
       IntOp $3 $3 & 0xF
-      IntCmp $3 7 0 dk_loop dk_loop
+      IntCmp $3 1 dk_loop dk_loop 0
+        ; радиокнопки и рамка-группа темой не красятся (текст остаётся чёрным): рисуем классически, цвета задаём сами
+        IntCmp $3 9 dk_btn_classic 0 0
+        IntCmp $3 7 dk_btn_classic dk_btn_colors dk_btn_colors
+        dk_btn_classic:
+          System::Call 'uxtheme::SetWindowTheme(p r1, w "", w "")'
+        dk_btn_colors:
         SetCtlColors $1 ${DK_TEXT} ${DK_BG}
       Goto dk_loop
     dk_edit:
@@ -165,8 +172,10 @@ ${StrLoc}
     !insertmacro DK_DWM 34 ${DK_BG_B}
     !insertmacro DK_DWM 35 ${DK_BG_B}
     !insertmacro DK_DWM 36 ${DK_TEXT_B}
-    ; белые линии над кнопками и под шапкой (1035, 1045) в тёмной теме не нужны
+    ; белые линии над кнопками и под шапкой (1035, 1036, 1045) в тёмной теме не нужны
     GetDlgItem $0 $HWNDPARENT 1035
+    ShowWindow $0 ${SW_HIDE}
+    GetDlgItem $0 $HWNDPARENT 1036
     ShowWindow $0 ${SW_HIDE}
     GetDlgItem $0 $HWNDPARENT 1045
     ShowWindow $0 ${SW_HIDE}
@@ -347,6 +356,11 @@ Function PageReinstall
 
   nsis_tauri_utils::SemverCompare "${VERSION}" $R0
   Pop $R0
+  ; Установка новой версии поверх старой: удалять ничего не нужно, страницу пропускаем (Tobi хранит данные отдельно)
+  ${If} $R0 = 1
+    Abort
+  ${EndIf}
+
   ; Reinstalling the same version
   ${If} $R0 = 0
     StrCpy $R1 "$(alreadyInstalledLong)"
