@@ -28,6 +28,8 @@ import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spot
 import { SPOTIFY_ID } from "../core/spotify";
 import { buildWhatsAppCard } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
+import { buildTelegramCard } from "./telegram";
+import { TELEGRAM_ID } from "../core/telegram";
 import type { Outfit, OutfitSelection } from "../tobi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
 import type { ViewCommand } from "../island/shortcuts";
@@ -214,11 +216,13 @@ function buildOverview(actions: ViewActions): ViewHost {
   const spotifyCard = buildSpotifyCard();
   let spotifyPill: SpotifyPillHost | null = null;
   // WhatsApp's card too: its reply field keeps the draft and the keyboard while messages arrive.
-  const whatsappCard = buildWhatsAppCard({
+  const chatHost = {
     openSettings: () => actions.openSettingsWindow(),
-    keyboard: (on) => actions.keyboard(on),
-    holdOpen: (on) => actions.holdOpen(on),
-  });
+    keyboard: (on: boolean) => actions.keyboard(on),
+    holdOpen: (on: boolean) => actions.holdOpen(on),
+  };
+  const whatsappCard = buildWhatsAppCard(chatHost);
+  const telegramCard = buildTelegramCard(chatHost);
 
   const el = h("div", { class: "view overview" },
     h("div", { class: "left" }, left),
@@ -228,7 +232,7 @@ function buildOverview(actions: ViewActions): ViewHost {
   let pillIds = "";
   let detailOpen = false;
   let lastFocus: string | null = null;
-  let mode: "ticker" | "card" | "plan" | "diff" | "spotify" | "whatsapp" | null = null;
+  let mode: "ticker" | "card" | "plan" | "diff" | "spotify" | "whatsapp" | "telegram" | null = null;
   let cardKey = "";
   /** The list row highlighted at the last sync, to scroll only when it moves. */
   let shownSelection: number | null = null;
@@ -399,6 +403,14 @@ function buildOverview(actions: ViewActions): ViewHost {
           cardKey = "";
         }
         whatsappCard.sync();
+      } else if (task && task.id === TELEGRAM_ID) {
+        if (mode !== "telegram") {
+          clear(leftBody);
+          leftBody.append(telegramCard.el);
+          mode = "telegram";
+          cardKey = "";
+        }
+        telegramCard.sync();
       } else if (task) {
         const info = State.integrations[task.id];
         const key = [

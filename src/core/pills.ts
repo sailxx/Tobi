@@ -142,6 +142,10 @@ export const PILL_CATALOG: readonly PillDefinition[] = [
   // linked and turned on in Settings → Integrations → WhatsApp, off until then.
   { id: "integration_whatsapp", name: "WhatsApp", color: "#25D366", category: "service",
     subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
+  // Telegram (experimental) through the user's own account (src-tauri/src/telegram): the API id and hash
+  // and the sign-in are in Settings → Integrations → Telegram, off until then.
+  { id: "integration_telegram", name: "Telegram", color: "#2AABEE", category: "service",
+    subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
 ];
 
 /** The always-on pill unless the user picks another workspace tool. */

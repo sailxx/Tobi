@@ -10,6 +10,7 @@ import type { RecapHistory, RecapPrefs } from "../recap/summary";
 import type { SpotifyState } from "./spotify";
 import type { UpdateStatus } from "./update";
 import type { WaIslandView, WaSettingsView, WaTestResult } from "./whatsapp";
+import type { TgIslandView, TgSettingsView } from "./telegram";
 
 export const IS_TAURI =
   typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
@@ -470,6 +471,27 @@ export const Bridge = {
   whatsappTest: () => call<WaTestResult>("whatsapp_test"),
   /** "Install WhatsApp" / "Update": GOWA from its GitHub releases, on this click only. */
   whatsappInstall: () => call<void>("whatsapp_install"),
+
+  // ── Telegram (src-tauri/src/telegram) ─────────────────────────────────────
+  /** The island's copy, asked once at start (then the "telegram" event). Island only. */
+  telegramIsland: () => call<TgIslandView>("telegram_island"),
+  /** A chat opened in the card: its latest messages, the receipt if Settings says so. */
+  telegramOpen: (chat: string) => call<void>("telegram_open", { chat }),
+  telegramClose: (chat: string) => call<void>("telegram_close", { chat }),
+  /** Enter or the send button only. True once Telegram took it. */
+  telegramSend: (chat: string, text: string) => call<boolean>("telegram_send", { chat, text }),
+  telegramIgnore: (chat: string) => call<void>("telegram_ignore", { chat }),
+  telegramUnignore: (chat: string) => call<void>("telegram_unignore", { chat }),
+  /** Settings only, from here down. */
+  telegramSettings: () => call<TgSettingsView>("telegram_settings"),
+  telegramSetOptions: (enabled: boolean, muteGroups: boolean, markReadOnOpen: boolean) =>
+    callOrThrow<void>("telegram_set_options", { enabled, muteGroups, markReadOnOpen }),
+  /** The API id and hash from my.telegram.org. Rust keeps the hash. */
+  telegramSaveApi: (apiId: string, apiHash: string) => callOrThrow<void>("telegram_save_api", { apiId, apiHash }),
+  telegramRequestCode: (phone: string) => callOrThrow<void>("telegram_request_code", { phone }),
+  telegramSubmitCode: (code: string) => callOrThrow<void>("telegram_submit_code", { code }),
+  telegramSubmitPassword: (password: string) => callOrThrow<void>("telegram_submit_password", { password }),
+  telegramSignOut: () => call<void>("telegram_sign_out"),
 
   // ── New versions (src-tauri/src/update.rs) ────────────────────────────────
   updateStatus: () => call<UpdateStatus>("update_status"),

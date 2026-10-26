@@ -39,6 +39,7 @@ mod update;
 mod voice;
 #[cfg(windows)]
 mod webview_drop;
+mod telegram;
 mod whatsapp;
 
 use std::process::Command;
@@ -133,6 +134,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
     integrations::settings_saved(&app, &settings.active_integrations);
     spotify::sync(&app, &settings.active_integrations);
     whatsapp::sync(&settings.active_integrations);
+    telegram::sync(&settings.active_integrations);
     if shortcuts_changed {
         shortcuts::apply(&app, &settings.shortcuts);
     }
@@ -938,6 +940,19 @@ pub fn run() {
             whatsapp::whatsapp_save_gateway,
             whatsapp::whatsapp_test,
             whatsapp::whatsapp_install,
+            telegram::telegram_island,
+            telegram::telegram_open,
+            telegram::telegram_close,
+            telegram::telegram_send,
+            telegram::telegram_ignore,
+            telegram::telegram_unignore,
+            telegram::telegram_settings,
+            telegram::telegram_set_options,
+            telegram::telegram_save_api,
+            telegram::telegram_request_code,
+            telegram::telegram_submit_code,
+            telegram::telegram_submit_password,
+            telegram::telegram_sign_out,
             flow::flow_status,
             flow::flow_set_prefs,
             flow::flow_history,
@@ -1021,6 +1036,8 @@ pub fn run() {
             spotify::sync(&handle, &loaded.active_integrations);
             // WhatsApp (experimental): nothing runs unless it is turned on and its pill is active.
             whatsapp::start(&handle, &loaded.active_integrations);
+            // Telegram (experimental): the same, through the user's own account.
+            telegram::start(&handle, &loaded.active_integrations);
             shortcuts::apply(&handle, &loaded.shortcuts);
             // New versions: nothing goes to GitHub until the user agrees (update.rs).
             update::start(handle.clone());
@@ -1044,6 +1061,7 @@ pub fn run() {
                 notes::shutdown(app);
                 // GOWA started by Tobi stops with it; the conversations were only in memory.
                 whatsapp::shutdown();
+                telegram::shutdown();
             }
         });
 }
