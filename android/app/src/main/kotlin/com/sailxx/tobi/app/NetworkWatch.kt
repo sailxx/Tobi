@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import com.sailxx.tobi.link.LanSockets
 
 /**
  * Tells the model when the network changes (a new Wi-Fi, a hotspot) and whether a Wi-Fi or cable is up at all.
@@ -21,11 +22,16 @@ class NetworkWatch(
     @Volatile var wifiUp: Boolean = isWifiUp()
         private set
 
-    fun isWifiUp(): Boolean {
-        val n = cm.activeNetwork ?: return false
-        val c = cm.getNetworkCapabilities(n) ?: return false
-        return c.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || c.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-    }
+    /** The Wi-Fi or cable network, even when a VPN (or mobile data) is the default one; null if there is none. */
+    fun lanNetwork(): Network? = runCatching {
+        cm.allNetworks.firstOrNull { n ->
+            val c = cm.getNetworkCapabilities(n) ?: return@firstOrNull false
+            !c.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
+                (c.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || c.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+        }
+    }.getOrNull()
+
+    fun isWifiUp(): Boolean = lanNetwork() != null
 
     fun isCellular(): Boolean {
         val n = cm.activeNetwork ?: return false
@@ -41,6 +47,9 @@ class NetworkWatch(
             override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) { changed() }
         }
         callback = cb
+        // The direct link to the computer must go over the Wi-Fi itself: with a VPN on, the default route is the tunnel
+        // and the computer's 192.168.x.x address is not reachable through it.
+        LanSockets.provider = { lanNetwork()?.socketFactory?.createSocket() }
         runCatching { cm.registerDefaultNetworkCallback(cb) }
     }
 
@@ -48,6 +57,7 @@ class NetworkWatch(
     fun stop() {
         callback?.let { runCatching { cm.unregisterNetworkCallback(it) } }
         callback = null
+        LanSockets.provider = null
     }
 
     private fun changed() {

@@ -90,6 +90,12 @@ interface DesktopLink {
 /** Opens the (TLS) connection to the desktop. Swappable so tests can use plain sockets. */
 fun interface Connector { fun connect(timeoutMs: Int): Socket }
 
+/** Where the direct (LAN) sockets come from: bound to the Wi-Fi network when the app can find it, a plain socket otherwise. */
+object LanSockets {
+    @Volatile var provider: (() -> Socket?)? = null
+    fun newSocket(): Socket = runCatching { provider?.invoke() }.getOrNull() ?: Socket()
+}
+
 object PinnedTls {
     private const val HANDSHAKE_TIMEOUT_MS = 10_000
 
@@ -97,7 +103,7 @@ object PinnedTls {
         val ctx = SSLContext.getInstance("TLS").apply {
             init(null, arrayOf(PinnedTrustManager(p.certSha256)), SecureRandom())
         }
-        val raw = Socket()
+        val raw = LanSockets.newSocket()
         raw.connect(InetSocketAddress(p.host, p.port), timeoutMs)
         val tls = ctx.socketFactory.createSocket(raw, p.host, p.port, true) as javax.net.ssl.SSLSocket
         tls.enabledProtocols = tls.supportedProtocols.filter { it == "TLSv1.3" || it == "TLSv1.2" }.toTypedArray()

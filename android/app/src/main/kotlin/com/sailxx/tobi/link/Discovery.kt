@@ -230,7 +230,7 @@ class AddressFinder(
 object PinnedProbe : Probe {
     override fun check(host: String, port: Int, certSha256: String): ProbeResult {
         val ctx = SSLContext.getInstance("TLS").apply { init(null, arrayOf(PinnedTrustManager(certSha256)), SecureRandom()) }
-        val raw = Socket()
+        val raw = LanSockets.newSocket()
         return try {
             raw.connect(InetSocketAddress(host, port), 2_000)
             val tls = ctx.socketFactory.createSocket(raw, host, port, true) as javax.net.ssl.SSLSocket
