@@ -131,10 +131,12 @@ fn part_text(part: &Value, want: &str) -> Option<String> {
 
 /// The readable text of a message: its text/plain part, or its text/html part stripped of tags.
 pub fn extract_text(payload: &Value) -> String {
-    let text = part_text(payload, "text/plain")
-        .filter(|t| !t.trim().is_empty())
-        .or_else(|| part_text(payload, "text/html").map(|h| strip_html(&h)))
-        .unwrap_or_default();
+    extract_plain_or_html(part_text(payload, "text/plain"), part_text(payload, "text/html"))
+}
+
+/// The text to show from a message's plain part and its html part, whichever there is (plain first).
+pub fn extract_plain_or_html(plain: Option<String>, html: Option<String>) -> String {
+    let text = plain.filter(|t| !t.trim().is_empty()).or_else(|| html.map(|h| strip_html(&h))).unwrap_or_default();
     clip(text.replace("\r\n", "\n").trim().to_string(), MAX_TEXT)
 }
 
@@ -203,14 +205,23 @@ pub fn strip_html(html: &str) -> String {
 
 // ── Writing a message ─────────────────────────────────────────────────────────
 
-/// The RFC 822 text of a new message or a reply, base64-encoded as Gmail's `raw` wants (URL-safe).
-/// `in_reply_to` / `references` make it a reply in the same conversation.
-pub fn build_raw(to: &str, subject: &str, body: &str, in_reply_to: Option<&str>, references: Option<&str>) -> Result<String, &'static str> {
-    if !valid_address(to) {
+/// The RFC 822 text of a new message or a reply. `in_reply_to` / `references` make it a reply in the same
+/// conversation. With `from` (SMTP, where nobody adds them for us) it also gets From, Date and Message-ID;
+/// Gmail's own API leaves those to Gmail.
+pub fn build_message(
+    from: Option<&str>, to: &str, subject: &str, body: &str, in_reply_to: Option<&str>, references: Option<&str>,
+) -> Result<Vec<u8>, &'static str> {
+    if !valid_address(to) || from.is_some_and(|f| !valid_address(f)) {
         return Err("badAddress");
     }
     let body = body.replace("\r\n", "\n").replace('\n', "\r\n");
     let mut msg = String::new();
+    if let Some(from) = from {
+        let domain = from.rsplit('@').next().unwrap_or("localhost");
+        msg.push_str(&format!("From: {}\r\n", one_line(from)));
+        msg.push_str(&format!("Date: {}\r\n", rfc2822_date(std::time::SystemTime::now())));
+        msg.push_str(&format!("Message-ID: <{}.{}@{domain}>\r\n", unix_millis(), std::process::id()));
+    }
     msg.push_str(&format!("To: {}\r\n", one_line(to)));
     msg.push_str(&format!("Subject: {}\r\n", header_text(subject)));
     if let Some(id) = in_reply_to.map(one_line).filter(|s| !s.is_empty()) {
@@ -221,7 +232,39 @@ pub fn build_raw(to: &str, subject: &str, body: &str, in_reply_to: Option<&str>,
     msg.push_str("MIME-Version: 1.0\r\nContent-Type: text/plain; charset=\"UTF-8\"\r\nContent-Transfer-Encoding: base64\r\n\r\n");
     msg.push_str(&b64_lines(body.as_bytes()));
     msg.push_str("\r\n");
-    Ok(b64_std(msg.as_bytes()).replace('+', "-").replace('/', "_").trim_end_matches('=').to_string())
+    Ok(msg.into_bytes())
+}
+
+/// The message as Gmail's `raw` wants it: base64, URL-safe, no padding.
+pub fn build_raw(to: &str, subject: &str, body: &str, in_reply_to: Option<&str>, references: Option<&str>) -> Result<String, &'static str> {
+    let msg = build_message(None, to, subject, body, in_reply_to, references)?;
+    Ok(b64_std(&msg).replace('+', "-").replace('/', "_").trim_end_matches('=').to_string())
+}
+
+fn unix_millis() -> u128 {
+    std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis()).unwrap_or(0)
+}
+
+/// "Tue, 15 Nov 1994 08:12:31 +0000" (UTC), as RFC 5322 writes a date.
+pub fn rfc2822_date(t: std::time::SystemTime) -> String {
+    let secs = t.duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs() as i64).unwrap_or(0);
+    let (days, rem) = (secs.div_euclid(86_400), secs.rem_euclid(86_400));
+    // Civil date from days since 1970-01-01 (Howard Hinnant's algorithm).
+    let z = days + 719_468;
+    let era = z.div_euclid(146_097);
+    let doe = z.rem_euclid(146_097);
+    let yoe = (doe - doe / 1_460 + doe / 36_524 - doe / 146_096) / 365;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let day = doy - (153 * mp + 2) / 5 + 1;
+    let month = if mp < 10 { mp + 3 } else { mp - 9 };
+    let year = yoe + era * 400 + i64::from(month <= 2);
+    const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
+    const MONTHS: [&str; 12] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    format!(
+        "{}, {day:02} {} {year} {:02}:{:02}:{:02} +0000",
+        DAYS[days.rem_euclid(7) as usize], MONTHS[(month - 1) as usize], rem / 3600, rem % 3600 / 60, rem % 60
+    )
 }
 
 #[cfg(test)]
@@ -283,6 +326,23 @@ mod tests {
         assert_eq!(String::from_utf8(b64_decode(&body).unwrap()).unwrap(), "Строка 1\r\nline 2");
         let fresh = String::from_utf8(b64_decode(&build_raw("a@x.org", "Hi", "b", None, None).unwrap()).unwrap()).unwrap();
         assert!(!fresh.contains("In-Reply-To"));
+    }
+
+    #[test]
+    fn a_date_is_written_the_rfc_way() {
+        let at = |secs: u64| rfc2822_date(std::time::UNIX_EPOCH + std::time::Duration::from_secs(secs));
+        assert_eq!(at(0), "Thu, 01 Jan 1970 00:00:00 +0000");
+        assert_eq!(at(784_887_151), "Tue, 15 Nov 1994 08:12:31 +0000");
+        assert_eq!(at(1_709_164_800), "Thu, 29 Feb 2024 00:00:00 +0000");
+    }
+
+    #[test]
+    fn smtp_gets_from_date_and_message_id_but_gmail_does_not() {
+        let smtp = String::from_utf8(build_message(Some("me@mail.ru"), "ann@x.org", "Hi", "b", None, None).unwrap()).unwrap();
+        assert!(smtp.starts_with("From: me@mail.ru\r\nDate: ") && smtp.contains("\r\nMessage-ID: <") && smtp.contains("@mail.ru>\r\nTo: ann@x.org\r\n"));
+        let gmail = String::from_utf8(build_message(None, "ann@x.org", "Hi", "b", None, None).unwrap()).unwrap();
+        assert!(gmail.starts_with("To: ann@x.org\r\n") && !gmail.contains("Message-ID"));
+        assert!(build_message(Some("bad"), "ann@x.org", "Hi", "b", None, None).is_err());
     }
 
     #[test]

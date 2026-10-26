@@ -150,6 +150,10 @@ export const PILL_CATALOG: readonly PillDefinition[] = [
   // and the sign-in are in Settings → Integrations → Gmail, off until then.
   { id: "integration_gmail", name: "Gmail", color: "#EA4335", category: "service",
     subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
+  // Any mailbox over IMAP and SMTP with an app password (src-tauri/src/mailbox): the account is in
+  // Settings → Integrations → Mail, off until then.
+  { id: "integration_mail", name: "Mail", color: "#60A5FA", category: "service",
+    subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
 ];
 
 /** The always-on pill unless the user picks another workspace tool. */

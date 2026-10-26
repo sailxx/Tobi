@@ -1,17 +1,35 @@
-// The Gmail card: your unread mail as one row per message (sender, subject, a line of text, the age),
+// The mail card (Gmail, or any mailbox over IMAP): your unread mail as one row per message (sender, subject, a line of text, the age),
 // a click opens the message (its plain text only), with Reply, Archive and Delete, and the pencil
 // starts a new message. Enter sends a reply, Shift+Enter starts a new line, Escape goes back. Nothing
 // is sent without the user's own Enter or click, and while something is being written the island
 // stays open. Built once and synced in place: a field keeps its draft and the keyboard while mail
-// arrives. It reuses the chat card's look (style.css .wa-*) with Gmail's colour.
+// arrives. It reuses the chat card's look (style.css .wa-*) with the account's colour; what differs per account is in `MailCardConfig`.
 
 import { h, svg, clear, dot } from "./dom";
 import { ICONS } from "./icons";
-import { Bridge } from "../core/bridge";
 import { State } from "../core/state";
-import { GMAIL_ID, GMAIL_RED, Mail, linkColor, linkLabel, sendErrorLabel, subjectOf, type MailItem } from "../core/gmail";
+import { subjectOf, type MailIslandView, type MailItem, type MailLink, type MailSendError } from "../core/gmail";
 import { canSend, initials, keyAction, timeAgo } from "../core/whatsapp";
 import { language, t, tl } from "../i18n/i18n";
+
+export interface MailCardConfig {
+  id: string;
+  title: string;
+  color: string;
+  view(): MailIslandView;
+  linkLabel(link: MailLink): string;
+  linkColor(link: MailLink): string;
+  sendErrorLabel(e: MailSendError): string;
+  bridge: {
+    refresh(): Promise<unknown>;
+    open(id: string): Promise<unknown>;
+    close(): Promise<unknown>;
+    archive(id: string): Promise<unknown>;
+    trash(id: string): Promise<unknown>;
+    reply(id: string, text: string): Promise<boolean | null>;
+    send(to: string, subject: string, text: string): Promise<boolean | null>;
+  };
+}
 
 export interface MailCardHost {
   openSettings(): void;
@@ -32,12 +50,12 @@ function avatar(name: string, size = 16): HTMLElement {
   return el;
 }
 
-export function buildMailCard(host: MailCardHost): MailCard {
+export function buildMailCard(cfg: MailCardConfig, host: MailCardHost): MailCard {
   // ── The list ──
   const unreadTag = h("span", { class: "wa-unread" });
   const composeBtn = h("button", { class: "int-back mail-compose", title: tl("New message") }, svg(ICONS.plus, 10, { stroke: 2.4 }));
   const refreshBtn = h("button", { class: "int-back mail-refresh", title: tl("Check now") }, svg(ICONS.arrowClockwise, 10, { stroke: 2 }));
-  const head = h("div", { class: "int-head" }, dot(GMAIL_RED, 7), h("b", { text: "Gmail" }), unreadTag, h("span", { class: "wa-spacer" }), refreshBtn, composeBtn);
+  const head = h("div", { class: "int-head" }, dot(cfg.color, 7), h("b", { text: cfg.title }), unreadTag, h("span", { class: "wa-spacer" }), refreshBtn, composeBtn);
   const listBody = h("div", {});
   const listView = h("div", { class: "wa-list" }, head, listBody);
 
@@ -67,7 +85,7 @@ export function buildMailCard(host: MailCardHost): MailCard {
   const composeView = h("div", { class: "wa-convo" },
     composeHead, toField, subjectField, composeBody, h("div", { class: "wa-reply" }, h("span", { class: "wa-spacer" }), composeSend), composeNote);
 
-  const el = h("div", { class: "int-card wa-card", style: `--chat-accent:${GMAIL_RED}` }, listView, messageView, composeView);
+  const el = h("div", { class: "int-card wa-card", style: `--chat-accent:${cfg.color}` }, listView, messageView, composeView);
 
   let openId: string | null = null;
   let composing = false;
@@ -80,13 +98,13 @@ export function buildMailCard(host: MailCardHost): MailCard {
     openId = item.id;
     field.value = "";
     messageKey = "";
-    void Bridge.gmailOpen(item.id);
+    void cfg.bridge.open(item.id);
     host.keyboard(true);
     sync();
   }
 
   function closeAll() {
-    if (openId != null) void Bridge.gmailClose();
+    if (openId != null) void cfg.bridge.close();
     openId = null;
     composing = false;
     field.value = "";
@@ -110,8 +128,8 @@ export function buildMailCard(host: MailCardHost): MailCard {
   async function sendReply() {
     const id = openId;
     const text = field.value;
-    if (!id || !canSend(text, Mail.view.sending)) return;
-    if (await Bridge.gmailReply(id, text)) {
+    if (!id || !canSend(text, cfg.view().sending)) return;
+    if (await cfg.bridge.reply(id, text)) {
       field.value = "";
       host.holdOpen(draftOn());
       syncSend();
@@ -120,23 +138,23 @@ export function buildMailCard(host: MailCardHost): MailCard {
   }
 
   async function sendNew() {
-    if (!canSend(composeBody.value, Mail.view.sending)) return;
-    if (await Bridge.gmailSend(toField.value, subjectField.value, composeBody.value)) closeAll();
+    if (!canSend(composeBody.value, cfg.view().sending)) return;
+    if (await cfg.bridge.send(toField.value, subjectField.value, composeBody.value)) closeAll();
   }
 
   back.addEventListener("click", closeAll);
   composeBack.addEventListener("click", closeAll);
   composeBtn.addEventListener("click", startCompose);
-  refreshBtn.addEventListener("click", () => void Bridge.gmailRefresh());
+  refreshBtn.addEventListener("click", () => void cfg.bridge.refresh());
   sendBtn.addEventListener("click", () => void sendReply());
   composeSend.addEventListener("click", () => void sendNew());
   archiveBtn.addEventListener("click", () => {
     const id = openId;
-    if (id) void Bridge.gmailArchive(id).then(() => closeAll());
+    if (id) void cfg.bridge.archive(id).then(() => closeAll());
   });
   trashBtn.addEventListener("click", () => {
     const id = openId;
-    if (id) void Bridge.gmailTrash(id).then(() => closeAll());
+    if (id) void cfg.bridge.trash(id).then(() => closeAll());
   });
   for (const input of [field, composeBody, toField, subjectField]) {
     input.addEventListener("input", () => {
@@ -168,11 +186,11 @@ export function buildMailCard(host: MailCardHost): MailCard {
   // Leaving the card (another pill, another view, the island folded) closes the message.
   State.subscribe(() => {
     if (openId == null && !composing) return;
-    if (State.mode !== "expanded" || State.view !== "overview" || State.focusTask?.id !== GMAIL_ID || !Mail.view.on) closeAll();
+    if (State.mode !== "expanded" || State.view !== "overview" || State.focusTask?.id !== cfg.id || !cfg.view().on) closeAll();
   });
 
   function syncSend() {
-    const sending = Mail.view.sending;
+    const sending = cfg.view().sending;
     const ok = canSend(field.value, sending);
     sendBtn.classList.toggle("ready", ok);
     sendBtn.disabled = !ok;
@@ -194,7 +212,7 @@ export function buildMailCard(host: MailCardHost): MailCard {
   }
 
   function syncList() {
-    const v = Mail.view;
+    const v = cfg.view();
     const key = [
       language(), v.link.state, "detail" in v.link ? v.link.detail : "", v.unread, Math.floor(Date.now() / 60_000),
       ...v.items.map((i) => `${i.id}|${i.date}`),
@@ -208,7 +226,7 @@ export function buildMailCard(host: MailCardHost): MailCard {
     clear(listBody);
     if (v.link.state !== "connected") {
       listBody.append(
-        h("div", { class: "int-status" }, dot(linkColor(v.link), 5), h("span", { class: "wa-status-text", text: linkLabel(v.link) })),
+        h("div", { class: "int-status" }, dot(cfg.linkColor(v.link), 5), h("span", { class: "wa-status-text", text: cfg.linkLabel(v.link) })),
         h("div", { class: "int-actions" }, h("button", { class: "link-btn wa-settings", text: t("Settings…"), onclick: () => host.openSettings() })),
       );
     } else if (v.items.length === 0) {
@@ -219,7 +237,7 @@ export function buildMailCard(host: MailCardHost): MailCard {
   }
 
   function syncMessage() {
-    const v = Mail.view;
+    const v = cfg.view();
     const m = v.opened && v.opened.id === openId ? v.opened : null;
     const key = [language(), openId, m?.id ?? "", m?.text.length ?? 0].join("~");
     if (key !== messageKey) {
@@ -235,10 +253,10 @@ export function buildMailCard(host: MailCardHost): MailCard {
     field.placeholder = t("Reply…  (Shift+Enter: new line)");
     note.className = "wa-note";
     if (v.link.state !== "connected") {
-      note.textContent = linkLabel(v.link);
+      note.textContent = cfg.linkLabel(v.link);
       note.classList.add("warn");
     } else if (v.sendError) {
-      note.textContent = sendErrorLabel(v.sendError);
+      note.textContent = cfg.sendErrorLabel(v.sendError);
       note.classList.add("err");
     } else {
       note.textContent = "";
@@ -248,13 +266,13 @@ export function buildMailCard(host: MailCardHost): MailCard {
   }
 
   function syncCompose() {
-    const v = Mail.view;
+    const v = cfg.view();
     toField.placeholder = t("To");
     subjectField.placeholder = t("Subject");
     composeBody.placeholder = t("Write your message…");
     composeNote.className = "wa-note";
     if (v.sendError) {
-      composeNote.textContent = sendErrorLabel(v.sendError);
+      composeNote.textContent = cfg.sendErrorLabel(v.sendError);
       composeNote.classList.add("err");
     } else {
       composeNote.textContent = "";
@@ -263,8 +281,8 @@ export function buildMailCard(host: MailCardHost): MailCard {
   }
 
   function sync() {
-    const v = Mail.view;
-    // Kept open through a missed check (the draft too): only gone when Gmail is off.
+    const v = cfg.view();
+    // Kept open through a missed check (the draft too): only gone when the account is off.
     if ((openId != null || composing) && !v.on) {
       closeAll();
       return;

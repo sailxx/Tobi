@@ -30,7 +30,9 @@ import { buildWhatsAppCard } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
 import { buildTelegramCard } from "./telegram";
 import { TELEGRAM_ID } from "../core/telegram";
-import { buildMailCard } from "./mail-card";
+import { buildGmailCard } from "./gmail";
+import { buildMailboxCard } from "./mailbox";
+import { MAILBOX_ID } from "../core/mailbox";
 import { GMAIL_ID } from "../core/gmail";
 import type { Outfit, OutfitSelection } from "../tobi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
@@ -225,7 +227,8 @@ function buildOverview(actions: ViewActions): ViewHost {
   };
   const whatsappCard = buildWhatsAppCard(chatHost);
   const telegramCard = buildTelegramCard(chatHost);
-  const mailCard = buildMailCard(chatHost);
+  const mailCard = buildGmailCard(chatHost);
+  const mailboxCard = buildMailboxCard(chatHost);
 
   const el = h("div", { class: "view overview" },
     h("div", { class: "left" }, left),
@@ -235,7 +238,7 @@ function buildOverview(actions: ViewActions): ViewHost {
   let pillIds = "";
   let detailOpen = false;
   let lastFocus: string | null = null;
-  let mode: "ticker" | "card" | "plan" | "diff" | "spotify" | "whatsapp" | "telegram" | "gmail" | null = null;
+  let mode: "ticker" | "card" | "plan" | "diff" | "spotify" | "whatsapp" | "telegram" | "gmail" | "mailbox" | null = null;
   let cardKey = "";
   /** The list row highlighted at the last sync, to scroll only when it moves. */
   let shownSelection: number | null = null;
@@ -422,6 +425,14 @@ function buildOverview(actions: ViewActions): ViewHost {
           cardKey = "";
         }
         mailCard.sync();
+      } else if (task && task.id === MAILBOX_ID) {
+        if (mode !== "mailbox") {
+          clear(leftBody);
+          leftBody.append(mailboxCard.el);
+          mode = "mailbox";
+          cardKey = "";
+        }
+        mailboxCard.sync();
       } else if (task) {
         const info = State.integrations[task.id];
         const key = [
