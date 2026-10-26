@@ -34,6 +34,8 @@ qrcode = { version = "0.14", default-features = false, features = ["svg"] }
 # Apache-2.0 OR MIT, no async runtime or logger (default features off); it adds five small crates
 # (mdns-sd, flume, if-addrs, socket-pktinfo, spin). See docs/ANDROID_LINK.md.
 mdns-sd = { version = "0.21", default-features = false }
+# Already pulled in by mdns-sd: lists the network adapters, so the pairing link carries the real LAN address and not a virtual adapter's.
+if-addrs = "0.15"
 # Phone link through a relay (phone_link/relay_client.rs; docs/RELAY_LINK.md): the computer opens an outbound
 # WebSocket to the user's own relay, only while "Away from home Wi-Fi" is on. tokio-tungstenite is the WebSocket
 # framing only (no TLS feature: the TLS is the tokio-rustls/ring already here, with the web roots reqwest already
