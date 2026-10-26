@@ -12,6 +12,7 @@
 // (src/settings/gmail.ts); both only ever see status codes, which they translate.
 
 pub mod api;
+pub mod builtin;
 pub mod model;
 pub mod oauth;
 pub mod prefs;
@@ -91,6 +92,8 @@ pub struct SettingsView {
     pub prefs: Prefs,
     pub client_id: Option<String>,
     pub has_secret: bool,
+    /// Tobi ships its own client: no setup is needed unless the user wants their own.
+    pub builtin: bool,
     pub link: Link,
     pub account: Option<String>,
     /// The last sign-in problem, as a code: denied, timeout, network, badClient, badAnswer, noCode, other.
@@ -180,6 +183,7 @@ impl Ctl {
             prefs: self.prefs.clone(),
             client_id: crate::secrets::get_internal(CLIENT_ID_KEY),
             has_secret: crate::secrets::get_internal(CLIENT_SECRET_KEY).is_some(),
+            builtin: builtin::available(),
             link: self.link.clone(),
             account: self.account.clone(),
             error: self.login_error.clone(),
@@ -205,7 +209,12 @@ fn pill(event: PillEvent) {
     }
 }
 
+/// The user's own client when they set one, else the one Tobi ships (builtin.rs).
 fn client_credentials() -> Option<(String, String)> {
+    own_client().or_else(|| builtin::available().then(|| (builtin::CLIENT_ID.to_string(), builtin::CLIENT_SECRET.to_string())))
+}
+
+fn own_client() -> Option<(String, String)> {
     let id = crate::secrets::get_internal(CLIENT_ID_KEY)?;
     let secret = crate::secrets::get_internal(CLIENT_SECRET_KEY)?;
     (!id.trim().is_empty() && !secret.trim().is_empty()).then(|| (id.trim().to_string(), secret.trim().to_string()))
@@ -686,6 +695,19 @@ pub async fn gmail_sign_in() -> Result<(), String> {
         }
     });
     Ok(())
+}
+
+/// Goes back to the client Tobi ships: the user's own one is forgotten, and so is the sign-in made with it.
+#[tauri::command]
+pub async fn gmail_forget_client() {
+    if let Some(refresh) = crate::secrets::get_internal(REFRESH_KEY) {
+        oauth::revoke(&refresh).await;
+    }
+    let _ = crate::secrets::set_internal(CLIENT_ID_KEY, "");
+    let _ = crate::secrets::set_internal(CLIENT_SECRET_KEY, "");
+    let _ = crate::secrets::set_internal(REFRESH_KEY, "");
+    stop(Link::Off);
+    reconcile();
 }
 
 /// Signs out: Google is told to forget the token, and everything kept here goes.

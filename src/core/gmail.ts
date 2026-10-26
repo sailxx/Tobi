@@ -71,6 +71,8 @@ export interface MailSettingsView {
   /** The client id is no secret; the secret never leaves Rust. */
   clientId: string | null;
   hasSecret: boolean;
+  /** Tobi ships its own Google client: nothing to set up unless the user wants their own. */
+  builtin: boolean;
   link: MailLink;
   account: string | null;
   error: MailSignInError | null;

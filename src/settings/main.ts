@@ -28,6 +28,8 @@ import { telegramSection } from "./telegram";
 import { TELEGRAM_ID } from "../core/telegram";
 import { gmailSection } from "./gmail";
 import { GMAIL_ID } from "../core/gmail";
+import { mailboxSection } from "./mailbox";
+import { MAILBOX_ID } from "../core/mailbox";
 import { updateRows, updatesListener } from "./updates";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
@@ -961,6 +963,27 @@ function gmailSections(): HTMLElement[] {
   })];
 }
 
+/** Mail over IMAP (experimental), next to Gmail: its pill is turned on from its own switch. */
+function mailboxSections(): HTMLElement[] {
+  if (!availablePills().some((p) => p.id === MAILBOX_ID)) return [];
+  return [mailboxSection({
+    toggle,
+    maxPills: MAX_ACTIVE,
+    pillActive: () => settings.activeIntegrations.includes(MAILBOX_ID),
+    setPill: (on) => {
+      const has = settings.activeIntegrations.includes(MAILBOX_ID);
+      if (on && !has && settings.activeIntegrations.length < MAX_ACTIVE) {
+        settings.activeIntegrations = [...settings.activeIntegrations, MAILBOX_ID];
+      } else if (!on && has) {
+        settings.activeIntegrations = settings.activeIntegrations.filter((x) => x !== MAILBOX_ID);
+      } else {
+        return;
+      }
+      declaredChanged();
+    },
+  })];
+}
+
 // ── General section ───────────────────────────────────────────────────────────
 
 function generalSection(): HTMLElement {
@@ -1453,7 +1476,7 @@ async function render() {
     pills: () => [activePillsSection(connected)],
     agents: () => [claudeSection(status), agentsSection(agents), planSection(status)],
     chat: () => [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)],
-    integrations: () => [integrationsSection(present), ...whatsappSections(), ...telegramSections(), ...gmailSections()],
+    integrations: () => [integrationsSection(present), ...whatsappSections(), ...telegramSections(), ...gmailSections(), ...mailboxSections()],
     phone: () => [phoneSection(settings.phoneLink ?? false, toggle, settings)],
     shortcuts: () => [shortcutsSection(shortcutReport)],
   };

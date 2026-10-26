@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.5.0",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "Any mailbox in the island",
+            "zh-Hans": "岛中的任意邮箱",
+            "hi": "आइलैंड में कोई भी मेलबॉक्स",
+            "es": "Cualquier buzón en la isla",
+            "ar": "أي صندوق بريد في الشريط",
+            "fr": "Toute messagerie dans l’île",
+            "bn": "আইল্যান্ডে যেকোনো মেইলবক্স",
+            "pt-BR": "Qualquer caixa de e-mail na ilha",
+            "ru": "Любая почта на острове",
+            "id": "Kotak email apa pun di pulau",
+            "de": "Jedes Postfach in der Insel",
+            "tr": "Adada herhangi bir posta kutusu"
+          },
+          "detail": {
+            "en": "Gmail, Yandex, Mail.ru, Yahoo, iCloud or your own server, with an app password. Gmail also signs in with one click.",
+            "zh-Hans": "Gmail、Yandex、Mail.ru、Yahoo、iCloud 或你自己的服务器，使用应用专用密码。Gmail 还可一键登录。",
+            "hi": "Gmail, Yandex, Mail.ru, Yahoo, iCloud या आपका अपना सर्वर, ऐप पासवर्ड के साथ। Gmail में एक क्लिक से साइन-इन भी।",
+            "es": "Gmail, Yandex, Mail.ru, Yahoo, iCloud o tu propio servidor, con una contraseña de aplicación. Gmail también inicia sesión con un clic.",
+            "ar": "Gmail وYandex وMail.ru وYahoo وiCloud أو خادمك الخاص بكلمة مرور تطبيق. ويمكن لـ Gmail تسجيل الدخول بنقرة واحدة.",
+            "fr": "Gmail, Yandex, Mail.ru, Yahoo, iCloud ou ton propre serveur, avec un mot de passe d’application. Gmail se connecte aussi en un clic.",
+            "bn": "Gmail, Yandex, Mail.ru, Yahoo, iCloud বা আপনার নিজের সার্ভার, অ্যাপ পাসওয়ার্ড দিয়ে। Gmail এক ক্লিকে সাইন ইনও করে।",
+            "pt-BR": "Gmail, Yandex, Mail.ru, Yahoo, iCloud ou seu próprio servidor, com uma senha de app. O Gmail também entra com um clique.",
+            "ru": "Gmail, Yandex, Mail.ru, Yahoo, iCloud или свой сервер, с паролем приложения. В Gmail можно войти и одним кликом.",
+            "id": "Gmail, Yandex, Mail.ru, Yahoo, iCloud, atau server Anda sendiri, dengan kata sandi aplikasi. Gmail juga masuk dengan satu klik.",
+            "de": "Gmail, Yandex, Mail.ru, Yahoo, iCloud oder dein eigener Server, mit App-Passwort. Gmail meldet sich auch mit einem Klick an.",
+            "tr": "Gmail, Yandex, Mail.ru, Yahoo, iCloud veya kendi sunucunuz, uygulama parolasıyla. Gmail ayrıca tek tıkla giriş yapar."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.4.0",
       "items": [
         {

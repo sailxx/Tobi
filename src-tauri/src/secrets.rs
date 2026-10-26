@@ -86,6 +86,8 @@ pub const INTERNAL_KEYS: &[&str] = &[
     "gmail-client-id",
     "gmail-client-secret",
     "gmail-refresh-token",
+    // Any mailbox over IMAP: the account's app password (mailbox/mod.rs).
+    "mail-password",
     "telegram-api-id",
     "telegram-api-hash",
     "telegram-session-0",

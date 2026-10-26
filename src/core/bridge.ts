@@ -12,6 +12,7 @@ import type { UpdateStatus } from "./update";
 import type { WaIslandView, WaSettingsView, WaTestResult } from "./whatsapp";
 import type { TgIslandView, TgSettingsView } from "./telegram";
 import type { MailIslandView, MailSettingsView } from "./gmail";
+import type { MailboxSettingsView } from "./mailbox";
 
 export const IS_TAURI =
   typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
@@ -516,6 +517,29 @@ export const Bridge = {
   /** Opens Google's page in the browser. */
   gmailSignIn: () => callOrThrow<void>("gmail_sign_in"),
   gmailSignOut: () => call<void>("gmail_sign_out"),
+  /** Back to the client Tobi ships: the user's own one and its sign-in are forgotten. */
+  gmailForgetClient: () => call<void>("gmail_forget_client"),
+
+  // ── Mail over IMAP (src-tauri/src/mailbox) ────────────────────────────────
+  /** The island's copy, asked once at start (then the "mailbox" event). Island only. */
+  mailboxIsland: () => call<MailIslandView>("mailbox_island"),
+  mailboxRefresh: () => call<void>("mailbox_refresh"),
+  mailboxOpen: (id: string) => call<boolean>("mailbox_open", { id }),
+  mailboxClose: () => call<void>("mailbox_close"),
+  mailboxMarkRead: (id: string) => call<boolean>("mailbox_mark_read", { id }),
+  mailboxArchive: (id: string) => call<boolean>("mailbox_archive", { id }),
+  mailboxTrash: (id: string) => call<boolean>("mailbox_trash", { id }),
+  /** Enter or the send button only. True once the server took it. */
+  mailboxReply: (id: string, text: string) => call<boolean>("mailbox_reply", { id, text }),
+  mailboxSend: (to: string, subject: string, text: string) => call<boolean>("mailbox_send", { to, subject, text }),
+  /** Settings only, from here down. */
+  mailboxSettings: () => call<MailboxSettingsView>("mailbox_settings"),
+  mailboxSetOptions: (enabled: boolean, markReadOnOpen: boolean) => callOrThrow<void>("mailbox_set_options", { enabled, markReadOnOpen }),
+  /** `password`: null keeps the stored one. Rust keeps it; it is never handed back. */
+  mailboxSaveAccount: (a: {
+    provider: string; email: string; password: string | null; imapHost: string; imapPort: number; smtpHost: string; smtpPort: number;
+  }) => callOrThrow<void>("mailbox_save_account", a),
+  mailboxSignOut: () => call<void>("mailbox_sign_out"),
 
   // ── New versions (src-tauri/src/update.rs) ────────────────────────────────
   updateStatus: () => call<UpdateStatus>("update_status"),

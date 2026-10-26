@@ -40,6 +40,7 @@ mod voice;
 #[cfg(windows)]
 mod webview_drop;
 mod gmail;
+mod mailbox;
 mod telegram;
 mod whatsapp;
 
@@ -137,6 +138,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
     whatsapp::sync(&settings.active_integrations);
     telegram::sync(&settings.active_integrations);
     gmail::sync(&settings.active_integrations);
+    mailbox::sync(&settings.active_integrations);
     if shortcuts_changed {
         shortcuts::apply(&app, &settings.shortcuts);
     }
@@ -968,6 +970,20 @@ pub fn run() {
             gmail::gmail_set_options,
             gmail::gmail_save_client,
             gmail::gmail_sign_in,
+            gmail::gmail_forget_client,
+            mailbox::mailbox_island,
+            mailbox::mailbox_refresh,
+            mailbox::mailbox_open,
+            mailbox::mailbox_close,
+            mailbox::mailbox_mark_read,
+            mailbox::mailbox_archive,
+            mailbox::mailbox_trash,
+            mailbox::mailbox_reply,
+            mailbox::mailbox_send,
+            mailbox::mailbox_settings,
+            mailbox::mailbox_set_options,
+            mailbox::mailbox_save_account,
+            mailbox::mailbox_sign_out,
             gmail::gmail_sign_out,
             flow::flow_status,
             flow::flow_set_prefs,
@@ -1056,6 +1072,8 @@ pub fn run() {
             telegram::start(&handle, &loaded.active_integrations);
             // Gmail (experimental): the user's own Google sign-in, polled only while on.
             gmail::start(&handle, &loaded.active_integrations);
+            // Any mailbox over IMAP and SMTP with an app password (experimental).
+            mailbox::start(&handle, &loaded.active_integrations);
             shortcuts::apply(&handle, &loaded.shortcuts);
             // New versions: nothing goes to GitHub until the user agrees (update.rs).
             update::start(handle.clone());
@@ -1081,6 +1099,7 @@ pub fn run() {
                 whatsapp::shutdown();
                 telegram::shutdown();
                 gmail::shutdown();
+                mailbox::shutdown();
             }
         });
 }

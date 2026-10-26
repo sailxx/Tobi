@@ -129,17 +129,21 @@ export function gmailSection(host: GmailSettingsHost): HTMLElement {
       parts.push(h("div", { class: "hint", style: "color:#F4505E", text: t("Turn off another pill to make room for Gmail ({max} at most).", { max: host.maxPills }) }));
     }
     parts.push(statusRow(v));
-    const ready = v.clientId != null && v.hasSecret;
+    const own = v.clientId != null && v.hasSecret;
+    const ready = own || v.builtin;
     const signedIn = v.link.state === "connected" || v.link.state === "connecting" || v.link.state === "unreachable";
     if (signedIn && !editingClient) {
       parts.push(h("div", { class: "row" }, h("button", { class: "danger", text: t("Sign out of Gmail"), onclick: () => void Bridge.gmailSignOut() })));
-    } else if (!ready || editingClient || v.link.state === "needsSetup") {
+    } else if (!ready || editingClient || (v.link.state === "needsSetup" && !v.builtin)) {
       parts.push(...clientBlock(v));
+      if (v.builtin && editingClient) {
+        parts.push(h("div", { class: "row" }, h("button", { text: t("Use Tobi’s Google client"), onclick: () => { editingClient = false; void Bridge.gmailForgetClient(); } })));
+      }
     } else {
       parts.push(
         h("div", { class: "row" },
           btn(t("Sign in with Google"), () => void signIn()),
-          h("button", { text: t("Change client"), onclick: () => { editingClient = true; draw(); } }),
+          h("button", { text: own ? t("Change client") : t("Use my own client"), onclick: () => { editingClient = true; draw(); } }),
         ),
         h("div", { class: "hint", text: v.link.state === "signingIn" ? t("Finish in the browser: pick your account and allow Tobi to read and send mail. Google warns that the app isn’t verified: that is your own client, choose Continue.") : t("Your browser opens Google’s page; Tobi gets the answer on this computer only.") }),
       );
