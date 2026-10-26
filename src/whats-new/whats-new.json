@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.2.1",
+      "items": [
+        {
+          "icon": "download",
+          "title": {
+            "en": "A darker installer",
+            "zh-Hans": "更暗的安装程序",
+            "hi": "गहरा इंस्टॉलर",
+            "es": "Instalador oscuro",
+            "ar": "مثبّت داكن",
+            "fr": "Un installeur sombre",
+            "bn": "গাঢ় ইনস্টলার",
+            "pt-BR": "Instalador escuro",
+            "ru": "Тёмный установщик",
+            "id": "Penginstal gelap",
+            "de": "Dunkler Installer",
+            "tr": "Koyu yükleyici"
+          },
+          "detail": {
+            "en": "The installer matches Tobi, and updating no longer asks you to uninstall first.",
+            "zh-Hans": "安装程序与 Tobi 风格一致，更新时不再要求先卸载。",
+            "hi": "इंस्टॉलर Tobi जैसा दिखता है, और अपडेट के लिए अब पहले अनइंस्टॉल नहीं करना पड़ता।",
+            "es": "El instalador combina con Tobi y actualizar ya no pide desinstalar antes.",
+            "ar": "المثبّت يناسب Tobi، والتحديث لم يعد يطلب إزالة التثبيت أولاً.",
+            "fr": "L’installeur est assorti à Tobi, et la mise à jour ne demande plus de désinstaller d’abord.",
+            "bn": "ইনস্টলার এখন Tobi-র মতো, আর আপডেটে আগে আনইনস্টল করতে বলে না।",
+            "pt-BR": "O instalador combina com o Tobi e atualizar não pede mais para desinstalar antes.",
+            "ru": "Установщик в стиле Tobi, а при обновлении больше не просит сначала удалить программу.",
+            "id": "Penginstal senada dengan Tobi, dan pembaruan tidak lagi meminta uninstal dulu.",
+            "de": "Der Installer passt zu Tobi, und beim Update muss nichts mehr vorher deinstalliert werden.",
+            "tr": "Yükleyici Tobi’ye uyuyor ve güncellerken artık önce kaldırmanız istenmiyor."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.2.0",
       "items": [
         {
