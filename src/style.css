@@ -3086,3 +3086,56 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   text-decoration: underline;
   text-decoration-color: rgba(255, 255, 255, 0.3);
 }
+
+/* Gmail's card (views/mail-card.ts): the chat card's look with a message's text and plain fields. */
+.mail-row .wa-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mail-subject {
+  font: 600 11px var(--font);
+  padding: 2px 8px 4px;
+  color: var(--text, #f3f4f6);
+}
+
+.mail-text {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 8px;
+  font: 400 11px/1.45 var(--font);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.mail-act {
+  font-size: 10.5px;
+  padding: 0 4px;
+}
+
+.mail-input {
+  box-sizing: border-box;
+  width: calc(100% - 16px);
+  margin: 0 8px 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: 400 11px var(--font);
+  outline: none;
+}
+
+.mail-compose-body {
+  margin: 0 8px;
+  width: calc(100% - 16px);
+  min-height: 56px;
+}
+
+html[data-dir="rtl"] #views :is(.mail-text, .mail-input, .mail-subject) {
+  direction: rtl;
+  text-align: right;
+}

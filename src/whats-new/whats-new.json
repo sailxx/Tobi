@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.4.0",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "Gmail in the island",
+            "zh-Hans": "岛中的 Gmail",
+            "hi": "आइलैंड में Gmail",
+            "es": "Gmail en la isla",
+            "ar": "Gmail في الشريط",
+            "fr": "Gmail dans l’île",
+            "bn": "আইল্যান্ডে Gmail",
+            "pt-BR": "Gmail na ilha",
+            "ru": "Gmail на острове",
+            "id": "Gmail di pulau",
+            "de": "Gmail in der Insel",
+            "tr": "Adada Gmail"
+          },
+          "detail": {
+            "en": "Unread mail in the island: open it, reply, archive or delete. Experimental: sign in with your own Google client.",
+            "zh-Hans": "在岛中查看未读邮件：打开、回复、归档或删除。实验性功能：使用你自己的 Google 客户端登录。",
+            "hi": "आइलैंड में अपठित मेल: खोलें, जवाब दें, संग्रहित करें या हटाएँ। प्रायोगिक: अपने Google क्लाइंट से साइन इन करें।",
+            "es": "Correo sin leer en la isla: ábrelo, responde, archiva o elimina. Experimental: inicia sesión con tu propio cliente de Google.",
+            "ar": "البريد غير المقروء في الشريط: افتحه وردّ وأرشِفه أو احذفه. تجريبي: سجّل الدخول بعميل Google الخاص بك.",
+            "fr": "Les mails non lus dans l’île : ouvre, réponds, archive ou supprime. Expérimental : connecte-toi avec ton propre client Google.",
+            "bn": "আইল্যান্ডে অপঠিত মেইল: খুলুন, উত্তর দিন, আর্কাইভ বা মুছুন। পরীক্ষামূলক: নিজের Google ক্লায়েন্ট দিয়ে সাইন ইন করুন।",
+            "pt-BR": "E-mails não lidos na ilha: abra, responda, arquive ou apague. Experimental: entre com seu próprio cliente do Google.",
+            "ru": "Непрочитанная почта на острове: открывайте, отвечайте, архивируйте или удаляйте. Экспериментально: вход со своим клиентом Google.",
+            "id": "Email belum dibaca di pulau: buka, balas, arsipkan, atau hapus. Eksperimental: masuk dengan klien Google Anda sendiri.",
+            "de": "Ungelesene Mails in der Insel: öffnen, antworten, archivieren oder löschen. Experimentell: Anmeldung mit deinem eigenen Google-Client.",
+            "tr": "Okunmamış postalar adada: açın, yanıtlayın, arşivleyin veya silin. Deneysel: kendi Google istemcinizle giriş yapın."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.3.0",
       "items": [
         {

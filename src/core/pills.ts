@@ -146,6 +146,10 @@ export const PILL_CATALOG: readonly PillDefinition[] = [
   // and the sign-in are in Settings → Integrations → Telegram, off until then.
   { id: "integration_telegram", name: "Telegram", color: "#2AABEE", category: "service",
     subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
+  // Gmail (experimental) through the user's own Google OAuth client (src-tauri/src/gmail): the client
+  // and the sign-in are in Settings → Integrations → Gmail, off until then.
+  { id: "integration_gmail", name: "Gmail", color: "#EA4335", category: "service",
+    subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
 ];
 
 /** The always-on pill unless the user picks another workspace tool. */

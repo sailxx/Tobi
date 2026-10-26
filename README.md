@@ -35,9 +35,9 @@ Open PRs, review requests and CI status on GitHub, plus Vercel, Stripe, n8n, Not
 
 Chat with Claude, OpenAI, Gemini, DeepSeek, Qwen, Moonshot or a local model (Ollama, LM Studio) with your own key. Drop a file on the window: Tobi turns into a box, swallows it and answers questions about it.
 
-### ✈️ Telegram and WhatsApp (experimental)
+### ✈️ Telegram, Gmail and WhatsApp (experimental)
 
-Your unread chats in the island: open one to read its last messages and reply (Enter sends, Shift+Enter starts a new line). Telegram signs in with your own account through your own API id (free, from my.telegram.org), the phone number and the code Telegram sends; WhatsApp goes through a gateway on this computer. Both are off by default, keep messages in memory only and never write them anywhere: **Settings → Integrations**.
+Your unread chats in the island: open one to read its last messages and reply (Enter sends, Shift+Enter starts a new line). Telegram signs in with your own account through your own API id (free, from my.telegram.org), the phone number and the code Telegram sends; Gmail signs in with your own Google OAuth client (the browser opens Google’s page), lists your unread mail, opens a message as plain text and lets you reply, write a new message, archive or delete to the bin; WhatsApp goes through a gateway on this computer. All three are off by default, keep messages in memory only and never write them anywhere: **Settings → Integrations**.
 
 ### 🫥 Hide when idle
 

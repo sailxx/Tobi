@@ -30,6 +30,8 @@ import { buildWhatsAppCard } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
 import { buildTelegramCard } from "./telegram";
 import { TELEGRAM_ID } from "../core/telegram";
+import { buildMailCard } from "./mail-card";
+import { GMAIL_ID } from "../core/gmail";
 import type { Outfit, OutfitSelection } from "../tobi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
 import type { ViewCommand } from "../island/shortcuts";
@@ -223,6 +225,7 @@ function buildOverview(actions: ViewActions): ViewHost {
   };
   const whatsappCard = buildWhatsAppCard(chatHost);
   const telegramCard = buildTelegramCard(chatHost);
+  const mailCard = buildMailCard(chatHost);
 
   const el = h("div", { class: "view overview" },
     h("div", { class: "left" }, left),
@@ -232,7 +235,7 @@ function buildOverview(actions: ViewActions): ViewHost {
   let pillIds = "";
   let detailOpen = false;
   let lastFocus: string | null = null;
-  let mode: "ticker" | "card" | "plan" | "diff" | "spotify" | "whatsapp" | "telegram" | null = null;
+  let mode: "ticker" | "card" | "plan" | "diff" | "spotify" | "whatsapp" | "telegram" | "gmail" | null = null;
   let cardKey = "";
   /** The list row highlighted at the last sync, to scroll only when it moves. */
   let shownSelection: number | null = null;
@@ -411,6 +414,14 @@ function buildOverview(actions: ViewActions): ViewHost {
           cardKey = "";
         }
         telegramCard.sync();
+      } else if (task && task.id === GMAIL_ID) {
+        if (mode !== "gmail") {
+          clear(leftBody);
+          leftBody.append(mailCard.el);
+          mode = "gmail";
+          cardKey = "";
+        }
+        mailCard.sync();
       } else if (task) {
         const info = State.integrations[task.id];
         const key = [
