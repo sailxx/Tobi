@@ -30,6 +30,9 @@ use crate::i18n::t;
 use crate::island::WINDOW_LABEL;
 
 pub const RELEASES_URL: &str = "https://api.github.com/repos/sailxx/Tobi/releases?per_page=30";
+/// The releases feed on github.com: not counted by the API's hourly limit, which a shared address
+/// (an office, a mobile network, a VPN) can use up for everyone behind it.
+pub const RELEASES_FEED: &str = "https://github.com/sailxx/Tobi/releases.atom";
 /// Where "What's new" goes when no release is known.
 pub const RELEASES_PAGE: &str = "https://github.com/sailxx/Tobi/releases";
 
@@ -170,6 +173,28 @@ pub fn latest(json: &[u8], prefix: &str) -> Option<Release> {
             page_url,
             headline: headline(r.get("body").and_then(Value::as_str)),
             assets,
+        })
+    });
+    releases.fold(None, |best: Option<Release>, r| match best {
+        Some(b) if !is_newer(&r.version, &b.version) => Some(b),
+        _ => Some(r),
+    })
+}
+
+/// The newest release named by the releases feed: its version and page, no files (the feed has
+/// none, so the card offers the release page; "Update now" comes back with the API).
+pub fn latest_from_feed(xml: &str, prefix: &str) -> Option<Release> {
+    const MARK: &str = "/sailxx/Tobi/releases/tag/";
+    let releases = xml.match_indices(MARK).filter_map(|(at, _)| {
+        let rest = &xml[at + MARK.len()..];
+        let tag = &rest[..rest.find(|c: char| c == '"' || c == '<' || c.is_whitespace())?];
+        let version = version_from_tag(tag, prefix)?;
+        Some(Release {
+            version,
+            tag: tag.to_string(),
+            page_url: format!("https://github.com{MARK}{tag}"),
+            headline: None,
+            assets: vec![],
         })
     });
     releases.fold(None, |best: Option<Release>, r| match best {
@@ -527,11 +552,29 @@ async fn fetch_latest() -> Result<Option<Release>, String> {
         .send()
         .await
         .map_err(|e| e.to_string())?;
-    if response.status().as_u16() != 200 {
-        return Err(format!("HTTP {}", response.status().as_u16()));
+    let code = response.status().as_u16();
+    // 403 / 429: the API's hourly limit for this address is used up. The feed has no limit.
+    if code == 403 || code == 429 {
+        return fetch_latest_from_feed().await;
+    }
+    if code != 200 {
+        return Err(format!("HTTP {code}"));
     }
     let body = crate::net::read_capped(response, crate::net::MAX_BODY).await?;
     Ok(latest(&body, TAG_PREFIX))
+}
+
+async fn fetch_latest_from_feed() -> Result<Option<Release>, String> {
+    let response = github_client(Duration::from_secs(30))?
+        .get(RELEASES_FEED)
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+    if response.status().as_u16() != 200 {
+        return Err(format!("feed HTTP {}", response.status().as_u16()));
+    }
+    let body = crate::net::read_capped(response, crate::net::MAX_BODY).await?;
+    Ok(latest_from_feed(&String::from_utf8_lossy(&body), TAG_PREFIX))
 }
 
 /// One look at GitHub. `manual`: "Check now" in Settings, which opens the card
@@ -852,6 +895,19 @@ mod tests {
         ])
         .to_string()
         .into_bytes()
+    }
+
+    #[test]
+    fn the_feed_names_the_newest_release_without_files() {
+        let xml = r#"<feed><entry><link rel="alternate" href="https://github.com/sailxx/Tobi/releases/tag/v0.5.1"/></entry>
+<entry><link href="https://github.com/sailxx/Tobi/releases/tag/v0.10.0"/></entry>
+<entry><link href="https://github.com/sailxx/Tobi/releases/tag/windows-latest"/></entry>
+<entry><link href="https://github.com/sailxx/Tobi/releases/tag/v0.9.0-beta"/></entry></feed>"#;
+        let r = latest_from_feed(xml, "v").unwrap();
+        assert_eq!(r.version, "0.10.0");
+        assert_eq!(r.page_url, "https://github.com/sailxx/Tobi/releases/tag/v0.10.0");
+        assert!(r.assets.is_empty() && allowed_url(&r.page_url));
+        assert!(latest_from_feed("<feed/>", "v").is_none());
     }
 
     #[test]
