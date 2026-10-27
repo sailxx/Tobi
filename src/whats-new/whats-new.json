@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.6.1",
+      "items": [
+        {
+          "icon": "update",
+          "title": {
+            "en": "Update check fixed",
+            "zh-Hans": "修复更新检查",
+            "hi": "अपडेट जाँच ठीक की गई",
+            "es": "Búsqueda de actualizaciones corregida",
+            "ar": "تم إصلاح البحث عن التحديثات",
+            "fr": "Recherche de mises à jour corrigée",
+            "bn": "আপডেট পরীক্ষা ঠিক করা হয়েছে",
+            "pt-BR": "Verificação de atualizações corrigida",
+            "ru": "Проверка обновлений исправлена",
+            "id": "Pengecekan pembaruan diperbaiki",
+            "de": "Update-Prüfung repariert",
+            "tr": "Güncelleme denetimi düzeltildi"
+          },
+          "detail": {
+            "en": "“Check now” no longer says it can’t reach GitHub when many computers share your internet address.",
+            "zh-Hans": "当多台电脑共用同一网络地址时，“立即检查”不再提示无法连接 GitHub。",
+            "hi": "जब कई कंप्यूटर एक ही इंटरनेट पते का उपयोग करते हैं, तब “अभी जाँचें” अब GitHub न पहुँच पाने की बात नहीं कहता।",
+            "es": "«Buscar ahora» ya no dice que no llega a GitHub cuando varios equipos comparten tu dirección de internet.",
+            "ar": "لم يعد «تحقق الآن» يقول إنه لا يصل إلى GitHub عندما تتشارك عدة أجهزة عنوان الإنترنت نفسه.",
+            "fr": "« Vérifier maintenant » ne dit plus qu’il n’atteint pas GitHub quand plusieurs ordinateurs partagent ton adresse internet.",
+            "bn": "একাধিক কম্পিউটার একই ইন্টারনেট ঠিকানা ব্যবহার করলে “এখনই দেখুন” আর GitHub-এ পৌঁছাতে পারছে না বলে না।",
+            "pt-BR": "“Verificar agora” não diz mais que não alcança o GitHub quando vários computadores compartilham seu endereço de internet.",
+            "ru": "«Проверить сейчас» больше не пишет, что GitHub недоступен, когда несколько компьютеров делят один интернет-адрес.",
+            "id": "“Periksa sekarang” tidak lagi bilang tak bisa menjangkau GitHub saat banyak komputer memakai alamat internet yang sama.",
+            "de": "„Jetzt prüfen“ meldet nicht mehr, GitHub sei nicht erreichbar, wenn sich mehrere Computer deine Internetadresse teilen.",
+            "tr": "Birçok bilgisayar aynı internet adresini paylaştığında “Şimdi denetle” artık GitHub’a ulaşamadığını söylemiyor."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.6.0",
       "items": [
         {
