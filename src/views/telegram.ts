@@ -18,7 +18,7 @@ export function buildTelegramCard(host: ChatCardHost): ChatCard {
       close: (c) => Bridge.telegramClose(c),
       send: (c, t) => Bridge.telegramSend(c, t),
       ignore: (c) => Bridge.telegramIgnore(c),
-      media: (c, id) => Bridge.telegramMedia(c, id),
+      expand: (m) => Bridge.openMessageWindow(m),
     },
   }, host);
 }
