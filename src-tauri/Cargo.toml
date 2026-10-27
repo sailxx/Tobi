@@ -14,7 +14,9 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = ["tray-icon"] }
+# macos-private-api: a transparent window on macOS (the island's) needs Apple's private API (Tobi is not
+# sold through the App Store). It does nothing on the other systems; tauri-build wants it listed here.
+tauri = { version = "2", features = ["tray-icon", "macos-private-api"] }
 tauri-plugin-single-instance = "2"
 tauri-plugin-autostart = "2"
 tauri-plugin-global-shortcut = "2"
@@ -107,8 +109,6 @@ libc = "0.2"
 # (platform/macos.rs). Same versions as tauri, so nothing new is compiled.
 objc2 = "0.6"
 objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSWindow", "NSResponder"] }
-# A transparent window on macOS (the island's) needs Apple's private API; Tobi is not sold through the App Store.
-tauri = { version = "2", features = ["macos-private-api"] }
 # The clipboard for Flow dictation.
 arboard = { version = "3.6", default-features = false }
 
