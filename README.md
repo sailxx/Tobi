@@ -1,10 +1,29 @@
 <div align="center">
 
-<img src="assets/readme/hero-en.svg" width="100%" alt="Tobi — an AI helper for Windows, Linux and macOS">
+<img src="src-tauri/icons/128x128@2x.png" width="128" alt="Tobi">
+
+# Tobi
+
+**A small helper who lives at the top of your screen and keeps an eye on your AI coding agents, on Windows, Linux and macOS. His Android app links your phone over your own network.**
+
+Press `Ctrl+Alt+N` and Tobi drops in to show what Claude Code is doing: thinking, reading, editing files, running commands. Allow or deny an agent’s request in one click, drop a file on him, chat with Claude, read your Telegram, Gmail and other mail without leaving what you are doing.
+
+**No telemetry, no account.** Open source, MIT.
+
+<img src="https://img.shields.io/github/v/release/sailxx/Tobi?label=version&color=%232E9BFF" alt="version">
+<img src="https://img.shields.io/badge/Windows-10%20%7C%2011-2E9BFF" alt="Windows 10 | 11">
+<img src="https://img.shields.io/badge/macOS-11%2B-2E9BFF" alt="macOS 11+">
+<img src="https://img.shields.io/badge/Linux-AppImage%20%7C%20deb%20%7C%20rpm-2E9BFF" alt="Linux AppImage | deb | rpm">
+<img src="https://img.shields.io/badge/Android-11%2B-2E9BFF" alt="Android 11+">
+<img src="https://img.shields.io/badge/Tauri-2-2E9BFF" alt="Tauri 2">
+<img src="https://img.shields.io/badge/code-MIT-2E9BFF" alt="MIT">
+<img src="https://img.shields.io/github/stars/sailxx/Tobi?style=flat&logo=github&color=%232E9BFF" alt="Stars">
+
+<br>
+
+<img src="assets/readme/hero-en.svg" width="100%" alt="Tobi: the island at the top of the screen with an agent's permission request">
 
 <a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows-setup.exe"><img src="assets/readme/btn-windows-en.svg" height="52" alt="Download for Windows"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Linux-x86_64.AppImage"><img src="assets/readme/btn-linux-en.svg" height="52" alt="Download for Linux"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-macOS-aarch64.dmg"><img src="assets/readme/btn-macos-en.svg" height="52" alt="Download for macOS"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest"><img src="assets/readme/btn-new-en.svg" height="52" alt="What’s new"></a>
-
-**Tobi is an AI helper for working on Windows 11, Linux and macOS.** Press `Ctrl+Alt+N` and he drops in from the top of your screen to show what Claude Code is doing: thinking, reading, editing files, running commands. Allow or deny an agent’s request in one click. No telemetry, no account.
 
 </div>
 

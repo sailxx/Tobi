@@ -132,8 +132,7 @@ const HERO_DEFS = `${TOBI_DEFS}
 // ---------- HERO ----------
 function hero(t) {
   const W = 880, H = 480;
-  let b = `<g class="r">${logo(40, 30, 44)}<text x="96" y="62" font-size="22" font-weight="800" letter-spacing="-.3">${T('Tobi')}</text></g>`;
-  b += `<g class="r" ${delay(1)}>${chip(164, 39, 'v' + VERSION).s}</g>`;
+  let b = `<g class="r">${chip(40, 39, 'v' + VERSION).s}</g>`;
   const ts = fitSize(t.hero.title, 450, 44, 800);
   b += `<g class="r" ${delay(2)}>${lines(40, 146, t.hero.title.map(one), { size: ts, weight: 800, lh: 50, spacing: '-1' })}</g>`;
   const ss = fitSize(t.hero.sub, 450, 16, 500);
