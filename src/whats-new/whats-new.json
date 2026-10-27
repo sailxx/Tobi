@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.7.2",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "Messages in their own window",
+            "zh-Hans": "消息在独立窗口中打开",
+            "hi": "संदेश अपनी विंडो में",
+            "es": "Los mensajes en su propia ventana",
+            "ar": "الرسائل في نافذة خاصة",
+            "fr": "Les messages dans leur propre fenêtre",
+            "bn": "বার্তা নিজস্ব উইন্ডোতে",
+            "pt-BR": "Mensagens em uma janela própria",
+            "ru": "Сообщения в отдельном окне",
+            "id": "Pesan di jendelanya sendiri",
+            "de": "Nachrichten im eigenen Fenster",
+            "tr": "Mesajlar kendi penceresinde"
+          },
+          "detail": {
+            "en": "Click a message in a chat to open it in a window you can resize: all the text selectable, the photo, and Copy text or Copy photo.",
+            "zh-Hans": "点击聊天中的消息，会在可调整大小的窗口中打开：全部文字可选，含照片，并可复制文字或照片。",
+            "hi": "चैट में किसी संदेश पर क्लिक करें: वह आकार बदलने योग्य विंडो में खुलता है, पूरा टेक्स्ट चुना जा सकता है, फ़ोटो दिखती है, और टेक्स्ट या फ़ोटो कॉपी कर सकते हैं।",
+            "es": "Haz clic en un mensaje del chat para abrirlo en una ventana que puedes redimensionar: todo el texto seleccionable, la foto, y Copiar texto o Copiar foto.",
+            "ar": "انقر على رسالة في المحادثة لفتحها في نافذة يمكن تغيير حجمها: كل النص قابل للتحديد، مع الصورة، ونسخ النص أو الصورة.",
+            "fr": "Clique sur un message d’un chat pour l’ouvrir dans une fenêtre redimensionnable : tout le texte sélectionnable, la photo, et Copier le texte ou la photo.",
+            "bn": "চ্যাটে একটি বার্তায় ক্লিক করলে সেটি আকার বদলানো যায় এমন উইন্ডোতে খোলে: পুরো টেক্সট নির্বাচনযোগ্য, ছবি, এবং টেক্সট বা ছবি কপি।",
+            "pt-BR": "Clique em uma mensagem do chat para abri-la em uma janela redimensionável: todo o texto selecionável, a foto, e Copiar texto ou Copiar foto.",
+            "ru": "Нажмите на сообщение в чате, и оно откроется в окне, размер которого можно менять: весь текст выделяется, видно фото, есть «Копировать текст» и «Копировать фото».",
+            "id": "Klik pesan di chat untuk membukanya di jendela yang bisa diubah ukurannya: semua teks bisa dipilih, ada foto, serta Salin teks atau Salin foto.",
+            "de": "Klicke im Chat auf eine Nachricht, um sie in einem Fenster mit veränderbarer Größe zu öffnen: aller Text markierbar, das Foto, und Text oder Foto kopieren.",
+            "tr": "Sohbette bir mesaja tıkla: yeniden boyutlandırılabilir bir pencerede açılır, tüm metin seçilebilir, fotoğraf görünür, metni veya fotoğrafı kopyalayabilirsin."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.7.1",
       "items": [
         {

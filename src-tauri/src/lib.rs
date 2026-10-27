@@ -18,6 +18,7 @@ mod integrations;
 mod island;
 mod local_chat;
 mod log;
+mod message_window;
 mod net;
 mod notes;
 mod openai_compat;
@@ -952,6 +953,9 @@ pub fn run() {
             telegram::telegram_island,
             telegram::telegram_open,
             telegram::telegram_close,
+            message_window::open_message_window,
+            message_window::message_window_data,
+            message_window::close_message_window,
             telegram::telegram_media,
             telegram::telegram_send,
             telegram::telegram_ignore,
@@ -1043,6 +1047,7 @@ pub fn run() {
             create_settings_window(&handle);
             // Same rule for Tobi's desktop window.
             desktop::setup(&handle);
+            message_window::setup(&handle);
             flow::setup(&handle);
             notes::setup(&handle);
 

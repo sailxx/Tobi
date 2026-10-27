@@ -2,6 +2,7 @@
 // page is opened in a plain browser, so the island can be iterated on with
 // `npm run dev` alone.
 
+import type { MessageWindowData } from "./message-window";
 import { invoke } from "@tauri-apps/api/core";
 import { emitTo, listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
@@ -473,6 +474,13 @@ export const Bridge = {
   whatsappTest: () => call<WaTestResult>("whatsapp_test"),
   /** "Install WhatsApp" / "Update": GOWA from its GitHub releases, on this click only. */
   whatsappInstall: () => call<void>("whatsapp_install"),
+
+  // ── The message window (src-tauri/src/message_window.rs) ──────────────────
+  /** Shows one chat message whole in its own, resizable window. */
+  openMessageWindow: (data: MessageWindowData) => call<void>("open_message_window", { data }),
+  closeMessageWindow: () => call<void>("close_message_window"),
+  /** What the message window shows now (asked once at load; then the "message-data" event). */
+  messageWindowData: () => call<MessageWindowData | null>("message_window_data"),
 
   // ── Telegram (src-tauri/src/telegram) ─────────────────────────────────────
   /** The island's copy, asked once at start (then the "telegram" event). Island only. */
