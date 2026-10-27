@@ -51,7 +51,7 @@ test("the catalog holds the Mac's pills with the Claude Code label for Windows a
     ["integration_mail", "Mail", "#60A5FA", "service", "Integration"],
   ];
   assert.deepEqual(
-    PILL_CATALOG.filter((p) => !["integration_gitlab", "integration_gitea"].includes(p.id))
+    PILL_CATALOG.filter((p) => !["integration_gitlab", "integration_gitea", "integration_youtubemusic"].includes(p.id))
       .map((p) => [p.id, p.name, p.color, p.category, p.subtitle]),
     mac,
   );
@@ -115,7 +115,11 @@ test("this build leaves out what only macOS has, and Claude Desktop on Linux", (
   // Spotify: MPRIS on Linux, the system media controls on Windows.
   assert.ok(linux.includes("integration_spotify"));
   assert.ok(windows.includes("integration_spotify"));
-  assert.deepEqual(linux, windows.filter((id) => id !== "agent_claude-desktop"));
+  // YouTube Music is read from the Windows media controls: Windows only, not the Mac or Linux.
+  assert.ok(windows.includes("integration_youtubemusic"));
+  assert.ok(!linux.includes("integration_youtubemusic"));
+  assert.ok(!availablePills("macos").some((p) => p.id === "integration_youtubemusic"));
+  assert.deepEqual(linux, windows.filter((id) => id !== "agent_claude-desktop" && id !== "integration_youtubemusic"));
 });
 
 test("Spotify: a service on both systems with nothing to set up", () => {

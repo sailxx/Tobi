@@ -23,6 +23,10 @@ use serde::Serialize;
 use tauri::AppHandle;
 
 pub const PILL_ID: &str = "integration_spotify";
+/// YouTube Music (Windows): the same card, read from the same system media
+/// controls; see "YouTube Music" below.
+pub const YTM_PILL_ID: &str = "integration_youtubemusic";
+const YTM_URL: &str = "https://music.youtube.com/";
 /// Where "Get Spotify" leads when it isn't installed.
 #[cfg(not(windows))]
 pub const DOWNLOAD_URL: &str = "https://www.spotify.com/download/linux/";
@@ -122,6 +126,12 @@ pub struct PlayerState {
     pub repeat: bool,
     /// 0…100.
     pub volume: i32,
+    /// The pill whose player this is (`integration_spotify` or
+    /// `integration_youtubemusic`): the card of the other one shows it idle.
+    pub player: String,
+    /// The volume can be set: Tobi found the player's entry in the Windows
+    /// mixer. The card hides the slider otherwise.
+    pub can_volume: bool,
 }
 
 impl Default for PlayerState {
@@ -136,6 +146,8 @@ impl Default for PlayerState {
             shuffle: false,
             repeat: false,
             volume: 50,
+            player: PILL_ID.to_string(),
+            can_volume: true,
         }
     }
 }
@@ -461,17 +473,22 @@ pub async fn spotify_control(app: AppHandle, action: String, value: Option<f64>)
 /// "Open Spotify": brings it forward, or starts it. Without Spotify, its
 /// download page. True when Spotify was reached or started.
 #[tauri::command]
-pub async fn spotify_open() -> bool {
+pub async fn spotify_open(player: Option<String>) -> bool {
     #[cfg(target_os = "linux")]
     {
+        let _ = player;
         tauri::async_runtime::spawn_blocking(linux::open).await.unwrap_or(false)
     }
     #[cfg(windows)]
     {
-        tauri::async_runtime::spawn_blocking(win::open).await.unwrap_or(false)
+        let ytm = player.as_deref() == Some(YTM_PILL_ID);
+        tauri::async_runtime::spawn_blocking(move || if ytm { win::open_youtube_music() } else { win::open() })
+            .await
+            .unwrap_or(false)
     }
     #[cfg(not(any(target_os = "linux", windows)))]
     {
+        let _ = player;
         false
     }
 }
@@ -500,9 +517,92 @@ pub fn sync(app: &AppHandle, active_integrations: &[String]) {
     #[cfg(target_os = "linux")]
     linux::sync(app, on);
     #[cfg(windows)]
-    win::sync(app, on);
+    win::sync(app, wanted_players(active_integrations));
     #[cfg(not(any(target_os = "linux", windows)))]
     let _ = (app, on);
+}
+
+/// The players whose pills are declared, in the order that settles a tie
+/// (both paused, or both idle).
+#[cfg_attr(not(windows), allow(dead_code))]
+pub fn wanted_players(active_integrations: &[String]) -> Vec<&'static str> {
+    [PILL_ID, YTM_PILL_ID].into_iter().filter(|p| active_integrations.iter().any(|id| id == p)).collect()
+}
+
+// ── YouTube Music ─────────────────────────────────────────────────────────────
+//
+// YouTube Music has no API for another program to drive, but everything that
+// plays it tells Windows: the desktop clients, the installed web app and a
+// browser tab publish their track to the system media controls, the same
+// session Spotify does. So the card is the one Spotify has, fed by whichever
+// of the declared players plays. The desktop clients and the installed web app
+// are recognised by name; a browser carries YouTube, Spotify's web player and
+// anything else, so a browser's session counts only when the track has an
+// album, which YouTube Music's songs have and a YouTube video does not.
+
+/// Browsers that publish a media session as themselves.
+#[cfg_attr(not(windows), allow(dead_code))]
+const BROWSERS: [(&str, &str); 7] = [
+    ("chrome", "chrome.exe"),
+    ("msedge", "msedge.exe"),
+    ("edge", "msedge.exe"),
+    ("brave", "brave.exe"),
+    ("opera", "opera.exe"),
+    ("vivaldi", "vivaldi.exe"),
+    ("firefox", "firefox.exe"),
+];
+
+/// Chrome's id of YouTube Music's web app (`Chrome._crx_…`).
+#[cfg_attr(not(windows), allow(dead_code))]
+const YTM_CHROME_APP: &str = "cinhimbnkkaeohfgghhklpknlkffjgod";
+
+/// The YouTube Music desktop clients: "YouTube Music" and its community builds.
+#[cfg_attr(not(windows), allow(dead_code))]
+pub fn is_youtube_music_app(app_id: &str) -> bool {
+    let id = app_id.to_ascii_lowercase();
+    (id.contains("youtube") && id.contains("music"))
+        || id.contains(YTM_CHROME_APP)
+        || id.contains("pear desktop")
+        || id.contains("pear-desktop")
+}
+
+#[cfg_attr(not(windows), allow(dead_code))]
+pub fn is_browser_app(app_id: &str) -> bool {
+    let id = app_id.to_ascii_lowercase();
+    BROWSERS.iter().any(|(name, _)| id.contains(name))
+}
+
+/// Which player a media session is: the pill that owns it, or None for any
+/// other app. `album` is the track's album, for browsers.
+#[cfg_attr(not(windows), allow(dead_code))]
+pub fn player_of(app_id: &str, album: &str) -> Option<&'static str> {
+    if is_spotify_app(app_id) {
+        Some(PILL_ID)
+    } else if is_youtube_music_app(app_id) || (is_browser_app(app_id) && !album.trim().is_empty()) {
+        Some(YTM_PILL_ID)
+    } else {
+        None
+    }
+}
+
+/// The processes whose entry in the Windows mixer is this player's volume.
+/// Empty when Tobi cannot tell (a browser it doesn't know).
+#[cfg_attr(not(windows), allow(dead_code))]
+pub fn audio_processes(app_id: &str) -> Vec<&'static str> {
+    let id = app_id.to_ascii_lowercase();
+    if is_spotify_app(&id) {
+        return vec!["spotify.exe"];
+    }
+    if id.contains(YTM_CHROME_APP) {
+        return vec!["chrome.exe"];
+    }
+    if id.contains("youtube") && id.contains("music") {
+        return vec!["youtube music.exe", "youtube-music.exe"];
+    }
+    if id.contains("pear desktop") || id.contains("pear-desktop") {
+        return vec!["pear desktop.exe", "pear-desktop.exe"];
+    }
+    BROWSERS.iter().find(|(name, _)| id.contains(name)).map(|(_, exe)| vec![*exe]).unwrap_or_default()
 }
 
 // ── Linux: MPRIS over D-Bus ───────────────────────────────────────────────────
@@ -1370,15 +1470,15 @@ pub fn windows_time_to_unix_ms(universal: i64) -> Option<f64> {
 /// What the media session says about the track → the track, or None when
 /// nothing is loaded. Windows gives no Spotify URI, so the id is made from the
 /// tags; an ad comes with a title and nothing else, and gets an ad id so the
-/// page treats it as the Mac does.
-pub fn windows_track(title: &str, artist: &str, album: &str, duration: f64) -> Option<Track> {
+/// page treats it as the Mac does (`ads`: only Spotify has them).
+pub fn windows_track(title: &str, artist: &str, album: &str, duration: f64, ads: bool) -> Option<Track> {
     let title = title.trim();
     if title.is_empty() {
         return None;
     }
     let artist = artist.trim();
     let album = album.trim();
-    let kind = if artist.is_empty() && album.is_empty() { "ad" } else { "track" };
+    let kind = if ads && artist.is_empty() && album.is_empty() { "ad" } else { "track" };
     // FNV-1a: a short, stable id for the same tags.
     let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
     for byte in [artist, album, title].join("\u{1f}").bytes() {
@@ -1439,12 +1539,24 @@ mod win {
         /// Bumped on every start and stop: a listener from an older one quits.
         generation: u64,
         active: bool,
+        /// The declared players, in the order that settles a tie.
+        wanted: Vec<&'static str>,
+        /// The media session the state comes from (its app id), for the volume.
+        app_id: String,
         wake: Option<Sender<Wake>>,
         state: PlayerState,
     }
 
-    static SHARED: LazyLock<Mutex<Shared>> =
-        LazyLock::new(|| Mutex::new(Shared { generation: 0, active: false, wake: None, state: PlayerState::default() }));
+    static SHARED: LazyLock<Mutex<Shared>> = LazyLock::new(|| {
+        Mutex::new(Shared {
+            generation: 0,
+            active: false,
+            wanted: Vec::new(),
+            app_id: String::new(),
+            wake: None,
+            state: PlayerState::default(),
+        })
+    });
 
     /// Covers already read, by the track's art key; the newest last.
     static ART: LazyLock<Mutex<VecDeque<(String, String)>>> = LazyLock::new(|| Mutex::new(VecDeque::new()));
@@ -1464,16 +1576,23 @@ mod win {
 
     // ── Start / stop ──────────────────────────────────────────────────────────
 
-    pub fn sync(app: &AppHandle, on: bool) {
+    pub fn sync(app: &AppHandle, wanted: Vec<&'static str>) {
+        let on = !wanted.is_empty();
         let (tx, rx) = mpsc::channel();
         let (old, generation, state) = {
             let mut s = SHARED.lock().unwrap();
-            if s.active == on {
+            if s.wanted == wanted {
                 return;
             }
             s.active = on;
             s.generation += 1;
-            s.state = PlayerState { installed: installed(), ..PlayerState::default() };
+            s.app_id.clear();
+            s.state = PlayerState {
+                installed: installed(),
+                player: wanted.first().copied().unwrap_or(PILL_ID).to_string(),
+                ..PlayerState::default()
+            };
+            s.wanted = wanted;
             let old = s.wake.take();
             if on {
                 s.wake = Some(tx.clone());
@@ -1517,17 +1636,22 @@ mod win {
                 .ok()
         };
 
-        let mut bound: Option<Bound> = None;
+        // Every session a declared player may be (Spotify's, a YouTube Music
+        // client's, a browser's) is watched, so a player starting while another
+        // is paused is noticed; `choose` says which one the card shows.
+        let mut bound: Vec<Bound> = Vec::new();
         let mut rebind = true;
         while current(generation) {
             if rebind {
-                if let Some(b) = bound.take() {
+                for b in bound.drain(..) {
                     b.unbind();
                 }
-                bound = find_session(&manager).and_then(|s| Bound::bind(s, &tx));
+                let wanted = SHARED.lock().unwrap().wanted.clone();
+                bound = candidates(&manager, &wanted).into_iter().filter_map(|s| Bound::bind(s, &tx)).collect();
                 rebind = false;
             }
-            read_and_emit(&app, generation, bound.as_ref().map(|b| &b.session));
+            let sessions: Vec<Session> = bound.iter().map(|b| b.session.clone()).collect();
+            read_and_emit(&app, generation, &sessions);
 
             // Events come in bursts (a new track moves everything): one read each.
             let mut stop = false;
@@ -1548,7 +1672,7 @@ mod win {
             }
         }
 
-        if let Some(b) = bound {
+        for b in bound {
             b.unbind();
         }
         if let Some(token) = sessions_token {
@@ -1595,11 +1719,54 @@ mod win {
         })
     }
 
-    fn find_session(manager: &Manager) -> Option<Session> {
-        let sessions = manager.GetSessions().ok()?;
-        (0..sessions.Size().ok()?)
+    /// The media sessions a declared player may be: judged by app id alone, so
+    /// a browser counts here and `classify` looks at its track.
+    fn candidates(manager: &Manager, wanted: &[&'static str]) -> Vec<Session> {
+        let Some(sessions) = manager.GetSessions().ok() else { return Vec::new() };
+        (0..sessions.Size().unwrap_or(0))
             .filter_map(|i| sessions.GetAt(i).ok())
-            .find(|s| s.SourceAppUserModelId().is_ok_and(|id| is_spotify_app(&id.to_string_lossy())))
+            .filter(|s| {
+                let Ok(id) = s.SourceAppUserModelId() else { return false };
+                let id = id.to_string_lossy();
+                (wanted.contains(&PILL_ID) && is_spotify_app(&id))
+                    || (wanted.contains(&YTM_PILL_ID) && (is_youtube_music_app(&id) || is_browser_app(&id)))
+            })
+            .collect()
+    }
+
+    /// Which player a session is. A browser's depends on its track's album.
+    fn classify(session: &Session, app_id: &str) -> Option<&'static str> {
+        if is_browser_app(app_id) && !is_youtube_music_app(app_id) {
+            let album = session.TryGetMediaPropertiesAsync().ok()?.get().ok()?.AlbumTitle().ok()?.to_string_lossy();
+            return player_of(app_id, &album);
+        }
+        player_of(app_id, "")
+    }
+
+    /// The session the card shows, read: a playing one before a paused one, one
+    /// with a track before one without, then the order the pills are declared in.
+    struct Chosen {
+        session: Session,
+        player: &'static str,
+        app_id: String,
+        snap: Snapshot,
+        props: MediaProperties,
+    }
+
+    fn choose(sessions: &[Session], wanted: &[&'static str]) -> Option<Chosen> {
+        let mut best: Option<((bool, bool, usize), Chosen)> = None;
+        for session in sessions {
+            let Ok(id) = session.SourceAppUserModelId() else { continue };
+            let app_id = id.to_string_lossy();
+            let Some(player) = classify(session, &app_id) else { continue };
+            let Some(rank) = wanted.iter().position(|w| *w == player) else { continue };
+            let Ok((snap, props)) = snapshot(session, player == PILL_ID) else { continue };
+            let score = (snap.playing, snap.track.is_some(), usize::MAX - rank);
+            if best.as_ref().is_none_or(|(b, _)| score > *b) {
+                best = Some((score, Chosen { session: session.clone(), player, app_id, snap, props }));
+            }
+        }
+        best.map(|(_, chosen)| chosen)
     }
 
     // ── Reading ───────────────────────────────────────────────────────────────
@@ -1615,7 +1782,7 @@ mod win {
         repeat: bool,
     }
 
-    fn snapshot(session: &Session) -> windows::core::Result<(Snapshot, MediaProperties)> {
+    fn snapshot(session: &Session, ads: bool) -> windows::core::Result<(Snapshot, MediaProperties)> {
         let props = session.TryGetMediaPropertiesAsync()?.get()?;
         let timeline = session.GetTimelineProperties()?;
         let start = timeline.StartTime()?.Duration;
@@ -1625,6 +1792,7 @@ mod win {
             &props.Artist()?.to_string_lossy(),
             &props.AlbumTitle()?.to_string_lossy(),
             duration,
+            ads,
         );
         let info = session.GetPlaybackInfo()?;
         let snapshot = Snapshot {
@@ -1641,17 +1809,22 @@ mod win {
         Ok((snapshot, props))
     }
 
-    fn read_and_emit(app: &AppHandle, generation: u64, session: Option<&Session>) {
-        let read = session.and_then(|s| snapshot(s).ok());
-        let volume = read.as_ref().and_then(|_| spotify_volume());
+    fn read_and_emit(app: &AppHandle, generation: u64, sessions: &[Session]) {
+        let wanted = SHARED.lock().unwrap().wanted.clone();
+        let chosen = choose(sessions, &wanted);
+        let audio = chosen.as_ref().map(|c| audio_processes(&c.app_id)).unwrap_or_default();
+        let volume = if audio.is_empty() { None } else { player_volume(&audio) };
         let now = now_ms();
         let (state, props) = {
             let mut s = SHARED.lock().unwrap();
             if !(s.active && s.generation == generation) {
                 return;
             }
-            let props = match read {
-                Some((snap, props)) => {
+            let props = match chosen {
+                Some(Chosen { player, app_id, snap, props, .. }) => {
+                    s.state.player = player.to_string();
+                    s.state.can_volume = !audio.is_empty();
+                    s.app_id = app_id;
                     s.state.running = true;
                     s.state.installed = true;
                     s.state.track = snap.track;
@@ -1670,6 +1843,8 @@ mod win {
                 None => {
                     s.state.running = false;
                     s.state.installed = installed();
+                    s.state.player = s.wanted.first().copied().unwrap_or(PILL_ID).to_string();
+                    s.app_id.clear();
                     s.state.clear(now);
                     None
                 }
@@ -1719,10 +1894,10 @@ mod win {
         Some(bytes)
     }
 
-    // ── Volume: Spotify in the Windows mixer ──────────────────────────────────
+    // ── Volume: the player's entry in the Windows mixer ───────────────────────
 
-    /// Spotify's audio sessions on the default output.
-    fn spotify_audio() -> Vec<ISimpleAudioVolume> {
+    /// The audio sessions of the processes named `names` on the default output.
+    fn player_audio(names: &[&str]) -> Vec<ISimpleAudioVolume> {
         com();
         let mut out = Vec::new();
         unsafe {
@@ -1736,7 +1911,7 @@ mod win {
                 let Ok(control) = sessions.GetSession(i) else { continue };
                 let Ok(control) = control.cast::<IAudioSessionControl2>() else { continue };
                 let pid = control.GetProcessId().unwrap_or(0);
-                if pid != 0 && is_spotify_process(pid) {
+                if pid != 0 && is_process_named(pid, names) {
                     if let Ok(volume) = control.cast::<ISimpleAudioVolume>() {
                         out.push(volume);
                     }
@@ -1746,7 +1921,7 @@ mod win {
         out
     }
 
-    fn is_spotify_process(pid: u32) -> bool {
+    fn is_process_named(pid: u32, names: &[&str]) -> bool {
         unsafe {
             let Ok(process) = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid) else { return false };
             let mut buf = [0u16; 1024];
@@ -1757,19 +1932,19 @@ mod win {
                 return false;
             }
             let path = String::from_utf16_lossy(&buf[..len as usize]);
-            path.rsplit(['\\', '/']).next().is_some_and(|name| name.eq_ignore_ascii_case("spotify.exe"))
+            path.rsplit(['\\', '/']).next().is_some_and(|name| names.iter().any(|n| name.eq_ignore_ascii_case(n)))
         }
     }
 
-    /// 0…100, or None while Spotify has no audio session (nothing played yet).
-    fn spotify_volume() -> Option<i32> {
-        let level = unsafe { spotify_audio().first()?.GetMasterVolume().ok()? };
+    /// 0…100, or None while the player has no audio session (nothing played yet).
+    fn player_volume(names: &[&str]) -> Option<i32> {
+        let level = unsafe { player_audio(names).first()?.GetMasterVolume().ok()? };
         Some((level * 100.0).round().clamp(0.0, 100.0) as i32)
     }
 
-    fn set_spotify_volume(percent: f64) -> bool {
+    fn set_player_volume(names: &[&str], percent: f64) -> bool {
         let level = (percent / 100.0).clamp(0.0, 1.0) as f32;
-        let sessions = spotify_audio();
+        let sessions = player_audio(names);
         let mut done = false;
         for volume in &sessions {
             done |= unsafe { volume.SetMasterVolume(level, std::ptr::null()).is_ok() };
@@ -1788,23 +1963,30 @@ mod win {
             s.generation
         };
         com();
-        let manager = Manager::RequestAsync().and_then(|op| op.get()).ok();
-        let session = manager.as_ref().and_then(find_session);
-        read_and_emit(app, generation, session.as_ref());
+        let wanted = SHARED.lock().unwrap().wanted.clone();
+        let sessions = Manager::RequestAsync()
+            .and_then(|op| op.get())
+            .map(|m| candidates(&m, &wanted))
+            .unwrap_or_default();
+        read_and_emit(app, generation, &sessions);
         let s = SHARED.lock().unwrap();
         (s.active && s.generation == generation).then(|| s.state.clone())
     }
 
     pub fn control(app: &AppHandle, action: &str, value: Option<f64>) -> bool {
-        let state = {
+        let (state, wanted) = {
             let s = SHARED.lock().unwrap();
             if !(s.active && s.state.running) {
                 return false;
             }
-            s.state.clone()
+            (s.state.clone(), s.wanted.clone())
         };
         com();
-        let Some(session) = Manager::RequestAsync().and_then(|op| op.get()).ok().and_then(|m| find_session(&m)) else {
+        let sessions = Manager::RequestAsync()
+            .and_then(|op| op.get())
+            .map(|m| candidates(&m, &wanted))
+            .unwrap_or_default();
+        let Some(Chosen { session, app_id, .. }) = choose(&sessions, &wanted) else {
             return false;
         };
         let v = value.unwrap_or(0.0);
@@ -1831,7 +2013,10 @@ mod win {
             } else {
                 MediaPlaybackAutoRepeatMode::None
             })),
-            "volume" => set_spotify_volume(v),
+            "volume" => {
+                let names = audio_processes(&app_id);
+                !names.is_empty() && set_player_volume(&names, v)
+            }
             _ => false,
         };
         if !done {
@@ -1871,10 +2056,20 @@ mod win {
         desktop || store
     }
 
+    /// YouTube Music has no URI scheme of its own: its site opens in the browser
+    /// (or in the web app, where the browser is set to hand it over).
+    pub fn open_youtube_music() -> bool {
+        crate::platform::open_url(YTM_URL);
+        true
+    }
+
     /// Spotify's URI scheme brings it forward, or starts it. Without Spotify,
     /// its download page.
     pub fn open() -> bool {
-        let running = SHARED.lock().unwrap().state.running;
+        let running = {
+            let s = SHARED.lock().unwrap();
+            s.state.running && s.state.player == PILL_ID
+        };
         if running || installed() {
             crate::platform::open_url("spotify:");
             return true;
@@ -2026,6 +2221,8 @@ mod tests {
         state.apply(&[("Metadata".into(), metadata("/com/spotify/track/ID1", "One"))], 7.0);
         let json = serde_json::to_value(&state).unwrap();
         assert_eq!(json["positionAt"], 7.0);
+        assert_eq!(json["player"], "integration_spotify");
+        assert_eq!(json["canVolume"], true);
         assert_eq!(json["track"]["artUrl"], "https://i.scdn.co/image/abc");
         assert_eq!(json["track"]["id"], "spotify:track:ID1");
         assert!(json["track"].get("objectPath").is_none());
@@ -2078,6 +2275,50 @@ mod tests {
     }
 
     #[test]
+    fn media_sessions_belong_to_the_right_player() {
+        // Spotify, by name.
+        assert_eq!(player_of("Spotify.exe", ""), Some(PILL_ID));
+        // YouTube Music's desktop clients and its web app, by name.
+        assert_eq!(player_of("com.github.th-ch.youtube-music", ""), Some(YTM_PILL_ID));
+        assert_eq!(player_of("Chrome._crx_cinhimbnkkaeohfgghhklpknlkffjgod", ""), Some(YTM_PILL_ID));
+        assert_eq!(player_of("Pear Desktop", ""), Some(YTM_PILL_ID));
+        // A browser: only a track with an album is a song of YouTube Music.
+        assert_eq!(player_of("Chrome", "After Hours"), Some(YTM_PILL_ID));
+        assert_eq!(player_of("MSEdge", "After Hours"), Some(YTM_PILL_ID));
+        assert_eq!(player_of("Chrome", ""), None);
+        assert_eq!(player_of("Chrome", "   "), None);
+        // Anything else is nobody's.
+        assert_eq!(player_of("Microsoft.ZuneMusic_8wekyb3d8bbwe!Microsoft.ZuneMusic", "Album"), None);
+        assert_eq!(player_of("vlc.exe", "Album"), None);
+    }
+
+    #[test]
+    fn the_volume_belongs_to_the_players_entry_in_the_mixer() {
+        assert_eq!(audio_processes("Spotify.exe"), vec!["spotify.exe"]);
+        assert_eq!(audio_processes("Chrome"), vec!["chrome.exe"]);
+        assert_eq!(audio_processes("MSEdge"), vec!["msedge.exe"]);
+        assert_eq!(audio_processes("Chrome._crx_cinhimbnkkaeohfgghhklpknlkffjgod"), vec!["chrome.exe"]);
+        assert_eq!(audio_processes("com.github.th-ch.youtube-music"), vec!["youtube music.exe", "youtube-music.exe"]);
+        // A browser Tobi does not know: no slider rather than a wrong one.
+        assert!(audio_processes("308046B0AF4A39CB").is_empty());
+        assert!(audio_processes("vlc.exe").is_empty());
+    }
+
+    #[test]
+    fn only_declared_players_are_wanted_and_spotify_wins_a_tie() {
+        let ids = |v: &[&str]| v.iter().map(|s| s.to_string()).collect::<Vec<_>>();
+        assert_eq!(wanted_players(&ids(&["integration_youtubemusic", "integration_spotify"])), vec![PILL_ID, YTM_PILL_ID]);
+        assert_eq!(wanted_players(&ids(&["integration_youtubemusic"])), vec![YTM_PILL_ID]);
+        assert!(wanted_players(&ids(&["integration_stripe"])).is_empty());
+    }
+
+    #[test]
+    fn only_spotify_has_ads() {
+        assert!(windows_track("Intro", "", "", 30.0, true).unwrap().id.starts_with("spotify:ad:"));
+        assert!(windows_track("Intro", "", "", 30.0, false).unwrap().id.starts_with("spotify:track:"));
+    }
+
+    #[test]
     fn windows_times_become_seconds_and_unix_ms() {
         assert_eq!(ticks_to_secs(2_150_000_000), 215.0);
         assert_eq!(ticks_to_secs(-5), 0.0);
@@ -2088,19 +2329,19 @@ mod tests {
 
     #[test]
     fn windows_tags_become_the_track() {
-        let t = windows_track("Song - Remastered 2011", "Artist feat. Someone", "Album", 215.0).unwrap();
+        let t = windows_track("Song - Remastered 2011", "Artist feat. Someone", "Album", 215.0, true).unwrap();
         assert_eq!(t.title, "Song");
         assert_eq!(t.artist, "Artist");
         assert_eq!(t.album, "Album");
         assert_eq!(t.duration, 215.0);
         assert!(t.id.starts_with("spotify:track:"));
         // The same tags give the same track, and the cover key follows it.
-        let again = windows_track("Song - Remastered 2011", "Artist feat. Someone", "Album", 215.0).unwrap();
+        let again = windows_track("Song - Remastered 2011", "Artist feat. Someone", "Album", 215.0, true).unwrap();
         assert_eq!(t.id, again.id);
         assert_eq!(t.art_url, again.art_url);
-        assert_ne!(t.id, windows_track("Other", "Artist", "Album", 1.0).unwrap().id);
+        assert_ne!(t.id, windows_track("Other", "Artist", "Album", 1.0, true).unwrap().id);
         // An ad is a title and nothing else.
-        assert!(windows_track("Spotify", "", "", 30.0).unwrap().id.starts_with("spotify:ad:"));
-        assert_eq!(windows_track("  ", "Artist", "Album", 1.0), None);
+        assert!(windows_track("Spotify", "", "", 30.0, true).unwrap().id.starts_with("spotify:ad:"));
+        assert_eq!(windows_track("  ", "Artist", "Album", 1.0, true), None);
     }
 }

@@ -25,8 +25,8 @@ import { buildRecap } from "./recap";
 import { buildWardrobe } from "./wardrobe";
 import { buildUpdate } from "./update";
 import { buildWhatsNew } from "./whatsnew";
-import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
-import { SPOTIFY_ID } from "../core/spotify";
+import { buildSpotifyCard, buildSpotifyPill, type SpotifyCardHost, type SpotifyPillHost } from "./spotify";
+import { isMusicPill } from "../core/spotify";
 import { buildWhatsAppCard } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
 import { buildTelegramCard } from "./telegram";
@@ -218,8 +218,10 @@ function buildOverview(actions: ViewActions): ViewHost {
   let planTimer: number | null = null;
   // Spotify's card and pill are kept and updated in place: the progress bar
   // runs on, and a slider being dragged must not be rebuilt under the pointer.
-  const spotifyCard = buildSpotifyCard();
-  let spotifyPill: SpotifyPillHost | null = null;
+  // One for each music pill (Spotify, YouTube Music).
+  const musicCards = new Map<string, SpotifyCardHost>();
+  let musicShown: string | null = null;
+  let musicPills: SpotifyPillHost[] = [];
   // WhatsApp's card too: its reply field keeps the draft and the keyboard while messages arrive.
   const chatHost = {
     openSettings: () => actions.openSettingsWindow(),
@@ -393,12 +395,18 @@ function buildOverview(actions: ViewActions): ViewHost {
             svg(ICONS.doc, 9), h("span", { text: t("Text") })));
         }
         ticker.sync(task);
-      } else if (task && task.id === SPOTIFY_ID) {
+      } else if (task && isMusicPill(task.id)) {
         // Its own card for every state: playing, idle, not installed.
-        if (mode !== "spotify") {
+        let spotifyCard = musicCards.get(task.id);
+        if (!spotifyCard) {
+          spotifyCard = buildSpotifyCard(task.id);
+          musicCards.set(task.id, spotifyCard);
+        }
+        if (mode !== "spotify" || musicShown !== task.id) {
           clear(leftBody);
           leftBody.append(spotifyCard.el);
           mode = "spotify";
+          musicShown = task.id;
           cardKey = "";
         }
         spotifyCard.sync();
@@ -464,18 +472,19 @@ function buildOverview(actions: ViewActions): ViewHost {
       if (pillKey !== pillIds) {
         pillIds = pillKey;
         clear(pills);
-        spotifyPill = null;
+        musicPills = [];
         for (const t of others) {
-          if (t.id === SPOTIFY_ID) {
-            spotifyPill = buildSpotifyPill(t, () => actions.setFocus(t.id));
-            pills.append(spotifyPill.el);
+          if (isMusicPill(t.id)) {
+            const pill = buildSpotifyPill(t, () => actions.setFocus(t.id));
+            musicPills.push(pill);
+            pills.append(pill.el);
           } else {
             pills.append(buildPill(t, actions));
           }
         }
         pruneMiniBots();
       }
-      spotifyPill?.sync();
+      for (const pill of musicPills) pill.sync();
     },
   };
 }

@@ -138,6 +138,10 @@ export const PILL_CATALOG: readonly PillDefinition[] = [
   // (src-tauri/src/spotify.rs).
   { id: "integration_spotify", name: "Spotify", color: "#1DB954", category: "service",
     subtitle: N_("Integration"), source: "n8n", support: "yes", connect: none },
+  // YouTube Music through the same system media controls, the desktop clients, the web app or a
+  // browser tab (src-tauri/src/spotify.rs). Windows for now.
+  { id: "integration_youtubemusic", name: "YouTube Music", color: "#FF3D4A", category: "service",
+    subtitle: N_("Integration"), source: "n8n", support: "windows", connect: none },
   // WhatsApp (experimental) through a gateway on this computer (src-tauri/src/whatsapp): set up,
   // linked and turned on in Settings → Integrations → WhatsApp, off until then.
   { id: "integration_whatsapp", name: "WhatsApp", color: "#25D366", category: "service",
@@ -177,8 +181,10 @@ export function pillDefinition(id: string): PillDefinition | undefined {
 }
 
 function offeredOn(def: PillDefinition, os: HostOs): boolean {
-  // The Claude desktop app exists for Windows and macOS, so "windows" pills are offered on the Mac too.
-  return def.support === "yes" || def.support === "soon" || def.support === os || (def.support === "windows" && os === "macos");
+  // The Claude desktop app exists for Windows and macOS, so "windows" pills are offered on the Mac too;
+  // YouTube Music is read from the Windows media controls and has no reader on the Mac here.
+  return def.support === "yes" || def.support === "soon" || def.support === os
+    || (def.support === "windows" && os === "macos" && def.id !== "integration_youtubemusic");
 }
 
 /** The pills this build offers, in catalog order. */

@@ -7976,6 +7976,45 @@
    "id": "Ditambahkan agen: {n}",
    "de": "Vom Agenten hinzugefügt: {n}",
    "tr": "Ajanın eklediği: {n}"
+  },
+  "Open YouTube Music": {
+   "zh-Hans": "打开 YouTube Music",
+   "hi": "YouTube Music खोलें",
+   "es": "Abrir YouTube Music",
+   "ar": "افتح YouTube Music",
+   "fr": "Ouvrir YouTube Music",
+   "bn": "YouTube Music খুলুন",
+   "pt-BR": "Abrir o YouTube Music",
+   "ru": "Открыть YouTube Music",
+   "id": "Buka YouTube Music",
+   "de": "YouTube Music öffnen",
+   "tr": "YouTube Music'i aç"
+  },
+  "{0}: open YouTube Music": {
+   "zh-Hans": "{0}：打开 YouTube Music",
+   "hi": "{0}: YouTube Music खोलें",
+   "es": "{0}: abrir YouTube Music",
+   "ar": "{0}: افتح YouTube Music",
+   "fr": "{0} : ouvrir YouTube Music",
+   "bn": "{0}: YouTube Music খুলুন",
+   "pt-BR": "{0}: abrir o YouTube Music",
+   "ru": "{0}: открыть YouTube Music",
+   "id": "{0}: buka YouTube Music",
+   "de": "{0}: YouTube Music öffnen",
+   "tr": "{0}: YouTube Music'i aç"
+  },
+  "Plays in the YouTube Music app or in a browser tab. In a browser, Tobi shows songs that come with an album.": {
+   "zh-Hans": "可在 YouTube Music 应用或浏览器标签页中播放。在浏览器中，Tobi 只显示带专辑信息的歌曲。",
+   "hi": "YouTube Music ऐप या ब्राउज़र टैब में चलता है। ब्राउज़र में Tobi वही गाने दिखाता है जिनके साथ एल्बम की जानकारी हो।",
+   "es": "Suena en la app de YouTube Music o en una pestaña del navegador. En el navegador, Tobi muestra las canciones que traen álbum.",
+   "ar": "يعمل في تطبيق YouTube Music أو في علامة تبويب بالمتصفح. في المتصفح يعرض Tobi الأغاني التي لها ألبوم.",
+   "fr": "Fonctionne avec l'application YouTube Music ou dans un onglet du navigateur. Dans un navigateur, Tobi montre les titres qui ont un album.",
+   "bn": "YouTube Music অ্যাপে বা ব্রাউজারের ট্যাবে চলে। ব্রাউজারে Tobi শুধু অ্যালবামসহ গান দেখায়।",
+   "pt-BR": "Toca no app do YouTube Music ou em uma aba do navegador. No navegador, o Tobi mostra as músicas que têm álbum.",
+   "ru": "Играет в приложении YouTube Music или во вкладке браузера. В браузере Tobi показывает песни, у которых есть альбом.",
+   "id": "Diputar di aplikasi YouTube Music atau di tab browser. Di browser, Tobi menampilkan lagu yang punya album.",
+   "de": "Läuft in der YouTube-Music-App oder in einem Browser-Tab. Im Browser zeigt Tobi Songs, die ein Album haben.",
+   "tr": "YouTube Music uygulamasında veya bir tarayıcı sekmesinde çalar. Tarayıcıda Tobi, albümü olan şarkıları gösterir."
   }
  }
 }

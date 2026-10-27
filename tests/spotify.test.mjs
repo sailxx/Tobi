@@ -8,8 +8,8 @@ import assert from "node:assert/strict";
 import { emit, sent } from "./tauri.mjs";
 import { installFakeDom } from "./fakedom.mjs";
 import {
-  IDLE_SPOTIFY, SPOTIFY_ID, Spotify, currentArtwork, desktopDances, formatTime, isAd, islandDances,
-  musicPlaying, spotifyPosition, volumeLevel, withPlaying,
+  IDLE_SPOTIFY, SPOTIFY_ID, YTM_ID, Spotify, currentArtwork, desktopDances, formatTime, isAd, islandDances, isMusicPill,
+  musicPlaying, spotifyPosition, stateFor, volumeLevel, withPlaying,
 } from "../src/core/spotify.ts";
 import { BotEngine, danceTransform, stepDanceLevel } from "../src/tobi/engine.ts";
 import { registerSpotifyHandlers } from "../src/island/spotify.ts";
@@ -301,4 +301,85 @@ test("the pill shows play/pause and next on hover, only with a track", () => {
   assert.equal(Spotify.state.playing, false);
   pill.el.fire("mouseleave");
   assert.ok(!pill.el.classList.contains("controls"));
+});
+
+// ── YouTube Music: the same card and pill, fed by the same report ─────────────
+
+const ytmTask = () => State.tasks.find((t) => t.id === YTM_ID);
+
+const ytmPlaying = (over = {}) => playing({ player: YTM_ID, ...over });
+
+function declareBoth() {
+  State.os = "windows";
+  State.settings = { ...DEFAULT_SETTINGS, activeIntegrations: [SPOTIFY_ID, YTM_ID] };
+  State.tasks = [];
+  State.loadIntegrationTasks();
+}
+
+test("a report belongs to one pill: the other music pill shows it idle", () => {
+  assert.equal(stateFor(YTM_ID, ytmPlaying()).playing, true);
+  const other = stateFor(SPOTIFY_ID, ytmPlaying());
+  assert.equal(other.playing, false);
+  assert.equal(other.track, null);
+  assert.equal(other.player, SPOTIFY_ID);
+  // An older report without a player is Spotify's.
+  const { player, ...old } = playing();
+  assert.equal(stateFor(SPOTIFY_ID, old).playing, true);
+  assert.equal(stateFor(YTM_ID, old).playing, false);
+  // YouTube Music is a site: there is always something to open.
+  assert.equal(stateFor(YTM_ID, playing()).installed, true);
+});
+
+test("music plays on whichever declared pill owns the report", () => {
+  assert.ok(musicPlaying(ytmPlaying(), [YTM_ID]));
+  assert.ok(!musicPlaying(ytmPlaying(), [SPOTIFY_ID]), "YouTube Music is not declared");
+  assert.ok(musicPlaying(ytmPlaying(), [SPOTIFY_ID, YTM_ID]));
+  assert.ok(isMusicPill(YTM_ID) && isMusicPill(SPOTIFY_ID) && !isMusicPill("integration_n8n") && !isMusicPill(null));
+  const dances = (focusId) => islandDances({ music: true, state: "idle", mode: "expanded", view: "overview", focusId });
+  assert.ok(dances(YTM_ID) && dances(SPOTIFY_ID) && !dances("integration_n8n"));
+});
+
+test("each music pill wears its own track, and its own name when it is not the one playing", () => {
+  declareBoth();
+  registerSpotifyHandlers(island);
+  assert.equal(ytmTask().name, "YouTube Music");
+  emit("spotify", ytmPlaying());
+  assert.equal(ytmTask().name, "Get Lucky");
+  assert.equal(State.tasks.find((t) => t.id === SPOTIFY_ID).name, "Spotify");
+  emit("spotify", playing());
+  assert.equal(ytmTask().name, "YouTube Music");
+  assert.equal(State.tasks.find((t) => t.id === SPOTIFY_ID).name, "Get Lucky");
+});
+
+test("the YouTube Music card: its name, its colour, and its site to open", () => {
+  const card = buildSpotifyCard(YTM_ID);
+  Spotify.state = { ...IDLE_SPOTIFY, player: YTM_ID };
+  card.sync();
+  assert.match(card.el.textContent, /YouTube Music.*Integration.*Not playing.*Open YouTube Music/);
+  card.el.find("BUTTON")[0].fire("click");
+  assert.deepEqual(sent("spotify_open").at(-1), { player: YTM_ID });
+
+  setLanguage("ru");
+  card.sync();
+  assert.ok(card.el.textContent.includes(lookup("Open YouTube Music", "ru")));
+
+  // Spotify's card, while YouTube Music plays, is idle and asks Spotify.
+  setLanguage("en");
+  const spotify = buildSpotifyCard(SPOTIFY_ID);
+  Spotify.state = ytmPlaying();
+  spotify.sync();
+  assert.match(spotify.el.textContent, /Spotify.*Not playing/);
+  spotify.el.find("BUTTON")[0].fire("click");
+  assert.deepEqual(sent("spotify_open").at(-1), { player: SPOTIFY_ID });
+});
+
+test("the playing YouTube Music card hides the volume slider the mixer cannot reach", () => {
+  const card = buildSpotifyCard(YTM_ID);
+  Spotify.state = ytmPlaying({ canVolume: true });
+  card.sync();
+  const box = card.el.querySelector("np-volume");
+  assert.notEqual(box.style.display, "none");
+  Spotify.state = ytmPlaying({ canVolume: false });
+  card.sync();
+  assert.equal(box.style.display, "none");
 });
