@@ -93,6 +93,12 @@ body {
   pointer-events: none;
 }
 
+/* Moved with transform each frame, so it never lays out. */
+#bot-canvas {
+  left: 0;
+  top: 0;
+}
+
 /* The drop sequence. Sits under the header and takes over the island body; it
    cross-fades in and out, so the last frame stays up while the views return. */
 #upload-layer {
@@ -146,9 +152,11 @@ body {
 
 #bot-glow {
   position: absolute;
+  left: 0;
+  top: 0;
   pointer-events: none;
   border-radius: 50%;
-  filter: blur(6px);
+  will-change: transform;
   transition: opacity 0.4s ease-in-out, background 0.4s ease-in-out;
 }
 

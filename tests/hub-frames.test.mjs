@@ -31,3 +31,13 @@ test("a canvas scrolled out of sight, or not laid out, is skipped", () => {
   assert.equal(onScreen(box(0, 1100, 300, 200), 1100, 720), false);
   assert.equal(onScreen(box(100, 240, 0, 0), 1100, 720), false);
 });
+
+import { FRAME_GAP, frameDue } from "../src/core/anim.ts";
+
+test("a loop skips the callbacks that come faster than its frame gap", () => {
+  // WebView2 can fire rAF about 280 times a second; the loops keep to ~60 (or ~30 for ambient ones).
+  assert.equal(frameDue(103.6, 100, FRAME_GAP.full), false);
+  assert.equal(frameDue(114, 100, FRAME_GAP.full), true);
+  assert.equal(frameDue(120, 100, FRAME_GAP.ambient), false);
+  assert.equal(frameDue(130, 100, FRAME_GAP.ambient), true);
+});

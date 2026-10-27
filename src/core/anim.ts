@@ -153,3 +153,13 @@ export class Tracked {
     }
   }
 }
+
+/** Frame cap for the animation loops. WebView2 can hand out rAF callbacks far
+ *  faster than the screen refreshes (about 280 a second on a 60 Hz laptop), and
+ *  every one lays out, redraws a canvas and crosses the IPC for nothing. */
+export const FRAME_GAP = { full: 14, ambient: 30 } as const;
+
+/** Whether a rAF callback at `now` should do a frame, given the last one done. */
+export function frameDue(now: number, last: number, gap: number): boolean {
+  return now - last >= gap;
+}
