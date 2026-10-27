@@ -805,6 +805,9 @@ const INTEGRATIONS: IntegrationDef[] = [
     fields: [{ key: "calcom-api-key", label: N_("API key"), placeholder: "cal_…", secret: true }] },
   // Nothing to enter: Spotify is read from the OS (src-tauri/src/spotify.rs).
   { id: "integration_spotify", name: "Spotify", color: "#1DB954", fields: [] },
+  // Nothing to enter either: a player that tells Windows what it plays (desktop client, web app, browser).
+  { id: "integration_youtubemusic", name: "YouTube Music", color: "#FF3D4A", fields: [],
+    hint: N_("Plays in the YouTube Music app or in a browser tab. In a browser, Tobi shows songs that come with an album.") },
 ];
 
 const MAX_ACTIVE = MAX_DECLARED;

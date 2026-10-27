@@ -485,7 +485,7 @@ export const Bridge = {
   spotifyControl: (action: SpotifyAction, value?: number) =>
     call<boolean>("spotify_control", { action, value: value ?? null }),
   /** Brings Spotify forward or starts it; without it, its download page. */
-  spotifyOpen: () => call<boolean>("spotify_open"),
+  spotifyOpen: (player?: string) => call<boolean>("spotify_open", { player: player ?? null }),
   /** Whether there is a Spotify to launch (Settings). */
   spotifyInstalled: () => call<boolean>("spotify_installed"),
 

@@ -16,7 +16,7 @@ import { registerWhatsAppHandlers } from "./island/whatsapp";
 import { registerTelegramHandlers } from "./island/telegram";
 import { registerGmailHandlers } from "./island/gmail";
 import { registerMailboxHandlers } from "./island/mailbox";
-import { SPOTIFY_ID } from "./core/spotify";
+import { isMusicPill } from "./core/spotify";
 import { Recap } from "./recap/recap";
 import { Updates } from "./island/update";
 import { WhatsNew } from "./whats-new/controller";
@@ -172,8 +172,8 @@ async function main() {
   registerMailboxHandlers(island);
   // New versions: Rust offers the card, the island opens it when nothing else waits.
   await Updates.register(island);
-  // Rust may have read Spotify before this page listened: ask once.
-  if (State.settings.activeIntegrations.includes(SPOTIFY_ID)) {
+  // Rust may have read the player before this page listened: ask once.
+  if (State.settings.activeIntegrations.some(isMusicPill)) {
     void Bridge.spotifyRefresh().then((s) => s && applySpotify(island, s));
   }
 

@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.9.0",
+      "items": [
+        {
+          "icon": "puzzle",
+          "title": {
+            "en": "YouTube Music in Tobi",
+            "zh-Hans": "Tobi 里的 YouTube Music",
+            "hi": "Tobi में YouTube Music",
+            "es": "YouTube Music en Tobi",
+            "ar": "YouTube Music في Tobi",
+            "fr": "YouTube Music dans Tobi",
+            "bn": "Tobi-তে YouTube Music",
+            "pt-BR": "YouTube Music no Tobi",
+            "ru": "YouTube Music в Tobi",
+            "id": "YouTube Music di Tobi",
+            "de": "YouTube Music in Tobi",
+            "tr": "Tobi’de YouTube Music"
+          },
+          "detail": {
+            "en": "Turn on the YouTube Music pill in Settings: a mini player with the song, play and pause, next, previous, a seek bar and volume. It follows the YouTube Music app or a browser tab, on Windows.",
+            "zh-Hans": "在设置中开启 YouTube Music 药丸：迷你播放器，含曲目、播放/暂停、上一首/下一首、进度条和音量。可配合 YouTube Music 应用或浏览器标签页，仅限 Windows。",
+            "hi": "सेटिंग में YouTube Music पिल चालू करें: मिनी प्लेयर में गाना, प्ले/पॉज़, अगला, पिछला, सीक बार और वॉल्यूम। यह YouTube Music ऐप या ब्राउज़र टैब के साथ चलता है, Windows पर।",
+            "es": "Activa la píldora de YouTube Music en Ajustes: un minirreproductor con la canción, reproducir y pausar, siguiente, anterior, barra de progreso y volumen. Funciona con la app de YouTube Music o una pestaña del navegador, en Windows.",
+            "ar": "فعّل كبسولة YouTube Music من الإعدادات: مشغّل مصغّر يعرض الأغنية مع التشغيل والإيقاف المؤقت والتالي والسابق وشريط التقدّم والصوت. يعمل مع تطبيق YouTube Music أو علامة تبويب في المتصفح، على Windows.",
+            "fr": "Activez la pastille YouTube Music dans les réglages : un mini-lecteur avec le titre, lecture et pause, suivant, précédent, barre de progression et volume. Il suit l’application YouTube Music ou un onglet du navigateur, sous Windows.",
+            "bn": "সেটিংসে YouTube Music পিল চালু করুন: গান, প্লে/পজ, পরের, আগের, সিক বার ও ভলিউমসহ মিনি প্লেয়ার। এটি YouTube Music অ্যাপ বা ব্রাউজার ট্যাবের সঙ্গে চলে, Windows-এ।",
+            "pt-BR": "Ative a pílula do YouTube Music nos Ajustes: um minirreprodutor com a música, tocar e pausar, próxima, anterior, barra de progresso e volume. Funciona com o app do YouTube Music ou uma aba do navegador, no Windows.",
+            "ru": "Включите пилюлю YouTube Music в настройках: мини-плеер с песней, пауза и воспроизведение, следующий и предыдущий трек, перемотка и громкость. Работает с приложением YouTube Music или вкладкой браузера, на Windows.",
+            "id": "Nyalakan pil YouTube Music di Pengaturan: pemutar mini dengan lagu, putar dan jeda, berikutnya, sebelumnya, bilah posisi, dan volume. Berfungsi dengan aplikasi YouTube Music atau tab browser, di Windows.",
+            "de": "Aktivieren Sie die YouTube-Music-Pille in den Einstellungen: ein Mini-Player mit Titel, Wiedergabe und Pause, Weiter, Zurück, Zeitleiste und Lautstärke. Er folgt der YouTube-Music-App oder einem Browser-Tab, unter Windows.",
+            "tr": "Ayarlar’da YouTube Music hapını açın: şarkı, oynat ve duraklat, sonraki, önceki, ilerleme çubuğu ve ses düzeyiyle mini oynatıcı. YouTube Music uygulamasını veya bir tarayıcı sekmesini izler, Windows’ta."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.8.0",
       "items": [
         {

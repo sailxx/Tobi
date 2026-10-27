@@ -48,7 +48,7 @@ A Claude Code permission request comes with **Allow / Deny / Always**. `AskUserQ
 
 ### 🔌 GitHub and services
 
-Open PRs, review requests and CI status on GitHub, plus Vercel, Stripe, n8n, Notion, Resend, Cal.com and Spotify, each in its own colored pill with a little Tobi. Keys live in the system keystore: Windows Credential Manager, the Secret Service on Linux (GNOME Keyring, KWallet) or the Keychain on macOS.
+Open PRs, review requests and CI status on GitHub, plus Vercel, Stripe, n8n, Notion, Resend, Cal.com, Spotify and YouTube Music (a mini player: play and pause, next, previous, seek and volume), each in its own colored pill with a little Tobi. Keys live in the system keystore: Windows Credential Manager, the Secret Service on Linux (GNOME Keyring, KWallet) or the Keychain on macOS.
 
 ### 💬 Chat and files
 
@@ -114,6 +114,7 @@ CI builds and tests Tobi on Windows, Ubuntu and macOS for every change, and the 
 | Flow dictation (hold a key) | yes | X11 and Wayland portal | no: the pill’s buttons only |
 | Notetaker | mic and system sound | mic and system sound | mic only (no system-sound capture) |
 | Spotify pill | yes | MPRIS | no |
+| YouTube Music pill | yes (the app or a browser tab) | no | no |
 | Phone link, Telegram, mail, WhatsApp, chat | yes | yes | yes (compiled; not run on a Mac) |
 | In-app updates | install from the card | opens the release page | opens the release page |
 | Signing | unsigned | none | ad-hoc, not notarized |
