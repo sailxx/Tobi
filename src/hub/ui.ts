@@ -118,7 +118,7 @@ export function select<T extends string>(options: [T, string][], value: T, onCha
 }
 
 /** "Right Ctrl", "Ctrl + Win"… */
-export function keyLabel(key: FlowKey | "wayland" | "", platform: "windows" | "linux" = "windows"): string {
+export function keyLabel(key: FlowKey | "wayland" | "", platform: "windows" | "linux" | "macos" = "windows"): string {
   switch (key) {
     case "right_alt":
       return t("Right {0}", { 0: "Alt" });
@@ -135,7 +135,7 @@ export function keyLabel(key: FlowKey | "wayland" | "", platform: "windows" | "l
 }
 
 /** The key written as keycaps: "Right Ctrl" twice for hands-free. */
-export function keyKeycap(key: FlowKey | "wayland" | "", platform: "windows" | "linux", twice = false): HTMLElement {
+export function keyKeycap(key: FlowKey | "wayland" | "", platform: "windows" | "linux" | "macos", twice = false): HTMLElement {
   const label = keyLabel(key, platform);
   return keycap(twice ? `${label} ${label}` : label);
 }

@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.7.0",
+      "items": [
+        {
+          "icon": "download",
+          "title": {
+            "en": "Tobi for Linux and macOS",
+            "zh-Hans": "Tobi 登陆 Linux 和 macOS",
+            "hi": "Tobi अब Linux और macOS पर",
+            "es": "Tobi para Linux y macOS",
+            "ar": "Tobi لنظامي Linux وmacOS",
+            "fr": "Tobi pour Linux et macOS",
+            "bn": "Linux ও macOS-এর জন্য Tobi",
+            "pt-BR": "Tobi para Linux e macOS",
+            "ru": "Tobi для Linux и macOS",
+            "id": "Tobi untuk Linux dan macOS",
+            "de": "Tobi für Linux und macOS",
+            "tr": "Linux ve macOS için Tobi"
+          },
+          "detail": {
+            "en": "Every release now comes with a Linux AppImage, .deb and .rpm and a macOS .dmg. The Mac build is new and has not been tried on a real Mac yet.",
+            "zh-Hans": "每个版本现在都提供 Linux 的 AppImage、.deb、.rpm 和 macOS 的 .dmg。Mac 版是新的，尚未在真实 Mac 上试用。",
+            "hi": "अब हर रिलीज़ के साथ Linux के लिए AppImage, .deb, .rpm और macOS के लिए .dmg आता है। Mac संस्करण नया है और अभी असली Mac पर आज़माया नहीं गया है।",
+            "es": "Cada versión incluye ahora AppImage, .deb y .rpm para Linux y un .dmg para macOS. La versión de Mac es nueva y aún no se ha probado en un Mac real.",
+            "ar": "تتضمن كل نسخة الآن AppImage و.deb و.rpm لنظام Linux وملف .dmg لنظام macOS. نسخة Mac جديدة ولم تُجرَّب بعد على جهاز Mac حقيقي.",
+            "fr": "Chaque version propose désormais un AppImage, un .deb et un .rpm pour Linux, et un .dmg pour macOS. La version Mac est nouvelle et n’a pas encore été essayée sur un vrai Mac.",
+            "bn": "এখন প্রতিটি রিলিজে Linux-এর জন্য AppImage, .deb, .rpm এবং macOS-এর জন্য .dmg থাকে। Mac সংস্করণটি নতুন এবং এখনও আসল Mac-এ চালিয়ে দেখা হয়নি।",
+            "pt-BR": "Cada versão agora traz AppImage, .deb e .rpm para Linux e um .dmg para macOS. A versão para Mac é nova e ainda não foi testada em um Mac de verdade.",
+            "ru": "Теперь в каждом релизе есть AppImage, .deb и .rpm для Linux и .dmg для macOS. Сборка для Mac новая и пока не проверена на настоящем Mac.",
+            "id": "Setiap rilis kini menyertakan AppImage, .deb, dan .rpm untuk Linux serta .dmg untuk macOS. Versi Mac masih baru dan belum dicoba di Mac sungguhan.",
+            "de": "Jede Version enthält jetzt ein AppImage, .deb und .rpm für Linux und eine .dmg für macOS. Die Mac-Version ist neu und noch nicht auf einem echten Mac ausprobiert.",
+            "tr": "Her sürümle artık Linux için AppImage, .deb ve .rpm, macOS için .dmg geliyor. Mac sürümü yeni ve henüz gerçek bir Mac’te denenmedi."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.6.1",
       "items": [
         {

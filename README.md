@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="assets/readme/hero-en.svg" width="100%" alt="Tobi — an AI helper for Windows 11">
+<img src="assets/readme/hero-en.svg" width="100%" alt="Tobi — an AI helper for Windows, Linux and macOS">
 
-<a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows-setup.exe"><img src="assets/readme/btn-windows-en.svg" height="52" alt="Download for Windows"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest"><img src="assets/readme/btn-new-en.svg" height="52" alt="What’s new"></a>
+<a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows-setup.exe"><img src="assets/readme/btn-windows-en.svg" height="52" alt="Download for Windows"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Linux-x86_64.AppImage"><img src="assets/readme/btn-linux-en.svg" height="52" alt="Download for Linux"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest/download/Tobi-macOS-aarch64.dmg"><img src="assets/readme/btn-macos-en.svg" height="52" alt="Download for macOS"></a>&nbsp;&nbsp;<a href="https://github.com/sailxx/Tobi/releases/latest"><img src="assets/readme/btn-new-en.svg" height="52" alt="What’s new"></a>
 
-**Tobi is an AI helper for working on Windows 11.** Press `Ctrl+Alt+N` and he drops in from the top of your screen to show what Claude Code is doing: thinking, reading, editing files, running commands. Allow or deny an agent’s request in one click. No telemetry, no account.
+**Tobi is an AI helper for working on Windows 11, Linux and macOS.** Press `Ctrl+Alt+N` and he drops in from the top of your screen to show what Claude Code is doing: thinking, reading, editing files, running commands. Allow or deny an agent’s request in one click. No telemetry, no account.
 
 </div>
 
@@ -29,7 +29,7 @@ A Claude Code permission request comes with **Allow / Deny / Always**. `AskUserQ
 
 ### 🔌 GitHub and services
 
-Open PRs, review requests and CI status on GitHub, plus Vercel, Stripe, n8n, Notion, Resend, Cal.com and Spotify, each in its own colored pill with a little Tobi. Keys live in Windows Credential Manager.
+Open PRs, review requests and CI status on GitHub, plus Vercel, Stripe, n8n, Notion, Resend, Cal.com and Spotify, each in its own colored pill with a little Tobi. Keys live in the system keystore: Windows Credential Manager, the Secret Service on Linux (GNOME Keyring, KWallet) or the Keychain on macOS.
 
 ### 💬 Chat and files
 
@@ -64,10 +64,36 @@ Tobi blinks, follows your cursor, cheers, dozes off, grumbles when poked and get
 <details>
 <summary><b>Install</b></summary>
 
-1. Download [`Tobi-Windows-setup.exe`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows-setup.exe) or [`Tobi-Windows.msi`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows.msi).
-2. The installer isn’t signed yet, so SmartScreen warns you: **More info → Run anyway**.
-3. Open Tobi with `Ctrl+Alt+N` → **Settings → Agents** and connect Claude Code. Tobi backs up `~/.claude/settings.json` and shows the changes before writing them.
-4. Windows 10 or 11. The interface is in Russian by default; switch it in **Settings → Language**.
+**Windows 10 or 11.** Download [`Tobi-Windows-setup.exe`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows-setup.exe) or [`Tobi-Windows.msi`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Windows.msi). The installer isn’t signed yet, so SmartScreen warns you: **More info → Run anyway**.
+
+**Linux (x86_64).** Download [`Tobi-Linux-x86_64.AppImage`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-Linux-x86_64.AppImage), `chmod +x` it and run it, or install the `.deb` / `.rpm` from the [release](https://github.com/sailxx/Tobi/releases/latest). The island sits on the top edge as a layer-shell surface on KDE, COSMIC and wlroots compositors, and through XWayland or X11 on GNOME (see [Platforms](#platforms)).
+
+**macOS 11 or later.** Download [`Tobi-macOS-aarch64.dmg`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-macOS-aarch64.dmg) (Apple silicon) or [`Tobi-macOS-x86_64.dmg`](https://github.com/sailxx/Tobi/releases/latest/download/Tobi-macOS-x86_64.dmg) (Intel) and drag Tobi to Applications. The app is ad-hoc signed and **not notarized** (that needs a paid Apple Developer account), so macOS refuses the first launch: right-click the app and choose **Open**, or run `xattr -dr com.apple.quarantine /Applications/Tobi.app` once.
+
+Then open Tobi (`Ctrl+Alt+N`) → **Settings → Agents** and connect Claude Code. Tobi backs up `~/.claude/settings.json` and shows the changes before writing them. The interface is in Russian by default; switch it in **Settings → Language**.
+
+</details>
+
+<a id="platforms"></a>
+
+<details>
+<summary><b>Platforms and known limits</b></summary>
+
+CI builds and tests Tobi on Windows, Ubuntu and macOS for every change, and the release carries all three. **Windows is the platform Tobi is developed and used on.** Linux has been run on real desktops by its users. **The macOS build has never been run on a Mac by its author**: it compiles and its tests pass in CI, nothing more is claimed. Please open an issue for anything that looks wrong.
+
+| | Windows | Linux | macOS |
+|---|---|---|---|
+| Island, click-through, eyes | cursor poll | layer-shell (KDE, COSMIC, wlroots), XWayland on GNOME, X11 | cursor poll (untested on a notch display) |
+| Agent hooks | named pipe | Unix socket in `$XDG_RUNTIME_DIR` | Unix socket in `~/Library/Application Support/Tobi` |
+| Secrets | Credential Manager | Secret Service | Keychain |
+| Tray | notification area | tray icon (AppIndicator) | menu bar |
+| Terminal / window jump (`Ctrl+Alt+T`) | yes | KWin, X11, kitty | no: opens the folder in VS Code |
+| Flow dictation (hold a key) | yes | X11 and Wayland portal | no: the pill’s buttons only |
+| Notetaker | mic and system sound | mic and system sound | mic only (no system-sound capture) |
+| Spotify pill | yes | MPRIS | no |
+| Phone link, Telegram, mail, WhatsApp, chat | yes | yes | yes (compiled; not run on a Mac) |
+| In-app updates | install from the card | opens the release page | opens the release page |
+| Signing | unsigned | none | ad-hoc, not notarized |
 
 </details>
 
@@ -84,7 +110,7 @@ npm test                                # island tests (Node)
 cargo test --release --workspace        # Rust tests
 ```
 
-Needs Node 24, Rust (MSVC) and Visual Studio Build Tools with C++. A `vX.Y.Z` tag releases; CI builds the installers.
+Needs Node 24 and Rust. Windows: MSVC and Visual Studio Build Tools with C++. Linux: the GTK/WebKit packages listed in `.github/workflows/ci.yml`. macOS: Xcode command line tools. A `vX.Y.Z` tag releases; CI builds the installers on all three systems.
 
 The icon is the logo in `assets/logo.png` (cut into `src-tauri/icons/`). The sounds and the README images are generated; don’t edit them by hand:
 

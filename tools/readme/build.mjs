@@ -227,6 +227,8 @@ for (const [lang, t] of Object.entries(STR)) {
   langs[lang] = () => ({
     [`hero-${lang}.svg`]: hero(t),
     [`btn-windows-${lang}.svg`]: K.button(t.buttons.windows, ICONS.windows, true),
+    [`btn-linux-${lang}.svg`]: K.button(t.buttons.linux, ICONS.linux, true),
+    [`btn-macos-${lang}.svg`]: K.button(t.buttons.macos, ICONS.macos, true),
     [`btn-new-${lang}.svg`]: K.button(t.buttons.whatsNew, ICONS.spark, false),
     [`features-${lang}.svg`]: features(t),
     [`keys-${lang}.svg`]: keys(t),

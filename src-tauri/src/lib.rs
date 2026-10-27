@@ -342,6 +342,11 @@ fn open_session(session_id: Option<String>, path: Option<String>) -> bool {
         });
         true
     }
+    #[cfg(target_os = "macos")]
+    {
+        let _ = (owners, folder);
+        open_in_vscode(path)
+    }
 }
 
 /// The Claude Desktop pill's target: the Claude app (Windows only — it has no
@@ -1028,6 +1033,9 @@ pub fn run() {
             update::update_open_page,
         ])
         .setup(move |app| {
+            // A menu bar app: no Dock icon, no application menu (the island is not a document window).
+            #[cfg(target_os = "macos")]
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
             let handle = app.handle().clone();
             app.manage(phone_link::PhoneLink::new(handle.clone()));
             tray::build(&handle)?;

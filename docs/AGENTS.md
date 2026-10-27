@@ -38,6 +38,10 @@ Same pattern with the Windows relay:
 }
 ```
 
+## Hook command (macOS, the cross-platform Tobi)
+
+The Tauri app (the one for Windows and Linux, also built for macOS) copies the relay to `~/Library/Application Support/Tobi/bin/tobi-hook` at startup. The command is the same as on Linux, with that path. The macOS build is compiled and tested by CI only and has not been run on a Mac by its author.
+
 ## Hook command (Linux)
 
 Same pattern with the Linux relay. Tobi copies the relay to `~/.local/share/tobi/bin/tobi-hook` at startup.
@@ -68,6 +72,7 @@ The relay adds `tobi_agent` to the JSON it forwards. You can also add it yoursel
 Send newline-terminated JSON to the socket:
 - **macOS (GitHub build):** `~/Library/Application Support/NotchBuddy/nb.sock`
 - **macOS (App Store build):** `~/Library/Containers/com.sailxx.Tobi/Data/nb.sock`
+- **macOS (this Tauri app):** `~/Library/Application Support/Tobi/tobi.sock` (the folder is mode 0700; only your own user can connect).
 - **Windows:** `\\.\pipe\tobi-<user-SID>`
 - **Linux:** `$XDG_RUNTIME_DIR/tobi.sock` (usually `/run/user/<uid>/tobi.sock`). Only your own user account can connect.
 

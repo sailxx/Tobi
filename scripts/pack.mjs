@@ -30,6 +30,13 @@ const PACKAGES = {
       names: [`Tobi-Windows-${version}.msi`, "Tobi-Windows.msi"],
     },
   ],
+  darwin: [
+    {
+      dir: "dmg",
+      suffix: ".dmg",
+      names: [`Tobi-macOS-${version}-${arch}.dmg`, `Tobi-macOS-${arch}.dmg`],
+    },
+  ],
   linux: [
     {
       dir: "appimage",

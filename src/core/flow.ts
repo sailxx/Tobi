@@ -56,7 +56,7 @@ export interface FlowStatus {
   keys: string;
   hasClaudeKey: boolean;
   mics: { name: string; default: boolean }[];
-  platform: "windows" | "linux";
+  platform: "windows" | "linux" | "macos";
   autostarted: boolean;
   userName?: string | null;
 }

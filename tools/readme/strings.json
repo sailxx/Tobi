@@ -1,7 +1,7 @@
 {
   "en": {
     "hero": {
-      "alt": "Tobi — an AI helper for Windows 11",
+      "alt": "Tobi — an AI helper for Windows, Linux and macOS",
       "title": [
         "Your AI helper,",
         "*one Ctrl+Alt+N away*"
@@ -55,6 +55,8 @@
     },
     "buttons": {
       "windows": "Download for Windows",
+      "linux": "Download for Linux",
+      "macos": "Download for macOS",
       "whatsNew": "What’s new"
     },
     "features": {

@@ -36,12 +36,9 @@ pub const RELEASES_FEED: &str = "https://github.com/sailxx/Tobi/releases.atom";
 /// Where "What's new" goes when no release is known.
 pub const RELEASES_PAGE: &str = "https://github.com/sailxx/Tobi/releases";
 
-/// This platform's release tags: `windows-vX.Y.Z` / `linux-vX.Y.Z`. Never the
-/// rolling `windows-latest` / `linux-latest`, nor the Mac's `v…` or Android's.
-#[cfg(windows)]
+/// Release tags: `vX.Y.Z`, one release for Windows, Linux and macOS. Never
+/// Android's `android-v…`.
 pub const TAG_PREFIX: &str = "v";
-#[cfg(not(windows))]
-pub const TAG_PREFIX: &str = "linux-v";
 
 /// Once allowed, a look every 6 hours (GitHub allows 60 unauthenticated calls an hour).
 pub const CHECK_INTERVAL: i64 = 6 * 3600;
@@ -425,7 +422,7 @@ pub fn this_install() -> InstallKind {
             ["ProgramFiles", "ProgramW6432", "ProgramFiles(x86)"].iter().filter_map(|k| env(k)).collect();
         install_kind(&exe.to_string_lossy(), has_uninstaller, env("LOCALAPPDATA").as_deref(), &program_files)
     }
-    // Linux: AppImage, .deb, .rpm and the Arch package update the way they were installed.
+    // Linux and macOS: the AppImage, .deb, .rpm and .dmg are replaced by hand; the card opens the release page.
     #[cfg(not(windows))]
     {
         InstallKind::Manual
@@ -451,7 +448,13 @@ pub fn status() -> Status {
         can_install: can_install(latest),
         phase: s.phase.clone(),
         check: s.check,
-        platform: if cfg!(windows) { "windows" } else { "linux" },
+        platform: if cfg!(windows) {
+            "windows"
+        } else if cfg!(target_os = "macos") {
+            "macos"
+        } else {
+            "linux"
+        },
     }
 }
 

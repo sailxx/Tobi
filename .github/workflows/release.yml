@@ -1,7 +1,8 @@
 name: Release
 
-# A tag vX.Y.Z builds the installers and publishes the GitHub release.
-# The in-app updater (src-tauri/src/update.rs) looks for these v* tags.
+# A tag vX.Y.Z builds the installers on Windows, Linux and macOS and publishes
+# the GitHub release. The in-app updater (src-tauri/src/update.rs) looks for
+# these v* tags.
 
 on:
   push:
@@ -14,7 +15,19 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    name: build (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: Windows, os: windows-latest }
+          # 22.04 on purpose: an AppImage built here runs on every distribution
+          # with a glibc as old as Ubuntu 22.04's.
+          - { name: Linux, os: ubuntu-22.04 }
+          - { name: macOS-arm64, os: macos-latest }
+          - { name: macOS-x64, os: macos-15-intel }
     steps:
       - uses: actions/checkout@v7
 
@@ -30,8 +43,14 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: release-cargo-${{ hashFiles('Cargo.lock') }}
-          restore-keys: release-cargo-
+          key: release-cargo-${{ matrix.os }}-${{ hashFiles('Cargo.lock') }}
+          restore-keys: release-cargo-${{ matrix.os }}-
+
+      - name: Install Linux system libraries
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 install -y --no-install-recommends             libwebkit2gtk-4.1-dev libgtk-3-dev libgtk-layer-shell-dev libdbus-1-dev             libasound2-dev libpulse-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev             libxdo-dev patchelf rpm
 
       - name: Install dependencies
         run: npm ci
@@ -54,41 +73,41 @@ jobs:
           if ($bad) { throw "tag says $tag but $($bad -join '; ')" }
 
       - name: Build and pack the installers
-        id: pack
-        shell: pwsh
-        run: |
-          npm run pack
-          $version = (Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json).version
-          "version=$version" >> $env:GITHUB_OUTPUT
-          Get-ChildItem release | Format-Table Name, Length
+        run: npm run pack
 
       - uses: actions/upload-artifact@v7
-        if: github.event_name == 'workflow_dispatch'
         with:
-          name: Tobi-Windows
-          path: |
-            release/Tobi-Windows-${{ steps.pack.outputs.version }}-setup.exe
-            release/Tobi-Windows-${{ steps.pack.outputs.version }}.msi
+          name: Tobi-${{ matrix.name }}
+          path: release/*
           retention-days: 3
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          path: release
+          merge-multiple: true
 
       # Both the versioned names (the updater picks these) and the plain ones
       # (README links to /releases/latest/download/Tobi-Windows-setup.exe).
       - name: Publish the release
-        if: startsWith(github.ref, 'refs/tags/v')
-        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          $v = "${{ steps.pack.outputs.version }}"
-          $notes = @"
-          Tobi $v для Windows 10/11.
+          v="${GITHUB_REF_NAME#v}"
+          ls -la release
+          cat > notes.md <<EOF
+          Tobi $v for Windows 10/11, Linux and macOS.
 
-          Скачай ``Tobi-Windows-setup.exe`` и запусти. Установщик пока без подписи, поэтому SmartScreen покажет предупреждение: **Подробнее → Выполнить в любом случае**.
-          "@
-          gh release create "${{ github.ref_name }}" `
-            "release/Tobi-Windows-$v-setup.exe" `
-            "release/Tobi-Windows-$v.msi" `
-            "release/Tobi-Windows-setup.exe" `
-            "release/Tobi-Windows.msi" `
-            --title "Tobi $v" `
-            --notes $notes
+          **Windows:** download \`Tobi-Windows-setup.exe\`. The installer is unsigned, so SmartScreen shows a warning: More info, then Run anyway.
+
+          **Linux:** \`Tobi-Linux-x86_64.AppImage\` (make it executable and run it), or the \`.deb\` / \`.rpm\`.
+
+          **macOS:** \`Tobi-macOS-aarch64.dmg\` (Apple silicon) or \`Tobi-macOS-x86_64.dmg\` (Intel). The app is ad-hoc signed, not notarized: after copying it to Applications, run \`xattr -dr com.apple.quarantine /Applications/Tobi.app\` once, or right-click and choose Open.
+          EOF
+          gh release create "$GITHUB_REF_NAME" release/* --repo "$REPO" --title "Tobi $v" --notes-file notes.md

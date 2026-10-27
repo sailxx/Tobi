@@ -100,7 +100,7 @@ const DEFAULT_STATUS: FlowStatus = {
   keys: "ok",
   hasClaudeKey: false,
   mics: [],
-  platform: navigator.userAgent.includes("Windows") ? "windows" : "linux",
+  platform: navigator.userAgent.includes("Windows") ? "windows" : /Macintosh|Mac OS X/.test(navigator.userAgent) ? "macos" : "linux",
   autostarted: false,
 };
 
