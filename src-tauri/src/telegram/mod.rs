@@ -45,7 +45,8 @@ const SETTINGS_EVENT: &str = "telegram-settings";
 /// How many chats the card lists, and how many messages an opened chat shows.
 const MAX_CHATS: usize = 25;
 const MAX_MESSAGES: usize = 10;
-const MAX_KEPT: usize = 30;
+/// Kept in memory for each chat: the same ten the open conversation shows.
+const MAX_KEPT: usize = MAX_MESSAGES;
 pub const MAX_REPLY: usize = 4096;
 
 // ── What the pages see ────────────────────────────────────────────────────────
@@ -218,6 +219,17 @@ impl Chats {
         chats
     }
 
+    /// What the island is told: the chats of `visible`, each cut to its last message (the list shows no
+    /// more), except the open one, which keeps its ten. A burst of news never sends the whole memory.
+    pub fn summaries(&self, prefs: &Prefs, open: Option<&str>) -> Vec<Chat> {
+        let mut chats = self.visible(prefs);
+        for c in chats.iter_mut().filter(|c| open != Some(c.id.as_str())) {
+            let excess = c.messages.len().saturating_sub(1);
+            c.messages.drain(..excess);
+        }
+        chats
+    }
+
     pub fn unread(&self, prefs: &Prefs) -> u32 {
         self.visible(prefs).iter().map(|c| c.unread).sum()
     }
@@ -306,7 +318,7 @@ impl Ctl {
         IslandView {
             on: self.online.is_some() && self.link == Link::Connected,
             link: self.link.clone(),
-            conversations: self.chats.visible(&self.prefs),
+            conversations: self.chats.summaries(&self.prefs, self.open.as_deref()),
             unread: self.chats.unread(&self.prefs),
             sending: self.sending,
             send_error: self.send_error.clone(),
@@ -1127,6 +1139,22 @@ mod tests {
         let c = &chats.map["1"];
         assert_eq!(c.messages.len(), MAX_KEPT);
         assert_eq!(c.messages.last().unwrap().id, (MAX_KEPT as i64 + 9).to_string());
+    }
+
+    #[test]
+    fn the_island_is_told_one_message_per_chat_but_ten_for_the_open_one() {
+        let mut c = Chats::default();
+        for chat in ["a", "b"] {
+            for i in 0..MAX_KEPT as i64 {
+                c.add(chat, chat, false, msg(&i.to_string(), chat, i), true);
+            }
+        }
+        let told = c.summaries(&Prefs::default(), Some("b"));
+        let len = |id: &str| told.iter().find(|x| x.id == id).unwrap().messages.len();
+        assert_eq!(len("a"), 1);
+        assert_eq!(len("b"), MAX_KEPT);
+        assert_eq!(told.iter().find(|x| x.id == "a").unwrap().messages[0].id, (MAX_KEPT - 1).to_string());
+        assert_eq!(c.map["a"].messages.len(), MAX_KEPT, "memory keeps its ten");
     }
 
     #[test]

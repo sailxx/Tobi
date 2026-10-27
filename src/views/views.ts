@@ -323,6 +323,8 @@ function buildOverview(actions: ViewActions): ViewHost {
     },
     sync() {
       const task = State.focusTask;
+      // An open conversation takes the card's whole width: the pills step aside.
+      el.classList.toggle("chat-open", State.chatOpen);
       if (task?.id !== lastFocus) {
         lastFocus = task?.id ?? null;
         detailOpen = false;

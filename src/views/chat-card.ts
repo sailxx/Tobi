@@ -4,9 +4,14 @@
 //
 // The list: one row per conversation (never one per message) with initials, name, age, the last
 // message cut short and the unread count; when the account isn't linked, why, and a way to Settings.
-// A click on a row opens the conversation: its last ten messages and a reply field. Enter sends,
+// A click on a row opens the conversation: its last ten messages and a reply field. The island grows
+// taller and the card takes its whole width (State.chatOpen); Tobi steps out,
+// the back button sits in the corner (its tooltip says whose chat it is), the reply field under the
+// messages: they get all the rest. Enter sends,
 // Shift+Enter starts a new line, Escape goes back to the list. Nothing is sent without the user's
-// own Enter or click, and while a reply is being typed the island stays open.
+// own Enter or click. The island stays open for as long as the conversation is (it is the island's
+// folding timer that used to throw the reader out); a conversation left alone for IDLE_CLOSE_MS with
+// nothing typed goes back to the list, and the island folds as usual.
 //
 // A click on a message opens it whole in a window of its own that can be resized, with every word
 // selectable and Copy text / Copy photo (src/message). The bubble shows the first lines only.
@@ -20,6 +25,9 @@ import { canSend, copyableText, hasPhoto, initials, keyAction, lastMessages, pre
 import { TELEGRAM_ID } from "../core/telegram";
 import { language, t, tl } from "../i18n/i18n";
 import type { MessageWindowData } from "../core/message-window";
+
+/** An open conversation nobody touches, with no draft, closes after this long. */
+export const IDLE_CLOSE_MS = 90_000;
 
 /** What the card reads of a messenger's report (core/whatsapp.ts WaIslandView, core/telegram.ts TgIslandView). */
 export interface ChatView {
@@ -92,24 +100,35 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
   const listView = h("div", { class: "wa-list" }, head, listBody);
 
   // ── The conversation ──
-  const back = h("button", { class: "int-back wa-back", title: tl("Back") }, svg(ICONS.chevronLeft, 10, { stroke: 2.4 }));
-  const convoAvatar = h("span", {});
-  const convoName = h("b", { class: "wa-name" });
-  const convoHead = h("div", { class: "wa-head" }, back, convoAvatar, convoName);
+  const back = h("button", { class: "int-back wa-back", title: tl("Back") }, svg(ICONS.chevronLeft, 12, { stroke: 2.4 }));
   const messages = h("div", { class: "wa-messages" });
   const field = h("textarea", { class: "wa-field", rows: "1", spellcheck: "true" }) as HTMLTextAreaElement;
   const sendBtn = h("button", { class: "wa-send", title: tl("Send") }, svg(ICONS.arrowUp, 12, { fill: "#0B0C0E" }));
   const reply = h("div", { class: "wa-reply" }, field, sendBtn);
   const note = h("div", { class: "wa-note" });
-  const convoView = h("div", { class: "wa-convo" }, convoHead, messages, reply, note);
+  const convoView = h("div", { class: "wa-convo" }, back, messages, note, reply);
 
-  const el = h("div", { class: "int-card wa-card", style: `--chat-accent:${cfg.color}` }, listView, convoView);
+  const el = h("div", { class: "int-card wa-card chat-card", style: `--chat-accent:${cfg.color}` }, listView, convoView);
 
   let openChat: string | null = null;
   /** The row whose "Ignore this chat" is showing (a right-click on it). */
   let ignoring: string | null = null;
   let listKey = "";
   let convoKey = "";
+  let idleTimer: number | null = null;
+
+  /** Anything done in the card: the conversation is being read. */
+  function touch() {
+    if (idleTimer != null) window.clearTimeout(idleTimer);
+    idleTimer = null;
+    if (openChat == null) return;
+    idleTimer = window.setTimeout(() => {
+      idleTimer = null;
+      if (openChat == null) return;
+      if (field.value.trim().length > 0) touch();
+      else close();
+    }, IDLE_CLOSE_MS);
+  }
 
   const current = (): WaConversation | undefined =>
     openChat ? cfg.view().conversations.find((c) => c.id === openChat) : undefined;
@@ -120,9 +139,13 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
     field.value = "";
     convoKey = "";
     void cfg.bridge.open(id);
+    State.chatOpen = true;
+    host.holdOpen(true);
+    touch();
     host.keyboard(true);
     window.setTimeout(() => field.focus(), 120);
     sync();
+    State.notify();
   }
 
   function expand(m: WaMessage, c: WaConversation) {
@@ -144,10 +167,14 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
     void cfg.bridge.close(openChat);
     openChat = null;
     field.value = "";
+    if (idleTimer != null) window.clearTimeout(idleTimer);
+    idleTimer = null;
+    State.chatOpen = false;
     host.holdOpen(false);
     host.keyboard(false);
     listKey = "";
     sync();
+    State.notify();
   }
 
   async function send() {
@@ -157,7 +184,6 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
     const sent = await cfg.bridge.send(chat, text);
     if (sent && openChat === chat && field.value === text) {
       field.value = "";
-      host.holdOpen(false);
       syncSendButton();
     }
     field.focus();
@@ -166,9 +192,10 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
   back.addEventListener("click", close);
   sendBtn.addEventListener("click", () => void send());
   field.addEventListener("input", () => {
-    host.holdOpen(field.value.trim().length > 0);
     syncSendButton();
+    touch();
   });
+  for (const type of ["pointermove", "pointerdown", "wheel", "keydown"]) el.addEventListener(type, touch, { passive: true });
   field.addEventListener("keydown", (e) => {
     const action = keyAction(e);
     if (action === "send") {
@@ -199,14 +226,17 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
 
   function row(c: WaConversation): HTMLElement {
     const unread = c.unread > 0;
-    const r = h("button", { class: unread ? "int-row wa-row unread" : "int-row wa-row" },
-      avatar(cfg.color, c.name, c.isGroup),
-      h("span", { class: "int-name wa-row-name", text: c.name }),
-      h("span", { class: "int-ago", text: timeAgo(c.lastActivity) }),
+    // Two lines: who and how long ago, then the last message at the full width of the card.
+    const main = h("span", { class: "wa-row-main" },
+      h("span", { class: "wa-row-top" },
+        h("span", { class: "int-name wa-row-name", text: c.name }),
+        h("span", { class: "int-ago", text: timeAgo(c.lastActivity) }),
+      ),
     );
+    const r = h("button", { class: unread ? "int-row wa-row unread" : "int-row wa-row" }, avatar(cfg.color, c.name, c.isGroup, 20), main);
     const last = c.messages[c.messages.length - 1];
     if (ignoring === c.id) {
-      r.append(h("span", { class: "wa-spacer" }), h("span", {
+      main.append(h("span", {
         class: "link-btn wa-ignore",
         text: t("Ignore this chat"),
         onclick: (e: Event) => {
@@ -216,8 +246,7 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
         },
       }));
     } else {
-      if (last) r.append(h("span", { class: "int-sub wa-preview", text: preview(last, c.isGroup) }));
-      r.append(h("span", { class: "wa-spacer" }));
+      if (last) main.append(h("span", { class: "int-sub wa-preview", text: preview(last, c.isGroup) }));
       if (unread) r.append(h("span", { class: "wa-count", text: c.unread > 99 ? "99+" : String(c.unread) }));
     }
     r.addEventListener("click", () => open(c.id));
@@ -262,17 +291,15 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
     const shown = lastMessages(c);
     const key = [language(), c.id, c.name, ...shown.map((m) => m.id)].join("~");
     if (key !== convoKey) {
-      const wasAtBottom = messages.scrollHeight - messages.scrollTop - messages.clientHeight < 24;
+      const fromBottom = messages.scrollHeight - messages.scrollTop - messages.clientHeight;
       const first = convoKey === "";
       convoKey = key;
-      clear(convoAvatar);
-      convoAvatar.append(avatar(cfg.color, c.name, c.isGroup));
-      convoName.textContent = c.name;
-      convoName.title = c.id.split("@")[0];
+      back.title = tl("Back") + " · " + c.name;
       clear(messages);
       for (const m of shown) messages.append(bubble(m, c.isGroup, (x) => expand(x, c)));
-      // The newest at the bottom, in view.
-      if (first || wasAtBottom) messages.scrollTop = messages.scrollHeight;
+      // The newest at the bottom, in view; a reader up in the history keeps the same lines in view.
+      if (first || fromBottom < 24) messages.scrollTop = messages.scrollHeight;
+      else messages.scrollTop = Math.max(0, messages.scrollHeight - messages.clientHeight - fromBottom);
     }
     field.placeholder = t("Reply…  (Shift+Enter: new line)");
     note.className = "wa-note";
@@ -296,6 +323,7 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
       close();
       return;
     }
+    el.classList.toggle("chatting", !!c);
     listView.style.display = c ? "none" : "";
     convoView.style.display = c ? "" : "none";
     if (c) syncConversation(c);

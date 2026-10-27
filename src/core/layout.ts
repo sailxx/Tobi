@@ -115,10 +115,14 @@ export function chatPromptHeight(messageCount: number): number {
   return Math.min(300, 240 + messageCount * 40);
 }
 
+/** An open messenger conversation: room for the messages, the reply field under Tobi. */
+export const CHAT_OPEN_H = 264;
+
 export function islandSize(
   mode: IslandMode,
   view: IslandViewName,
   chatCount = 0,
+  chatOpen = false,
 ): { w: number; h: number } {
   switch (mode) {
     case "hidden":
@@ -128,7 +132,7 @@ export function islandSize(
     case "compact":
       return { w: COMPACT_W, h: NOTCH_H };
     case "expanded": {
-      const h = view === "prompt" ? chatPromptHeight(chatCount) : VIEW_LAYOUTS[view].height;
+      const h = view === "prompt" ? chatPromptHeight(chatCount) : view === "overview" && chatOpen ? CHAT_OPEN_H : VIEW_LAYOUTS[view].height;
       return { w: EXPANDED_W, h };
     }
   }
