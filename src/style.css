@@ -2932,7 +2932,7 @@ input[type="range"]::-webkit-slider-thumb {
   color: #c5c8cd;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  /* A long message shows its start; a click opens it whole. */
+  /* A long message shows its start; a click opens it in a window. */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
@@ -2941,68 +2941,6 @@ input[type="range"]::-webkit-slider-thumb {
 
 .wa-bubble {
   cursor: pointer;
-}
-
-.wa-detail-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 4px 12px 4px 2px;
-  scrollbar-width: thin;
-  user-select: text;
-}
-
-.wa-detail-text {
-  font: 400 11.5px/1.45 var(--font);
-  color: #e1e3e7;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.wa-photo {
-  flex: 0 0 auto;
-  border-radius: 6px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.wa-photo-img {
-  display: block;
-  max-width: 100%;
-  max-height: 150px;
-  margin: 0 auto;
-  object-fit: contain;
-}
-
-.wa-photo.wa-skeleton {
-  height: 90px;
-  animation: wa-skeleton 1.3s ease-in-out infinite;
-}
-
-.wa-photo.failed {
-  padding: 8px;
-  font: 500 10px var(--font);
-  color: #9398a1;
-}
-
-@keyframes wa-skeleton {
-  50% { opacity: 0.45; }
-}
-
-.wa-detail-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 4px 8px 2px 2px;
-}
-
-.wa-detail-note {
-  margin-left: auto;
-  font: 500 10px var(--font);
-  color: #9398a1;
 }
 
 .wa-bubble.mine .wa-text {

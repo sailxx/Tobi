@@ -21,6 +21,7 @@ export function buildWhatsAppCard(host: WhatsAppCardHost): WhatsAppCard {
       close: (c) => Bridge.whatsappClose(c),
       send: (c, t) => Bridge.whatsappSend(c, t),
       ignore: (c) => Bridge.whatsappIgnore(c),
+      expand: (m) => Bridge.openMessageWindow(m),
     },
   }, host);
 }

@@ -221,6 +221,53 @@ ${ls.map((l, k) => fitText(x + 20, y + 86 + k * 18, l, w - 30, { size: 13, weigh
   return svg(W, head.y + 124 + 34, t.numbers.alt, b);
 }
 
+// ---------- ДОРОЖНАЯ КАРТА ----------
+function roadmap(t) {
+  const W = 880, r = t.roadmap;
+  const head = sectionHead(r.chip, r.title);
+  let b = head.s;
+  const top = head.y, RH = 50, n = r.done.length;
+  const LH = 56 + n * RH + 6;
+  const lx = 40, lw = 500;
+  // левая колонка: выпущенное
+  b += `<g class="r" ${delay(2)}>${card(lx, top, lw, LH, 20)}
+<text class="m" x="${lx + 24}" y="${top + 34}" font-size="12" font-weight="600" letter-spacing="1" fill="${HONEY}">${T(r.doneHead.toUpperCase())}</text></g>`;
+  const x0 = lx + 34, y0 = top + 74;
+  b += `<line x1="${x0}" y1="${y0}" x2="${x0}" y2="${y0 + (n - 1) * RH}" stroke="${HONEY}" stroke-opacity=".35" stroke-width="2"/>`;
+  r.done.forEach(([ver, date, title, desc], i) => {
+    const y = y0 + i * RH, last = i === n - 1;
+    b += `<g class="r" ${delay(3 + i)}>`;
+    if (last) b += `<circle cx="${x0}" cy="${y}" r="11" fill="${HONEY}" fill-opacity=".18"/>`;
+    b += `<circle cx="${x0}" cy="${y}" r="5" fill="${HONEY}"/>`;
+    b += `<text class="m" x="${x0 + 22}" y="${y + 4}" font-size="13" font-weight="700" fill="${last ? HONEY_HI : P.ink}">${T(ver)}</text>`;
+    b += fitText(x0 + 82, y + 1, title, 230, { size: 15, weight: 700 });
+    b += fitText(x0 + 82, y + 20, desc, 330, { size: 12.5, weight: 500, fill: P.muted });
+    b += `<text class="m" x="${lx + lw - 24}" y="${y + 4}" text-anchor="end" font-size="12" fill="${P.dim}">${T(date)}</text></g>`;
+  });
+  // правая колонка: дальше
+  const rx = lx + lw + 16, rw = 800 - lw - 16;
+  const colItems = (items) => items.map(([a, d]) => ({ a, d, ls: wrap(d, rw - 56, 12.5, 500) }));
+  const block = (head, items, y, h, kind, di) => {
+    let s = `<g class="r" ${delay(di)}>${card(rx, y, rw, h, 20)}
+<text class="m" x="${rx + 24}" y="${y + 34}" font-size="12" font-weight="600" letter-spacing="1" fill="${kind === 'next' ? HONEY : P.muted}">${T(head.toUpperCase())}</text>`;
+    let yy = y + 66;
+    for (const it of colItems(items)) {
+      const dot = kind === 'next'
+        ? `<circle cx="${rx + 30}" cy="${yy - 5}" r="4.5" fill="none" stroke="${HONEY}" stroke-width="2"/>`
+        : `<circle cx="${rx + 30}" cy="${yy - 5}" r="4.5" fill="none" stroke="${P.dim}" stroke-width="2" stroke-dasharray="2.4 2.4"/>`;
+      s += dot + fitText(rx + 46, yy, it.a, rw - 70, { size: 14, weight: 700 });
+      s += lines(rx + 46, yy + 19, it.ls, { size: 12.5, weight: 500, lh: 17, fill: P.muted });
+      yy += 19 + it.ls.length * 17 + 18;
+    }
+    return s + '</g>';
+  };
+  const hOf = (items) => 66 + colItems(items).reduce((a, it) => a + 19 + it.ls.length * 17 + 18, 0) - 4;
+  const nh = hOf(r.next);
+  b += block(r.nextHead, r.next, top, nh, 'next', 3);
+  b += block(r.gapsHead, r.gaps, top + nh + 16, LH - nh - 16, 'gaps', 4);
+  return svg(W, top + LH + 34, r.alt, b);
+}
+
 // ---------- сборка ----------
 const langs = {};
 for (const [lang, t] of Object.entries(STR)) {
@@ -234,6 +281,7 @@ for (const [lang, t] of Object.entries(STR)) {
     [`keys-${lang}.svg`]: keys(t),
     [`states-${lang}.svg`]: states(t),
     [`numbers-${lang}.svg`]: numbers(t),
+    [`roadmap-${lang}.svg`]: roadmap(t),
   });
 }
 await K.build(OUT, langs, 'vTobi.!+−→');

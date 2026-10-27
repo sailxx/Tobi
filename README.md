@@ -37,7 +37,7 @@ Chat with Claude, OpenAI, Gemini, DeepSeek, Qwen, Moonshot or a local model (Oll
 
 ### ✈️ Telegram, mail and WhatsApp (experimental)
 
-Your unread chats in the island: open one to read its last messages and reply (Enter sends, Shift+Enter starts a new line); click a message to see it whole, with its photo (Telegram), and copy the text or the photo. Telegram signs in with your own account through your own API id (free, from my.telegram.org), the phone number and the code Telegram sends; Gmail signs in with your own Google OAuth client (the browser opens Google’s page), lists your unread mail, opens a message as plain text and lets you reply, write a new message, archive or delete to the bin; Any other mailbox (Yandex, Mail.ru, Yahoo, iCloud or your own server) works over IMAP with an app password; WhatsApp goes through a gateway on this computer. All are off by default, keep messages in memory only and never write them anywhere: **Settings → Integrations**.
+Your unread chats in the island: open one to read its last messages and reply (Enter sends, Shift+Enter starts a new line); click a message to open it in a window you can resize, with all of its text selectable, its photo (Telegram), and buttons to copy the text or the photo. Telegram signs in with your own account through your own API id (free, from my.telegram.org), the phone number and the code Telegram sends; Gmail signs in with your own Google OAuth client (the browser opens Google’s page), lists your unread mail, opens a message as plain text and lets you reply, write a new message, archive or delete to the bin; Any other mailbox (Yandex, Mail.ru, Yahoo, iCloud or your own server) works over IMAP with an app password; WhatsApp goes through a gateway on this computer. All are off by default, keep messages in memory only and never write them anywhere: **Settings → Integrations**.
 
 ### 🫥 Hide when idle
 
@@ -60,6 +60,10 @@ Tobi blinks, follows your cursor, cheers, dozes off, grumbles when poked and get
 <br>
 
 <img src="assets/readme/numbers-en.svg" width="100%" alt="By the numbers: 9 MB, no telemetry, 10+ agents, 12 languages, 29 sounds">
+
+<br>
+
+<img src="assets/readme/roadmap-en.svg" width="100%" alt="Roadmap: releases from 0.1 to 0.7.1, what comes next and the known gaps">
 
 <details>
 <summary><b>Install</b></summary>
