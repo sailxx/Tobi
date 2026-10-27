@@ -518,7 +518,8 @@ pub fn spawn_cursor_poll(app: AppHandle, gate: Arc<PollGate>) {
                     let _ = win.set_ignore_cursor_events(!accept);
                 }
 
-                let _ = win.emit("cursor", CursorPayload { x, y });
+                // Only the island listens; a broadcast also woke the Tobi and message windows.
+                let _ = app.emit_to(WINDOW_LABEL, "cursor", CursorPayload { x, y });
             }
         }
     });

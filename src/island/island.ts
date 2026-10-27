@@ -1,7 +1,7 @@
 // The island: DOM shell, sizing animation, Tobi placement, mouse handling.
 // Mirrors IslandRootView.swift + IslandWindowController.swift.
 
-import { Tracked, Spring, clamp } from "../core/anim";
+import { Tracked, Spring, clamp, FRAME_GAP, frameDue } from "../core/anim";
 import { Bridge, IS_TAURI, onDragDrop } from "../core/bridge";
 import {
   EXPANDED_CORNER, EXPANDED_W, NOTCH_W, PANEL_H, PANEL_W,
@@ -83,6 +83,10 @@ export class Island {
 
   private running = false;
   private lastFrame = 0;
+  private frameGap: number = FRAME_GAP.full;
+  private glowSize = "";
+  private glowColor = "";
+  private glowOpacity = "";
   private dirty = true;
   private canvasPx = 0;
   /** The pixel ratio Tobi's bitmap was sized for: it changes with the monitor. */
@@ -992,10 +996,15 @@ export class Island {
     if (this.running) return;
     this.running = true;
     this.lastFrame = performance.now();
+    this.frameGap = FRAME_GAP.full;
     requestAnimationFrame(this.frame);
   }
 
   private frame = (nowMs: number) => {
+    if (!frameDue(nowMs, this.lastFrame, this.frameGap)) {
+      requestAnimationFrame(this.frame);
+      return;
+    }
     const dt = Math.min(0.05, (nowMs - this.lastFrame) / 1000);
     this.lastFrame = nowMs;
 
@@ -1057,6 +1066,11 @@ export class Island {
         !this.botCx.settled || !this.botCy.settled || !this.botSize.settled ||
         greetingActive || this.engine.busy || UploadSeq.isActive || viewAnimating;
 
+    // Only the breathing and blinking left: half the frames look the same.
+    this.frameGap = !settling && !greetingActive && !UploadSeq.isActive && !viewAnimating &&
+      this.botCx.settled && this.botCy.settled && this.botSize.settled
+      ? FRAME_GAP.ambient : FRAME_GAP.full;
+
     if (busy) {
       requestAnimationFrame(this.frame);
     } else {
@@ -1082,12 +1096,24 @@ export class Island {
       const d = p.diameter;
       const color = botGlowColor(State.effectiveState);
       this.botGlow.style.display = "block";
-      this.botGlow.style.width = `${d * 2.2}px`;
-      this.botGlow.style.height = `${d * 2.2}px`;
-      this.botGlow.style.left = `${this.botCx.value - d * 1.1}px`;
-      this.botGlow.style.top = `${this.botCy.value - d * 1.1}px`;
-      this.botGlow.style.background = `radial-gradient(circle, ${color} 0%, transparent 62%)`;
-      this.botGlow.style.opacity = String(botGlowOpacity(State.effectiveState));
+      // The glow moves as a layer; only its colour and size are written, and only
+      // when they change, so it never repaints (or re-blurs) in the middle of a frame.
+      const size = `${d * 2.2}px`;
+      if (size !== this.glowSize) {
+        this.glowSize = size;
+        this.botGlow.style.width = size;
+        this.botGlow.style.height = size;
+      }
+      if (color !== this.glowColor) {
+        this.glowColor = color;
+        this.botGlow.style.background = `radial-gradient(circle, ${color} 0%, transparent 62%)`;
+      }
+      this.botGlow.style.transform = `translate(${this.botCx.value - d * 1.1}px, ${this.botCy.value - d * 1.1}px)`;
+      const glowOpacity = String(botGlowOpacity(State.effectiveState));
+      if (glowOpacity !== this.glowOpacity) {
+        this.glowOpacity = glowOpacity;
+        this.botGlow.style.opacity = glowOpacity;
+      }
     } else {
       this.botGlow.style.display = "none";
     }
@@ -1109,8 +1135,8 @@ export class Island {
       this.botCanvas.style.width = `${wCss}px`;
       this.botCanvas.style.height = `${hCss}px`;
     }
-    this.botCanvas.style.left = `${this.botCx.value - wCss / 2}px`;
-    this.botCanvas.style.top = `${this.botCy.value - BOT_OVERHANG / 2 - hCss / 2}px`;
+    this.botCanvas.style.transform =
+      `translate(${this.botCx.value - wCss / 2}px, ${this.botCy.value - BOT_OVERHANG / 2 - hCss / 2}px)`;
 
     const ctx = this.botCanvas.getContext("2d");
     if (!ctx) return;

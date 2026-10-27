@@ -4,6 +4,7 @@
 
 import { BotEngine, hexToRGB } from "../tobi/engine";
 import { onScreen, shouldAnimate } from "./frames";
+import { FRAME_GAP, frameDue } from "../core/anim";
 import type { BotStateName } from "../core/layout";
 
 interface Animated {
@@ -27,6 +28,11 @@ function running(): boolean {
 
 function loop(now: number) {
   frame = null;
+  // These are only breathing and blinking: 30 a second is plenty.
+  if (!frameDue(now, last, FRAME_GAP.ambient)) {
+    if (running()) frame = requestAnimationFrame(loop);
+    return;
+  }
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
   const t = (now - start) / 1000;
