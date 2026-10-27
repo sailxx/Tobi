@@ -420,13 +420,13 @@ pub fn phone_relay_set(
 ) -> Result<RelayStatus, String> {
     only_settings(&window)?;
     let url = url.trim().to_string();
-    let clean = if url.is_empty() { String::new() } else { relay_client::Target::parse(&url).map_err(String::from)?.display() };
+    let clean = if url.is_empty() { String::new() } else { relay_client::Target::parse(&url)?.display() };
     if enabled {
         if clean.is_empty() {
-            return Err("Enter the relay address first".into());
+            return Err(crate::i18n::t("Enter the relay address first"));
         }
         if relay_client::access_key(&*link.store).is_none() {
-            return Err("Enter the relay's access key first".into());
+            return Err(crate::i18n::t("Enter the relay's access key first"));
         }
     }
     let updated = {

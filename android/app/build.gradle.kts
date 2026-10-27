@@ -22,8 +22,8 @@ android {
         applicationId = "com.sailxx.tobi"
         minSdk = 30
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.1.2"
+        versionCode = 4
+        versionName = "0.1.3"
         // The app's languages (English and the translations in i18n/translations); the libraries' other languages are left out of the app.
         resourceConfigurations += listOf("en", "fr", "es", "pt-rBR", "b+zh+Hans", "hi", "bn", "ru", "in", "ar")
     }

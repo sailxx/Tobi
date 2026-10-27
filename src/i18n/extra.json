@@ -7625,6 +7625,97 @@
    "id": "Foto tidak dapat disalin",
    "de": "Das Foto konnte nicht kopiert werden",
    "tr": "Fotoğraf kopyalanamadı"
+  },
+  "The address must start with wss://": {
+   "zh-Hans": "地址必须以 wss:// 开头",
+   "hi": "पता wss:// से शुरू होना चाहिए",
+   "es": "La dirección debe empezar por wss://",
+   "ar": "يجب أن يبدأ العنوان بـ wss://",
+   "fr": "L'adresse doit commencer par wss://",
+   "bn": "ঠিকানা অবশ্যই wss:// দিয়ে শুরু হতে হবে",
+   "pt-BR": "O endereço deve começar com wss://",
+   "ru": "Адрес должен начинаться с wss://",
+   "id": "Alamat harus diawali dengan wss://",
+   "de": "Die Adresse muss mit wss:// beginnen",
+   "tr": "Adres wss:// ile başlamalıdır"
+  },
+  "Use only the address, like wss://relay.example.workers.dev": {
+   "zh-Hans": "只填写地址，例如 wss://relay.example.workers.dev",
+   "hi": "केवल पता लिखें, जैसे wss://relay.example.workers.dev",
+   "es": "Usa solo la dirección, como wss://relay.example.workers.dev",
+   "ar": "استخدم العنوان فقط، مثل wss://relay.example.workers.dev",
+   "fr": "Saisissez uniquement l'adresse, par exemple wss://relay.example.workers.dev",
+   "bn": "শুধু ঠিকানা লিখুন, যেমন wss://relay.example.workers.dev",
+   "pt-BR": "Use apenas o endereço, como wss://relay.example.workers.dev",
+   "ru": "Укажите только адрес, например wss://relay.example.workers.dev",
+   "id": "Gunakan alamat saja, seperti wss://relay.example.workers.dev",
+   "de": "Gib nur die Adresse an, z. B. wss://relay.example.workers.dev",
+   "tr": "Yalnızca adresi yazın, örneğin wss://relay.example.workers.dev"
+  },
+  "That is not a valid address": {
+   "zh-Hans": "这不是有效的地址",
+   "hi": "यह मान्य पता नहीं है",
+   "es": "Esa dirección no es válida",
+   "ar": "هذا العنوان غير صالح",
+   "fr": "Cette adresse n'est pas valide",
+   "bn": "এটি একটি বৈধ ঠিকানা নয়",
+   "pt-BR": "Esse endereço não é válido",
+   "ru": "Это недопустимый адрес",
+   "id": "Alamat itu tidak valid",
+   "de": "Das ist keine gültige Adresse",
+   "tr": "Bu geçerli bir adres değil"
+  },
+  "That port is not valid": {
+   "zh-Hans": "该端口无效",
+   "hi": "यह पोर्ट मान्य नहीं है",
+   "es": "Ese puerto no es válido",
+   "ar": "هذا المنفذ غير صالح",
+   "fr": "Ce port n'est pas valide",
+   "bn": "এই পোর্টটি বৈধ নয়",
+   "pt-BR": "Essa porta não é válida",
+   "ru": "Недопустимый порт",
+   "id": "Port itu tidak valid",
+   "de": "Dieser Port ist ungültig",
+   "tr": "Bu bağlantı noktası geçerli değil"
+  },
+  "The access key is 43 characters of letters, digits, - and _": {
+   "zh-Hans": "访问密钥由 43 个字符组成，包含字母、数字、- 和 _",
+   "hi": "एक्सेस की 43 वर्णों की होती है: अक्षर, अंक, - और _",
+   "es": "La clave de acceso tiene 43 caracteres: letras, dígitos, - y _",
+   "ar": "مفتاح الوصول مكوّن من 43 حرفًا من الأحرف والأرقام و - و _",
+   "fr": "La clé d'accès compte 43 caractères : lettres, chiffres, - et _",
+   "bn": "অ্যাক্সেস কী ৪৩টি অক্ষরের: অক্ষর, সংখ্যা, - এবং _",
+   "pt-BR": "A chave de acesso tem 43 caracteres: letras, dígitos, - e _",
+   "ru": "Ключ доступа состоит из 43 символов: букв, цифр, - и _",
+   "id": "Kunci akses terdiri dari 43 karakter: huruf, angka, - dan _",
+   "de": "Der Zugangsschlüssel besteht aus 43 Zeichen: Buchstaben, Ziffern, - und _",
+   "tr": "Erişim anahtarı 43 karakterden oluşur: harfler, rakamlar, - ve _"
+  },
+  "Enter the relay address first": {
+   "zh-Hans": "请先输入中继地址",
+   "hi": "पहले रिले का पता दर्ज करें",
+   "es": "Introduce primero la dirección del relé",
+   "ar": "أدخل عنوان المرحّل أولًا",
+   "fr": "Saisissez d'abord l'adresse du relais",
+   "bn": "আগে রিলের ঠিকানা লিখুন",
+   "pt-BR": "Digite primeiro o endereço do relay",
+   "ru": "Сначала введите адрес релея",
+   "id": "Masukkan alamat relai terlebih dahulu",
+   "de": "Gib zuerst die Relay-Adresse ein",
+   "tr": "Önce aktarıcı adresini girin"
+  },
+  "Enter the relay's access key first": {
+   "zh-Hans": "请先输入中继的访问密钥",
+   "hi": "पहले रिले की एक्सेस की दर्ज करें",
+   "es": "Introduce primero la clave de acceso del relé",
+   "ar": "أدخل مفتاح وصول المرحّل أولًا",
+   "fr": "Saisissez d'abord la clé d'accès du relais",
+   "bn": "আগে রিলের অ্যাক্সেস কী লিখুন",
+   "pt-BR": "Digite primeiro a chave de acesso do relay",
+   "ru": "Сначала введите ключ доступа релея",
+   "id": "Masukkan kunci akses relai terlebih dahulu",
+   "de": "Gib zuerst den Zugangsschlüssel des Relays ein",
+   "tr": "Önce aktarıcının erişim anahtarını girin"
   }
  }
 }
