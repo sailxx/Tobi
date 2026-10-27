@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.7.1",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "Phone link messages in your language",
+            "zh-Hans": "手机连接的提示使用你的语言",
+            "hi": "फ़ोन लिंक के संदेश आपकी भाषा में",
+            "es": "Los avisos del enlace con el móvil, en tu idioma",
+            "ar": "رسائل ربط الهاتف بلغتك",
+            "fr": "Les messages du lien téléphone dans votre langue",
+            "bn": "ফোন লিংকের বার্তা আপনার ভাষায়",
+            "pt-BR": "As mensagens do vínculo com o celular no seu idioma",
+            "ru": "Сообщения о связи с телефоном на вашем языке",
+            "id": "Pesan tautan ponsel dalam bahasa Anda",
+            "de": "Meldungen zur Handy-Verbindung in Ihrer Sprache",
+            "tr": "Telefon bağlantısı iletileri kendi dilinizde"
+          },
+          "detail": {
+            "en": "Errors about the relay address and access key are translated, and the Russian About text in Tobi for Android is no longer English.",
+            "zh-Hans": "关于中继地址和访问密钥的错误提示已翻译；Tobi for Android 的俄语“关于”文字不再是英文。",
+            "hi": "रिले पते और एक्सेस की की त्रुटियाँ अनुवादित हैं, और Tobi for Android का रूसी \"परिचय\" पाठ अब अंग्रेज़ी में नहीं है।",
+            "es": "Los errores sobre la dirección del relé y la clave de acceso están traducidos, y el texto «Acerca de» en ruso de Tobi for Android ya no está en inglés.",
+            "ar": "أخطاء عنوان المرحّل ومفتاح الوصول مترجمة، ونص «حول» الروسي في Tobi for Android لم يعد بالإنجليزية.",
+            "fr": "Les erreurs sur l’adresse du relais et la clé d’accès sont traduites, et le texte « À propos » russe de Tobi for Android n’est plus en anglais.",
+            "bn": "রিলের ঠিকানা ও অ্যাক্সেস কী-র ত্রুটিগুলো অনূদিত, আর Tobi for Android-এর রুশ “সম্পর্কে” লেখা আর ইংরেজিতে নেই।",
+            "pt-BR": "Os erros sobre o endereço do relay e a chave de acesso foram traduzidos, e o texto «Sobre» em russo do Tobi for Android não está mais em inglês.",
+            "ru": "Ошибки про адрес релея и ключ доступа переведены, а текст «О приложении» в Tobi for Android на русском больше не на английском.",
+            "id": "Galat soal alamat relai dan kunci akses sudah diterjemahkan, dan teks «Tentang» berbahasa Rusia di Tobi for Android tidak lagi berbahasa Inggris.",
+            "de": "Fehler zu Relay-Adresse und Zugangsschlüssel sind übersetzt, und der russische Über-Text in Tobi for Android ist nicht mehr englisch.",
+            "tr": "Aktarıcı adresi ve erişim anahtarı hataları çevrildi; Tobi for Android’in Rusça Hakkında metni artık İngilizce değil."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.7.0",
       "items": [
         {

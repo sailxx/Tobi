@@ -326,7 +326,7 @@ function files(dir, ext) {
 function code(path) {
   // Windows checkouts have CRLF line endings.
   let text = readFileSync(path, "utf8").replace(/\r\n/g, "\n");
-  const tests = text.indexOf("#[cfg(test)]\nmod tests");
+  const tests = text.indexOf("#[cfg(test)]\nmod tests {");
   if (tests >= 0) text = text.slice(0, tests);
   return text.split("\n").filter((line) => !/^\s*(\/\/|\*|\/\*)/.test(line)).join("\n");
 }

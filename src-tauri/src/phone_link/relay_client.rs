@@ -10,6 +10,7 @@
 // Nothing here blocks the agent: it is its own task, a failure only changes the status line, and nothing secret is
 // ever logged (a log line names a state, never a key, a room or an address).
 
+use crate::i18n::t;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
@@ -57,35 +58,35 @@ pub struct Target {
 }
 
 impl Target {
-    pub fn parse(text: &str) -> Result<Target, &'static str> {
+    pub fn parse(text: &str) -> Result<Target, String> {
         let text = text.trim();
         let (tls, rest) = if let Some(r) = text.strip_prefix("wss://") {
             (true, r)
         } else if let Some(r) = text.strip_prefix("ws://") {
             (false, r)
         } else {
-            return Err("The address must start with wss://");
+            return Err(t("The address must start with wss://"));
         };
         let rest = rest.strip_suffix('/').unwrap_or(rest);
         if rest.is_empty() || rest.contains(['/', '?', '#', '@', ' ', '\\']) {
-            return Err("Use only the address, like wss://relay.example.workers.dev");
+            return Err(t("Use only the address, like wss://relay.example.workers.dev"));
         }
         let (host, port) = match rest.rsplit_once(':') {
             Some((h, p)) if !h.ends_with(':') && !h.is_empty() && !p.is_empty() && !h.starts_with('[') => {
-                (h, p.parse::<u16>().map_err(|_| "That port is not valid")?)
+                (h, p.parse::<u16>().map_err(|_| t("That port is not valid"))?)
             }
-            Some((h, p)) if h.starts_with('[') && h.ends_with(']') => (h, p.parse::<u16>().map_err(|_| "That port is not valid")?),
+            Some((h, p)) if h.starts_with('[') && h.ends_with(']') => (h, p.parse::<u16>().map_err(|_| t("That port is not valid"))?),
             _ => (rest, if tls { 443 } else { 80 }),
         };
         let name_ok = host == "[::1]" || (host.len() <= 253 && host.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'.' || b == b'-'));
         if !name_ok || host.starts_with('.') || host.starts_with('-') || host.contains("..") {
-            return Err("That is not a valid address");
+            return Err(t("That is not a valid address"));
         }
         if port == 0 {
-            return Err("That port is not valid");
+            return Err(t("That port is not valid"));
         }
         if !tls && !matches!(host, "localhost" | "127.0.0.1" | "[::1]") {
-            return Err("The address must start with wss://");
+            return Err(t("The address must start with wss://"));
         }
         Ok(Target { tls, host: host.to_string(), port })
     }
@@ -160,7 +161,7 @@ pub fn access_key(store: &dyn SecretStore) -> Option<String> {
 pub fn set_access_key(store: &dyn SecretStore, value: &str) -> Result<(), String> {
     let value = value.trim();
     if !value.is_empty() && !is_access_key(value) {
-        return Err("The access key is 43 characters of letters, digits, - and _".into());
+        return Err(t("The access key is 43 characters of letters, digits, - and _"));
     }
     store.set(ACCESS_KEY, value)
 }
