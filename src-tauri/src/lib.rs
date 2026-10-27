@@ -5,6 +5,7 @@ mod agents;
 mod chat;
 mod claude;
 mod claude_cli;
+mod code_window;
 mod codex_plan;
 mod config_file;
 mod desktop;
@@ -850,6 +851,13 @@ pub fn run() {
             open_session,
             open_claude_desktop,
             open_file_in_vscode,
+            code_window::open_code_window,
+            code_window::update_code_window,
+            code_window::code_window_session,
+            code_window::close_code_window,
+            code_window::code_read,
+            code_window::code_version,
+            code_window::code_write,
             quit_app,
             hooks_status,
             agent_hooks_status,
@@ -1048,6 +1056,7 @@ pub fn run() {
             // Same rule for Tobi's desktop window.
             desktop::setup(&handle);
             message_window::setup(&handle);
+            code_window::setup(&handle);
             flow::setup(&handle);
             notes::setup(&handle);
 

@@ -9,6 +9,8 @@ import { N_, tl } from "../i18n/i18n";
 const STRINGS = {
   back: N_("Back"),
   open: N_("Open in VS Code"),
+  code: N_("View and edit the file"),
+  codeLabel: N_("Code"),
   tooLarge: N_("Diff too large"),
   noChanges: N_("No changes"),
 };
@@ -19,6 +21,8 @@ export interface DiffCardHooks {
   dismiss(): void;
   /** ↗ — opens the file in the editor. */
   open(path: string): void;
+  /** Opens the code window on the file: the whole text, live, and editable. */
+  openCode(path: string): void;
 }
 
 export function buildDiffCard(diff: FileDiff, hooks: DiffCardHooks): HTMLElement {
@@ -34,6 +38,7 @@ export function buildDiffCard(diff: FileDiff, hooks: DiffCardHooks): HTMLElement
     h("span", { class: "grow" }),
     diff.added > 0 ? h("span", { class: "tick-count plus", text: `+${diff.added}` }) : null,
     diff.removed > 0 ? h("span", { class: "tick-count minus", text: `−${diff.removed}` }) : null,
+    h("button", { class: "diff-code", title: tl(STRINGS.code), onclick: () => hooks.openCode(diff.path), text: tl(STRINGS.codeLabel) }),
     h(
       "button",
       { class: "icon-btn", title: tl(STRINGS.open), onclick: () => hooks.open(diff.path) },

@@ -64,6 +64,7 @@ export default defineConfig({
         settings: resolve(__dirname, "settings.html"),
         tobi: resolve(__dirname, "tobi.html"),
         message: resolve(__dirname, "message.html"),
+        code: resolve(__dirname, "code.html"),
       },
     },
   },

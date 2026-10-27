@@ -15,6 +15,33 @@ import type { TgIslandView, TgSettingsView } from "./telegram";
 import type { MailIslandView, MailSettingsView } from "./gmail";
 import type { MailboxSettingsView } from "./mailbox";
 
+/** What the island tells the code window about a session (src-tauri/src/code_window.rs). */
+export interface CodeSession {
+  pillId: string;
+  name: string;
+  agent: string;
+  color: string;
+  state: string;
+  root: string;
+  steps: string[];
+  stepIndex: number;
+  files: CodeFileRef[];
+  active: string;
+}
+
+export interface CodeFileRef {
+  path: string;
+  added: number;
+  removed: number;
+  runs: string[][];
+}
+
+export interface CodeFile {
+  text: string;
+  version: string;
+  editable: boolean;
+}
+
 export const IS_TAURI =
   typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 
@@ -264,6 +291,16 @@ export const Bridge = {
 
   /** The diff card's ↗: an existing file, in VS Code; never launched by its type. */
   openFileInVSCode: (path: string) => call<boolean>("open_file_in_vscode", { path }),
+  /** The code window (src/code): the session's steps and the files the agent changed. */
+  openCodeWindow: (session: CodeSession) => call<void>("open_code_window", { session }),
+  updateCodeWindow: (session: CodeSession) => call<void>("update_code_window", { session }),
+  codeWindowSession: () => call<CodeSession | null>("code_window_session"),
+  closeCodeWindow: () => call<void>("close_code_window"),
+  /** Rejects with a code (CodeErrorKey) when the file may not be opened. */
+  codeRead: (root: string, path: string) => invoke<CodeFile>("code_read", { root, path }),
+  codeVersion: (root: string, path: string) => invoke<string>("code_version", { root, path }),
+  codeWrite: (root: string, path: string, text: string, base: string, force: boolean) =>
+    invoke<string>("code_write", { root, path, text, base, force }),
 
   quit: () => call<void>("quit_app"),
 

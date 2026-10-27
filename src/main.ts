@@ -5,6 +5,7 @@ import { Bridge, IS_TAURI, onEvent } from "./core/bridge";
 import { Sound } from "./core/sound";
 import { State, type Settings } from "./core/state";
 import { Island } from "./island/island";
+import { registerCodeLink } from "./island/code-link";
 import { registerHookHandlers } from "./island/hooks";
 import { registerPhoneLink } from "./island/phone-link";
 import { registerIntegrationHandlers, refreshConfigured } from "./island/integrations";
@@ -159,6 +160,7 @@ async function main() {
   });
 
   registerHookHandlers(island);
+  registerCodeLink();
   registerPhoneLink(island);
   registerIntegrationHandlers(island);
   registerShortcutHandlers(island, () => setPaused(false));

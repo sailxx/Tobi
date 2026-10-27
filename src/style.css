@@ -3148,3 +3148,14 @@ html[data-dir="rtl"] #views :is(.mail-text, .mail-input, .mail-subject) {
   direction: rtl;
   text-align: right;
 }
+
+.diff-code {
+  flex: 0 0 auto;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--dim);
+  font: 500 9.5px var(--font);
+  padding: 1px 5px;
+  cursor: default;
+}
