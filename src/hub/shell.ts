@@ -1,6 +1,6 @@
-// The Tobi window: a short sidebar (dictation, the Notetaker, words, the
-// island, agents, chat and settings) and the page on the right. A page with
-// several parts shows them as tabs.
+// The Tobi window: a short sidebar (voice: dictation, the Notetaker, words; agents,
+// chat and settings, the island's among them) and the page on the right. A
+// page with several parts shows them as tabs.
 
 import "./hub.css";
 import { h, clear } from "../views/dom";
@@ -30,22 +30,14 @@ interface Section {
 }
 
 export const SECTIONS: Section[] = [
-  { id: "home", icon: "mic", title: () => t("Dictation"), tabs: [{ id: "dictation", title: () => t("Dictation") }] },
-  { id: "notes", icon: "record", title: () => t("Notetaker"), tabs: [{ id: "notes", title: () => t("Notetaker") }] },
   {
-    id: "words", icon: "book", title: () => t("Dictionary"),
+    id: "voice", icon: "mic", title: () => t("Voice"),
     tabs: [
+      { id: "dictation", title: () => t("Dictation") },
+      { id: "notes", title: () => t("Notetaker") },
       { id: "dictionary", title: () => t("Dictionary") },
       { id: "snippets", title: () => t("Snippets") },
       { id: "styles", title: () => t("Styles") },
-    ],
-  },
-  {
-    id: "island", icon: "gear", title: () => t("Notch"),
-    tabs: [
-      { id: "general", title: () => t("General"), subtitle: () => t("Tobi, his sounds and how the island behaves.") },
-      { id: "pills", title: () => t("Active pills"), subtitle: () => t("The pills shown in the island, their order and their colours.") },
-      { id: "shortcuts", title: () => t("Shortcuts"), subtitle: () => t("The keys that open the island and its actions.") },
     ],
   },
   {
@@ -63,7 +55,15 @@ export const SECTIONS: Section[] = [
       { id: "voice", title: () => "OK Tobi" },
     ],
   },
-  { id: "settings", icon: "sliders", title: () => t("Settings"), tabs: [{ id: "flowsettings", title: () => t("Settings") }] },
+  {
+    id: "settings", icon: "sliders", title: () => t("Settings"),
+    tabs: [
+      { id: "general", title: () => t("General"), subtitle: () => t("Tobi, his sounds and how the island behaves.") },
+      { id: "pills", title: () => t("Active pills"), subtitle: () => t("The pills shown in the island, their order and their colours.") },
+      { id: "shortcuts", title: () => t("Shortcuts"), subtitle: () => t("The keys that open the island and its actions.") },
+      { id: "flowsettings", title: () => t("Dictation") },
+    ],
+  },
 ];
 
 const sectionOf = (page: PageId) => SECTIONS.find((s) => s.tabs.some((x) => x.id === page)) ?? SECTIONS[0];
@@ -211,7 +211,7 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   await show(current);
 
   void onEvent<string>("hub-page", (page) => {
-    const id = (page === "settings" ? "flowsettings" : page) as PageId;
+    const id = (page === "settings" ? "general" : page) as PageId;
     if (SECTIONS.some((s) => s.tabs.some((x) => x.id === id))) void show(id);
   });
   void onEvent<FlowPrefs>("flow-prefs", (prefs) => {

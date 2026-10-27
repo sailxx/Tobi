@@ -2,6 +2,73 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.7.3",
+      "items": [
+        {
+          "icon": "puzzle",
+          "title": {
+            "en": "All settings in one place",
+            "zh-Hans": "所有设置集中在一处",
+            "hi": "सारी सेटिंग्स एक ही जगह",
+            "es": "Todos los ajustes en un solo lugar",
+            "ar": "كل الإعدادات في مكان واحد",
+            "fr": "Tous les réglages au même endroit",
+            "bn": "সব সেটিংস এক জায়গায়",
+            "pt-BR": "Todos os ajustes em um só lugar",
+            "ru": "Все настройки в одном месте",
+            "id": "Semua pengaturan di satu tempat",
+            "de": "Alle Einstellungen an einem Ort",
+            "tr": "Tüm ayarlar tek yerde"
+          },
+          "detail": {
+            "en": "The Notch and Settings pages of the Tobi window are now one Settings section: General, Active pills, Shortcuts and Dictation as tabs.",
+            "zh-Hans": "Tobi 窗口里的 Notch 和设置页现在合并为一个“设置”分区：常规、活动药丸、快捷键和听写作为标签页。",
+            "hi": "Tobi विंडो के Notch और सेटिंग्स पेज अब एक ही सेटिंग्स सेक्शन हैं: सामान्य, सक्रिय पिल्स, शॉर्टकट और डिक्टेशन टैब के रूप में।",
+            "es": "Las páginas Notch y Ajustes de la ventana de Tobi son ahora una sola sección de Ajustes: General, Píldoras activas, Atajos y Dictado como pestañas.",
+            "ar": "صفحتا Notch والإعدادات في نافذة Tobi أصبحتا قسم إعدادات واحدًا: عام والأقراص النشطة والاختصارات والإملاء كعلامات تبويب.",
+            "fr": "Les pages Notch et Réglages de la fenêtre Tobi forment désormais une seule section Réglages : Général, Pastilles actives, Raccourcis et Dictée en onglets.",
+            "bn": "Tobi উইন্ডোর Notch ও সেটিংস পেজ এখন একটিই সেটিংস অংশ: সাধারণ, সক্রিয় পিল, শর্টকাট ও ডিক্টেশন ট্যাব হিসেবে।",
+            "pt-BR": "As páginas Notch e Ajustes da janela do Tobi agora são uma só seção de Ajustes: Geral, Pílulas ativas, Atalhos e Ditado como abas.",
+            "ru": "Страницы Notch и «Настройки» в окне Tobi теперь один раздел «Настройки»: вкладки «Основные», «Активные вкладки», «Горячие клавиши» и «Диктовка».",
+            "id": "Halaman Notch dan Pengaturan di jendela Tobi kini menjadi satu bagian Pengaturan: Umum, Pil aktif, Pintasan, dan Dikte sebagai tab.",
+            "de": "Die Seiten Notch und Einstellungen im Tobi-Fenster sind jetzt ein Bereich Einstellungen: Allgemein, Aktive Pills, Tastenkürzel und Diktat als Tabs.",
+            "tr": "Tobi penceresindeki Notch ve Ayarlar sayfaları artık tek bir Ayarlar bölümü: Genel, Etkin haplar, Kısayollar ve Dikte sekmeler olarak."
+          }
+        },
+        {
+          "icon": "mic",
+          "title": {
+            "en": "Dictation and Notetaker together",
+            "zh-Hans": "听写和会议记录合在一起",
+            "hi": "डिक्टेशन और नोटटेकर एक साथ",
+            "es": "Dictado y Notetaker, juntos",
+            "ar": "الإملاء ومدوّن الملاحظات معًا",
+            "fr": "Dictée et Notetaker réunis",
+            "bn": "ডিক্টেশন ও নোটটেকার একসাথে",
+            "pt-BR": "Ditado e Notetaker juntos",
+            "ru": "Диктовка и Notetaker вместе",
+            "id": "Dikte dan Notetaker jadi satu",
+            "de": "Diktat und Notetaker zusammen",
+            "tr": "Dikte ve Notetaker bir arada"
+          },
+          "detail": {
+            "en": "One Voice section in the Tobi window holds Dictation, Notetaker, Dictionary, Snippets and Styles as tabs.",
+            "zh-Hans": "Tobi 窗口里的“语音”分区把听写、会议记录、词典、片段和风格放在同一处，以标签页呈现。",
+            "hi": "Tobi विंडो के एक ही Voice सेक्शन में डिक्टेशन, नोटटेकर, शब्दकोश, स्निपेट और स्टाइल टैब के रूप में हैं।",
+            "es": "Una sola sección Voz en la ventana de Tobi reúne Dictado, Notetaker, Diccionario, Fragmentos y Estilos como pestañas.",
+            "ar": "قسم «الصوت» واحد في نافذة Tobi يضم الإملاء ومدوّن الملاحظات والقاموس والمقتطفات والأنماط كعلامات تبويب.",
+            "fr": "Une seule section Voix dans la fenêtre Tobi regroupe Dictée, Notetaker, Dictionnaire, Extraits et Styles en onglets.",
+            "bn": "Tobi উইন্ডোর একটি ভয়েস অংশেই ডিক্টেশন, নোটটেকার, অভিধান, স্নিপেট ও স্টাইল ট্যাব হিসেবে আছে।",
+            "pt-BR": "Uma única seção Voz na janela do Tobi reúne Ditado, Notetaker, Dicionário, Trechos e Estilos como abas.",
+            "ru": "Один раздел «Голос» в окне Tobi собирает вкладки «Диктовка», Notetaker, «Словарь», «Сниппеты» и «Стили».",
+            "id": "Satu bagian Suara di jendela Tobi memuat Dikte, Notetaker, Kamus, Cuplikan, dan Gaya sebagai tab.",
+            "de": "Ein Bereich Stimme im Tobi-Fenster vereint Diktat, Notetaker, Wörterbuch, Textbausteine und Stile als Tabs.",
+            "tr": "Tobi penceresindeki tek bir Ses bölümü Dikte, Notetaker, Sözlük, Parçalar ve Stilleri sekmeler olarak toplar."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.7.2",
       "items": [
         {
