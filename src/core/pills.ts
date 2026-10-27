@@ -204,6 +204,9 @@ export function isHookPill(id: string): boolean {
 /** The Claude desktop app may be the main pill too: then Claude Code's own pill only shows during a terminal session. */
 const CLAUDE_DESKTOP_ID = "agent_claude-desktop";
 
+/** The ones the settings offer as big cards: what people mostly use all day. */
+export const MAIN_FAVOURITES = ["integration_claude", "agent_codex", CLAUDE_DESKTOP_ID];
+
 /** Workspace tools, and the Claude desktop app, that can be the main pill. */
 export function mainPillChoices(os: HostOs = HOST_OS): PillDefinition[] {
   return availablePills(os).filter((p) => (p.category === "workspace" || p.id === CLAUDE_DESKTOP_ID) && p.support !== "soon");
@@ -224,6 +227,26 @@ export function sessionSubtitle(id: string): string {
 export interface Declared {
   mainPill: string;
   activeIntegrations: string[];
+}
+
+/**
+ * The pills to keep out of the island's strip: declared ones only, never the
+ * main pill, no duplicates. A hidden pill stays declared, so it keeps its slot
+ * and its integration keeps running; hiding is only about what is drawn.
+ */
+export function sanitizeHidden(hidden: readonly string[] | undefined, d: Declared): string[] {
+  const out: string[] = [];
+  for (const id of hidden ?? []) {
+    if (typeof id === "string" && id !== d.mainPill && d.activeIntegrations.includes(id) && !out.includes(id)) out.push(id);
+  }
+  return out;
+}
+
+/** Hides or shows a declared pill. Null when nothing changes (the main pill, or a pill that is not declared). */
+export function toggleHidden(hidden: readonly string[], d: Declared, id: string): string[] | null {
+  if (id === d.mainPill || !d.activeIntegrations.includes(id)) return null;
+  const now = sanitizeHidden(hidden, d);
+  return now.includes(id) ? now.filter((x) => x !== id) : [...now, id];
 }
 
 /**

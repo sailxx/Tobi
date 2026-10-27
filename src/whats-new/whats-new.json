@@ -2,6 +2,73 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.10.0",
+      "items": [
+        {
+          "icon": "puzzle",
+          "title": {
+            "en": "A character for every pill",
+            "zh-Hans": "每个胶囊都有自己的角色",
+            "hi": "हर पिल का अपना किरदार",
+            "es": "Un personaje para cada píldora",
+            "ar": "شخصية لكل حبة",
+            "fr": "Un personnage pour chaque pastille",
+            "bn": "প্রতিটি পিলের নিজস্ব চরিত্র",
+            "pt-BR": "Um personagem para cada pílula",
+            "ru": "Свой характер у каждой пилюли",
+            "id": "Karakter untuk setiap pil",
+            "de": "Eine Figur für jede Pille",
+            "tr": "Her hap için bir karakter"
+          },
+          "detail": {
+            "en": "Claude Code wears a terminal prompt, Codex a halo, Copilot pilot goggles, GitHub cat ears. Every pill’s Tobi now has its own look and a small move while it works.",
+            "zh-Hans": "Claude Code 戴着终端提示符，Codex 顶着光环，Copilot 戴着飞行护目镜，GitHub 长着猫耳。每个胶囊里的 Tobi 都有了自己的造型，工作时还会做个小动作。",
+            "hi": "Claude Code के माथे पर टर्मिनल प्रॉम्प्ट है, Codex के ऊपर हेलो, Copilot के पास पायलट चश्मा और GitHub के बिल्ली के कान। हर पिल के Tobi का अब अपना रूप है और काम करते समय एक छोटी-सी हरकत भी।",
+            "es": "Claude Code lleva un prompt de terminal, Codex un halo, Copilot gafas de piloto y GitHub orejas de gato. Cada Tobi de las píldoras tiene ahora su propio aspecto y un pequeño gesto mientras trabaja.",
+            "ar": "يضع Claude Code موجّه الطرفية، وCodex هالة، وCopilot نظارة طيّار، وGitHub أذني قطة. لكل توبي في الحبات الآن مظهره الخاص وحركة صغيرة أثناء العمل.",
+            "fr": "Claude Code porte une invite de terminal, Codex un halo, Copilot des lunettes d’aviateur, GitHub des oreilles de chat. Chaque Tobi de pastille a son look et un petit geste quand il travaille.",
+            "bn": "Claude Code-এর কপালে টার্মিনাল প্রম্পট, Codex-এর মাথায় হ্যালো, Copilot-এর পাইলট গগলস, GitHub-এর বিড়ালের কান। প্রতিটি পিলের Tobi-র এখন নিজস্ব চেহারা, কাজের সময় ছোট একটি নড়াচড়াও আছে।",
+            "pt-BR": "O Claude Code usa um prompt de terminal, o Codex uma auréola, o Copilot óculos de piloto e o GitHub orelhas de gato. Cada Tobi das pílulas agora tem visual próprio e um pequeno gesto enquanto trabalha.",
+            "ru": "У Claude Code на лбу строка терминала, у Codex нимб, у Copilot очки пилота, у GitHub кошачьи уши. Tobi в каждой пилюле теперь выглядит по-своему и делает маленькое движение, пока работает.",
+            "id": "Claude Code memakai prompt terminal, Codex halo, Copilot kacamata pilot, GitHub telinga kucing. Setiap Tobi di pil kini punya tampilan sendiri dan gerakan kecil saat bekerja.",
+            "de": "Claude Code trägt einen Terminal-Prompt, Codex einen Heiligenschein, Copilot eine Pilotenbrille, GitHub Katzenohren. Jedes Tobi in den Pillen hat jetzt sein eigenes Aussehen und eine kleine Bewegung bei der Arbeit.",
+            "tr": "Claude Code terminal imleci, Codex hale, Copilot pilot gözlüğü, GitHub kedi kulağı takıyor. Haplardaki her Tobi artık kendi görünümüne ve çalışırken küçük bir hareketine sahip."
+          }
+        },
+        {
+          "icon": "terminal",
+          "title": {
+            "en": "Hide pills, pick the main one",
+            "zh-Hans": "隐藏胶囊，选择主工具",
+            "hi": "पिल छिपाएँ, मुख्य चुनें",
+            "es": "Oculta píldoras y elige la principal",
+            "ar": "أخفِ الحبات واختر الرئيسية",
+            "fr": "Masquez des pastilles, choisissez la principale",
+            "bn": "পিল লুকান, মূলটি বেছে নিন",
+            "pt-BR": "Oculte pílulas e escolha a principal",
+            "ru": "Скрывайте пилюли, выбирайте главную",
+            "id": "Sembunyikan pil, pilih yang utama",
+            "de": "Pillen ausblenden, Hauptwerkzeug wählen",
+            "tr": "Hapları gizle, ana aracı seç"
+          },
+          "detail": {
+            "en": "In Settings, Active pills, choose Claude Code, Codex or Claude Desktop as the main one and hide any pill. A hidden pill keeps working and returns when it asks you something.",
+            "zh-Hans": "在设置的“启用的胶囊”中，可选 Claude Code、Codex 或 Claude Desktop 作为主工具，也可隐藏任意胶囊。隐藏的胶囊照常工作，有问题要问你时会重新出现。",
+            "hi": "सेटिंग्स के सक्रिय पिल में Claude Code, Codex या Claude Desktop को मुख्य चुनें और किसी भी पिल को छिपाएँ। छिपा पिल काम करता रहता है और कुछ पूछने पर फिर दिखता है।",
+            "es": "En Ajustes, Píldoras activas, elige Claude Code, Codex o Claude Desktop como principal y oculta cualquier píldora. Una oculta sigue funcionando y vuelve cuando te pregunta algo.",
+            "ar": "في الإعدادات، الحبات النشطة، اختر Claude Code أو Codex أو Claude Desktop رئيسياً وأخفِ أي حبة. تواصل الحبة المخفية عملها وتعود عندما تسألك شيئاً.",
+            "fr": "Dans les réglages, Pastilles actives, choisissez Claude Code, Codex ou Claude Desktop comme principal et masquez n’importe quelle pastille. Une pastille masquée continue de travailler et revient quand elle vous demande quelque chose.",
+            "bn": "সেটিংসে সক্রিয় পিল অংশে Claude Code, Codex বা Claude Desktop-কে মূল হিসেবে বেছে নিন এবং যেকোনো পিল লুকান। লুকানো পিল কাজ চালিয়ে যায় এবং কিছু জিজ্ঞেস করলে ফিরে আসে।",
+            "pt-BR": "Em Ajustes, Pílulas ativas, escolha Claude Code, Codex ou Claude Desktop como principal e oculte qualquer pílula. Uma oculta continua funcionando e volta quando pede algo a você.",
+            "ru": "В настройках, в разделе активных пилюль, выберите главным Claude Code, Codex или Claude Desktop и скройте любую пилюлю. Скрытая продолжает работать и возвращается, когда спросит вас о чём-то.",
+            "id": "Di Pengaturan, Pil aktif, pilih Claude Code, Codex, atau Claude Desktop sebagai yang utama dan sembunyikan pil mana pun. Pil tersembunyi tetap bekerja dan muncul lagi saat meminta jawaban Anda.",
+            "de": "In den Einstellungen unter Aktive Pillen wählst du Claude Code, Codex oder Claude Desktop als Hauptwerkzeug und blendest beliebige Pillen aus. Eine ausgeblendete Pille arbeitet weiter und kehrt zurück, wenn sie dich etwas fragt.",
+            "tr": "Ayarlar’da Etkin haplar bölümünden Claude Code, Codex veya Claude Desktop’u ana araç seçin ve istediğiniz hapı gizleyin. Gizli hap çalışmaya devam eder ve size bir şey soracağında geri gelir."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.9.1",
       "items": [
         {

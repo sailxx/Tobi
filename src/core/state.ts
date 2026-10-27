@@ -4,7 +4,7 @@ import type { BotEmoteName, BotStateName, IslandMode, IslandViewName } from "./l
 import type { EyeShape } from "../tobi/engine";
 import {
   DEFAULT_MAIN_PILL, HOST_OS, availablePills, orderPills, pillDefinition, sanitizeDeclared,
-  toggleDeclared, type HostOs, type PillDefinition,
+  toggleDeclared, sanitizeHidden, toggleHidden, type HostOs, type PillDefinition,
 } from "./pills";
 import type { CodexPlanUsage, PlanUsage } from "./plan";
 import type { ProviderId } from "./providers";
@@ -149,6 +149,8 @@ export interface Settings {
    * Same key and values as the Mac's "pillColors".
    */
   pillColors: Record<string, string>;
+  /** Declared pills kept out of the island's strip (they come back while they ask for an answer). */
+  hiddenPills: string[];
   /**
    * Interface language: "" follows the system (when Tobi has its language,
    * else English), or one of src/i18n's ten codes ("fr", "pt-BR", "zh-Hans"…).
@@ -199,6 +201,7 @@ export const DEFAULT_SETTINGS: Settings = {
   shortcuts: {},
   tobiOutfit: DEFAULT_OUTFIT,
   pillColors: {},
+  hiddenPills: [],
   language: "ru",
 };
 
@@ -300,7 +303,29 @@ class AppState {
   }
 
   get otherTasks(): AgentTask[] {
-    return this.tasks.filter((t) => t.id !== this.focusId);
+    return this.tasks.filter((t) => t.id !== this.focusId && !this.isHidden(t.id));
+  }
+
+  /**
+   * True for a pill the user keeps out of the strip. It still gets every event;
+   * it is drawn again while it waits for an answer, so a permission request
+   * from a hidden agent is never missed.
+   */
+  isHidden(id: string): boolean {
+    const d = sanitizeDeclared(this.settings, this.os);
+    if (!sanitizeHidden(this.settings.hiddenPills, d).includes(id)) return false;
+    if (this.pendingApproval?.pillId === id) return false;
+    const t = this.tasks.find((x) => x.id === id);
+    return !(t && (t.state === "approval" || t.state === "question" || t.pillBadge === "approval"));
+  }
+
+  /** Hides or shows a declared pill. */
+  toggleHiddenPill(id: string) {
+    const d = sanitizeDeclared(this.settings, this.os);
+    const next = toggleHidden(this.settings.hiddenPills, d, id);
+    if (!next) return;
+    this.settings.hiddenPills = next;
+    this.notify();
   }
 
   setFocus(id: string) {

@@ -431,3 +431,56 @@ html[dir="rtl"] :is(.diff, .path, .keycap, input[type="password"], input[type="t
 /* Settings → Android phone: the pairing QR code (an SVG from Rust, black on white). */
 .qr { width: 220px; max-width: 100%; background: #fff; border-radius: 8px; padding: 4px; }
 .qr svg { display: block; width: 100%; height: auto; }
+
+/* Main tool: one card per tool Tobi can open on; the chosen one is filled. */
+
+.main-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 8px;
+}
+
+.main-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+}
+
+.main-card .mini { grid-row: 1 / 3; }
+.main-card .nm { font: 500 12.5px var(--font); }
+.main-card .mc-state { font: 400 11px var(--font); color: var(--dim); min-height: 14px; }
+
+.main-card.on {
+  background: var(--card);
+  border-color: var(--dim);
+}
+
+.main-card:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.shown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shown-list .pill-row { min-height: 34px; }
+.pill-row.is-hidden .name { color: var(--dim-2); }
+.pill-row .mini { flex: none; }
+
+.mini-btn {
+  padding: 3px 10px;
+  font-size: 11.5px;
+}
+
+.mini { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.mini canvas { position: absolute; }

@@ -42,6 +42,7 @@ export function createMiniBot(task: AgentTask, bodySize: number, dancing?: () =>
   const engine = new BotEngine();
   engine.isMini = true;
   engine.bodyColor = hexToRGB(task.color);
+  engine.persona = task.id;
   engine.setState(task.state, true);
   if (task.emote) engine.setPermanentEmote(task.emote);
   if (task.miniEye) {
@@ -70,7 +71,9 @@ export function syncMiniBotStates(tasks: AgentTask[]) {
     const task = tasks.find((t) => t.id === mb.taskId);
     if (!task) continue;
     mb.engine.setState(task.state);
-    mb.engine.bodyColor = hexToRGB(task.color);
+    const rgb = hexToRGB(task.color);
+    const old = mb.engine.bodyColor;
+    if (!old || old[0] !== rgb[0] || old[1] !== rgb[1] || old[2] !== rgb[2]) mb.engine.bodyColor = rgb;
   }
 }
 
@@ -97,3 +100,33 @@ export function tickMiniBots(dt: number) {
 }
 
 export const miniBotCount = () => live.size;
+
+/**
+ * One still frame of a pill's Tobi, for places with no frame loop (the settings
+ * window). `bodySize` is the body in CSS pixels, as for createMiniBot.
+ */
+export function createMiniStill(id: string, color: string, bodySize: number): HTMLElement {
+  const slot = document.createElement("span");
+  slot.className = "mini";
+  slot.style.width = `${bodySize}px`;
+  slot.style.height = `${bodySize}px`;
+  const engineSize = bodySize / 0.6;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(engineSize * dpr);
+  canvas.height = Math.round(engineSize * dpr);
+  canvas.style.width = `${engineSize}px`;
+  canvas.style.height = `${engineSize}px`;
+  slot.append(canvas);
+  const engine = new BotEngine();
+  engine.isMini = true;
+  engine.persona = id;
+  engine.bodyColor = hexToRGB(color);
+  engine.setState("idle", true);
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    engine.draw(ctx, engineSize, engineSize);
+  }
+  return slot;
+}

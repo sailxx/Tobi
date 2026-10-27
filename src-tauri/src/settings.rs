@@ -62,6 +62,10 @@ pub struct Settings {
     /// Kept as it comes, like `tobi_outfit`: src/core/pill-colors.ts reads
     /// whatever is not a colour as "no choice".
     pub pill_colors: BTreeMap<String, String>,
+    /// Declared pills the user keeps out of the island's strip. They stay
+    /// declared (their integrations keep running); the island shows one again
+    /// while it asks for an answer. Never the main pill (src/core/pills.ts).
+    pub hidden_pills: Vec<String>,
     /// Interface language: "" follows the system, else one of i18n::LANGUAGES
     /// ("fr", "pt-BR", "zh-Hans"…). Kept as it comes, like `tobi_outfit`: a
     /// code this build doesn't know reads as "".
@@ -158,6 +162,7 @@ impl Default for Settings {
             shortcuts: Default::default(),
             tobi_outfit: "auto".into(),
             pill_colors: BTreeMap::new(),
+            hidden_pills: Vec::new(),
             // Tobi speaks Russian out of the box; "" (System) is one click away.
             language: "ru".into(),
             desktop_tobi: DesktopTobiPref::default(),
@@ -449,6 +454,7 @@ mod tests {
   "shortcuts": { "openChat": { "keys": "Ctrl+Shift+K", "enabled": false } },
   "tobiOutfit": "witchHat",
   "pillColors": { "integration_claude": "#2DD4BF" },
+  "hiddenPills": ["integration_notion"],
   "language": "pt-BR",
   "desktopTobi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } },
   "phoneLink": true,
@@ -693,6 +699,17 @@ mod tests {
         let loaded = parse(&custom_with("pillColors", None)).unwrap();
         assert!(loaded.pill_colors.is_empty());
         assert_eq!(loaded.tobi_outfit, "witchHat");
+    }
+
+    #[test]
+    fn hidden_pills_default_to_none_and_are_kept_as_written() {
+        let loaded = parse(&custom_with("hiddenPills", None)).unwrap();
+        assert!(loaded.hidden_pills.is_empty());
+        let loaded = parse(&custom_with("hiddenPills", Some(json!(["agent_codex"])))).unwrap();
+        assert_eq!(loaded.hidden_pills, vec!["agent_codex".to_string()]);
+        let loaded = parse(&custom_with("hiddenPills", Some(json!("agent_codex")))).unwrap();
+        assert!(loaded.hidden_pills.is_empty());
+        assert_eq!(loaded.model, "some-model");
     }
 
     #[test]
@@ -968,6 +985,7 @@ mod tests {
                 "shortcuts",
                 "tobiOutfit",
                 "pillColors",
+                "hiddenPills",
                 "language",
                 "desktopTobi",
                 "phoneLink",

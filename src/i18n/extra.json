@@ -8015,6 +8015,84 @@
    "id": "Diputar di aplikasi YouTube Music atau di tab browser. Di browser, Tobi menampilkan lagu yang punya album.",
    "de": "Läuft in der YouTube-Music-App oder in einem Browser-Tab. Im Browser zeigt Tobi Songs, die ein Album haben.",
    "tr": "YouTube Music uygulamasında veya bir tarayıcı sekmesinde çalar. Tarayıcıda Tobi, albümü olan şarkıları gösterir."
+  },
+  "Hidden": {
+   "zh-Hans": "已隐藏",
+   "hi": "छिपा हुआ",
+   "es": "Oculta",
+   "ar": "مخفية",
+   "fr": "Masquée",
+   "bn": "লুকানো",
+   "pt-BR": "Oculta",
+   "ru": "Скрыта",
+   "id": "Disembunyikan",
+   "de": "Ausgeblendet",
+   "tr": "Gizli"
+  },
+  "Show": {
+   "zh-Hans": "显示",
+   "hi": "दिखाएँ",
+   "es": "Mostrar",
+   "ar": "إظهار",
+   "fr": "Afficher",
+   "bn": "দেখান",
+   "pt-BR": "Mostrar",
+   "ru": "Показать",
+   "id": "Tampilkan",
+   "de": "Einblenden",
+   "tr": "Göster"
+  },
+  "Hide": {
+   "zh-Hans": "隐藏",
+   "hi": "छिपाएँ",
+   "es": "Ocultar",
+   "ar": "إخفاء",
+   "fr": "Masquer",
+   "bn": "লুকান",
+   "pt-BR": "Ocultar",
+   "ru": "Скрыть",
+   "id": "Sembunyikan",
+   "de": "Ausblenden",
+   "tr": "Gizle"
+  },
+  "In the island": {
+   "zh-Hans": "在灵动岛中",
+   "hi": "आइलैंड में",
+   "es": "En la isla",
+   "ar": "في الجزيرة",
+   "fr": "Dans l’île",
+   "bn": "আইল্যান্ডে",
+   "pt-BR": "Na ilha",
+   "ru": "В острове",
+   "id": "Di pulau",
+   "de": "In der Insel",
+   "tr": "Adada"
+  },
+  "The main tool comes first and Tobi opens on it.": {
+   "zh-Hans": "主工具排在最前，Tobi 会默认打开它。",
+   "hi": "मुख्य टूल सबसे पहले आता है और Tobi उसी पर खुलता है।",
+   "es": "La herramienta principal va primero y Tobi se abre en ella.",
+   "ar": "الأداة الرئيسية تأتي أولاً ويفتح توبي عليها.",
+   "fr": "L’outil principal passe en premier et Tobi s’ouvre dessus.",
+   "bn": "মূল টুল সবার আগে আসে এবং Tobi সেটিতেই খোলে।",
+   "pt-BR": "A ferramenta principal vem primeiro e o Tobi abre nela.",
+   "ru": "Главный инструмент идёт первым, и Tobi открывается на нём.",
+   "id": "Alat utama tampil pertama dan Tobi terbuka di sana.",
+   "de": "Das Hauptwerkzeug steht vorn und Tobi öffnet sich darauf.",
+   "tr": "Ana araç en başta gelir ve Tobi onda açılır."
+  },
+  "A hidden pill keeps working and its slot. It shows up again while it asks you something.": {
+   "zh-Hans": "隐藏的胶囊照常工作，并保留它的名额。它向你提问时会再次出现。",
+   "hi": "छिपा पिल काम करता रहता है और उसका स्लॉट बना रहता है। जब वह आपसे कुछ पूछता है तो फिर दिखता है।",
+   "es": "Una píldora oculta sigue funcionando y conserva su sitio. Reaparece cuando te pregunta algo.",
+   "ar": "تبقى الحبة المخفية تعمل وتحتفظ بمكانها. وتظهر من جديد عندما تسألك شيئاً.",
+   "fr": "Une pastille masquée continue de fonctionner et garde sa place. Elle réapparaît quand elle vous demande quelque chose.",
+   "bn": "লুকানো পিল কাজ চালিয়ে যায় এবং তার স্লট ধরে রাখে। আপনাকে কিছু জিজ্ঞেস করলে সেটি আবার দেখা যায়।",
+   "pt-BR": "Uma pílula oculta continua funcionando e mantém a sua vaga. Ela reaparece quando pede algo a você.",
+   "ru": "Скрытая пилюля продолжает работать и занимает своё место. Она снова появится, когда спросит вас о чём-то.",
+   "id": "Pil yang disembunyikan tetap bekerja dan tetap memakai slotnya. Pil itu muncul lagi saat meminta jawaban Anda.",
+   "de": "Eine ausgeblendete Pille arbeitet weiter und behält ihren Platz. Sie erscheint wieder, wenn sie dich etwas fragt.",
+   "tr": "Gizlenen hap çalışmaya ve yerini korumaya devam eder. Size bir şey sorarken yeniden görünür."
   }
  }
 }
