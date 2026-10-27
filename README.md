@@ -82,7 +82,7 @@ Tobi blinks, follows your cursor, cheers, dozes off, grumbles when poked and get
 
 <br>
 
-<img src="assets/readme/roadmap-en.svg" width="100%" alt="Roadmap: releases from 0.1 to 0.7.1, what comes next and the known gaps">
+<img src="assets/readme/roadmap-en.svg" width="100%" alt="Roadmap: latest releases, what comes next and the known gaps">
 
 <details>
 <summary><b>Install</b></summary>
