@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.11.1",
+      "items": [
+        {
+          "icon": "update",
+          "title": {
+            "en": "A tidier installer",
+            "zh-Hans": "更整洁的安装程序",
+            "hi": "साफ़-सुथरा इंस्टॉलर",
+            "es": "Un instalador más limpio",
+            "ar": "مثبّت أكثر ترتيبًا",
+            "fr": "Un installateur plus net",
+            "bn": "আরও পরিচ্ছন্ন ইনস্টলার",
+            "pt-BR": "Um instalador mais limpo",
+            "ru": "Аккуратный установщик",
+            "id": "Penginstal yang lebih rapi",
+            "de": "Ein saubererer Installer",
+            "tr": "Daha derli toplu kurulum"
+          },
+          "detail": {
+            "en": "The installer’s last page no longer draws text over itself, so the heading, status and file path are readable during installs and updates.",
+            "zh-Hans": "安装程序的最后一页不再出现文字重叠，安装和更新时标题、状态和文件路径都清晰可读。",
+            "hi": "इंस्टॉलर का आख़िरी पेज अब अक्षरों को एक-दूसरे पर नहीं छापता, इसलिए इंस्टॉल और अपडेट के दौरान शीर्षक, स्थिति और फ़ाइल पथ साफ़ पढ़े जा सकते हैं।",
+            "es": "La última página del instalador ya no dibuja el texto encima de sí mismo: el título, el estado y la ruta se leen bien al instalar y al actualizar.",
+            "ar": "لم تعد الصفحة الأخيرة من المثبّت ترسم النص فوق نفسه، فصار العنوان والحالة ومسار الملف مقروءة عند التثبيت والتحديث.",
+            "fr": "La dernière page de l’installateur ne superpose plus le texte à lui-même : le titre, l’état et le chemin se lisent bien à l’installation et à la mise à jour.",
+            "bn": "ইনস্টলারের শেষ পাতায় লেখা আর একটির উপর আরেকটি ছাপা হয় না, তাই ইনস্টল ও আপডেটের সময় শিরোনাম, অবস্থা ও ফাইলের পথ স্পষ্ট পড়া যায়।",
+            "pt-BR": "A última página do instalador não desenha mais o texto sobre si mesma: título, status e caminho ficam legíveis ao instalar e atualizar.",
+            "ru": "Последняя страница установщика больше не рисует текст поверх самого себя: заголовок, статус и путь к файлу читаются при установке и обновлении.",
+            "id": "Halaman terakhir penginstal tidak lagi menimpa teksnya sendiri, jadi judul, status, dan jalur berkas terbaca jelas saat instal dan pembaruan.",
+            "de": "Die letzte Seite des Installers überzeichnet ihren Text nicht mehr: Überschrift, Status und Dateipfad sind bei Installation und Update lesbar.",
+            "tr": "Kurulum programının son sayfası artık yazıyı üst üste çizmiyor; başlık, durum ve dosya yolu kurulum ve güncellemede okunaklı."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.11.0",
       "items": [
         {
