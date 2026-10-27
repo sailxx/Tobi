@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.5.1",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "The phone finds your computer",
+            "zh-Hans": "手机能找到你的电脑",
+            "hi": "फ़ोन को आपका कंप्यूटर मिल जाता है",
+            "es": "El móvil encuentra tu ordenador",
+            "ar": "الهاتف يعثر على حاسوبك",
+            "fr": "Le téléphone retrouve votre ordinateur",
+            "bn": "ফোন আপনার কম্পিউটার খুঁজে পায়",
+            "pt-BR": "O celular encontra o seu computador",
+            "ru": "Телефон находит ваш компьютер",
+            "id": "Ponsel menemukan komputer Anda",
+            "de": "Das Handy findet Ihren Computer",
+            "tr": "Telefon bilgisayarınızı bulur"
+          },
+          "detail": {
+            "en": "The pairing code now carries your real Wi-Fi address, not a virtual one from WSL, Docker or a VPN.",
+            "zh-Hans": "配对码现在包含你真实的 Wi-Fi 地址，而不是 WSL、Docker 或 VPN 的虚拟地址。",
+            "hi": "पेयरिंग कोड में अब आपका असली Wi-Fi पता होता है, WSL, Docker या VPN का वर्चुअल पता नहीं।",
+            "es": "El código de emparejamiento ya lleva tu dirección Wi-Fi real, no una virtual de WSL, Docker o una VPN.",
+            "ar": "يحمل رمز الاقتران الآن عنوان Wi-Fi الحقيقي لديك، لا عنواناً افتراضياً من WSL أو Docker أو VPN.",
+            "fr": "Le code d’appairage contient désormais votre vraie adresse Wi-Fi, et non une adresse virtuelle de WSL, Docker ou d’un VPN.",
+            "bn": "পেয়ারিং কোডে এখন আপনার আসল Wi-Fi ঠিকানা থাকে, WSL, Docker বা VPN-এর ভার্চুয়াল ঠিকানা নয়।",
+            "pt-BR": "O código de pareamento agora traz o seu endereço Wi-Fi real, e não um virtual do WSL, Docker ou VPN.",
+            "ru": "В коде сопряжения теперь настоящий адрес Wi-Fi, а не виртуальный от WSL, Docker или VPN.",
+            "id": "Kode pemasangan kini membawa alamat Wi-Fi asli Anda, bukan alamat virtual dari WSL, Docker, atau VPN.",
+            "de": "Der Kopplungscode enthält jetzt Ihre echte WLAN-Adresse, nicht eine virtuelle von WSL, Docker oder VPN.",
+            "tr": "Eşleştirme kodu artık WSL, Docker veya VPN’in sanal adresini değil, gerçek Wi-Fi adresinizi taşır."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.5.0",
       "items": [
         {
