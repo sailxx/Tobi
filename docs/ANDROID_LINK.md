@@ -5,7 +5,7 @@ push, neither of which exists on Android, so the Android app connects to the des
 the local network.
 
 Status: the Android client, `android/tools/dev-desktop.mjs` (a stand-in desktop for testing) and the
-real desktop server of the Windows/Linux app (`windows/src-tauri/src/phone_link/`) implement this.
+real desktop server of the Windows/Linux/macOS app (`windows/src-tauri/src/phone_link/`) implement this.
 The Mac app is left to its author.
 
 ## Transport
@@ -326,7 +326,9 @@ simply keeps using the saved address.**
 - The desktop link is **off by default** and opt-in in settings. It should listen only while it is
   on, and only to the local network.
 
-## Windows/Linux implementation notes
+## Windows/Linux/macOS implementation notes
+
+- macOS: the first start asks "Do you want the application Tobi to accept incoming network connections?". Answer Allow, or the phone cannot reach the computer. The secrets live in the Keychain. This build has not been run on a Mac by its author.
 
 - Settings → Android phone: off by default (`phoneLink` in settings.json, owned by Rust: the webview
   cannot switch it on). While off, nothing listens, nothing is published and no timer runs.
