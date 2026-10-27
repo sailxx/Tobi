@@ -2,6 +2,73 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.11.0",
+      "items": [
+        {
+          "icon": "bell",
+          "title": {
+            "en": "Pin the island open",
+            "zh-Hans": "固定展开灵动岛",
+            "hi": "द्वीप को खुला रखें",
+            "es": "Fija la isla abierta",
+            "ar": "ثبّت الجزيرة مفتوحة",
+            "fr": "Garder l’île ouverte",
+            "bn": "আইল্যান্ড খোলা রাখুন",
+            "pt-BR": "Mantenha a ilha aberta",
+            "ru": "Закрепить остров открытым",
+            "id": "Pulau tetap terbuka",
+            "de": "Insel offen halten",
+            "tr": "Adayı açık tut"
+          },
+          "detail": {
+            "en": "The new pin in the island header keeps it open on the pill you are looking at, until you unpin it. Ctrl+P does the same.",
+            "zh-Hans": "岛顶部新增的图钉可让它停在当前药丸上保持展开，直到取消固定。Ctrl+P 效果相同。",
+            "hi": "आइलैंड हेडर का नया पिन उसे उसी पिल पर खुला रखता है जब तक आप अनपिन न करें। Ctrl+P भी यही करता है।",
+            "es": "La nueva chincheta de la cabecera mantiene la isla abierta en la píldora que miras hasta que la sueltes. Ctrl+P hace lo mismo.",
+            "ar": "الدبوس الجديد في ترويسة الجزيرة يبقيها مفتوحة على الكبسولة التي تنظر إليها حتى تلغي التثبيت. وCtrl+P يفعل الشيء نفسه.",
+            "fr": "La nouvelle épingle de l’en-tête garde l’île ouverte sur la pastille affichée jusqu’à ce que vous la détachiez. Ctrl+P fait de même.",
+            "bn": "হেডারের নতুন পিন আপনার দেখা পিলে আইল্যান্ড খোলা রাখে, আনপিন না করা পর্যন্ত। Ctrl+P-ও একই কাজ করে।",
+            "pt-BR": "O novo alfinete no cabeçalho mantém a ilha aberta na pílula que você vê, até desafixar. Ctrl+P faz o mesmo.",
+            "ru": "Новая кнопка закрепления в шапке острова держит его открытым на текущей пилюле, пока вы её не открепите. Ctrl+P делает то же самое.",
+            "id": "Pin baru di header menjaga pulau tetap terbuka pada pil yang Anda lihat sampai dilepas. Ctrl+P melakukan hal yang sama.",
+            "de": "Die neue Stecknadel in der Kopfzeile hält die Insel auf der aktuellen Pille offen, bis Sie sie lösen. Strg+P macht dasselbe.",
+            "tr": "Başlıktaki yeni raptiye, adayı baktığınız hapta siz kaldırana kadar açık tutar. Ctrl+P de aynısını yapar."
+          }
+        },
+        {
+          "icon": "puzzle",
+          "title": {
+            "en": "A better YouTube Music player",
+            "zh-Hans": "更好的 YouTube Music 播放器",
+            "hi": "बेहतर YouTube Music प्लेयर",
+            "es": "Un mejor reproductor de YouTube Music",
+            "ar": "مشغّل YouTube Music أفضل",
+            "fr": "Un meilleur lecteur YouTube Music",
+            "bn": "আরও ভালো YouTube Music প্লেয়ার",
+            "pt-BR": "Um player melhor do YouTube Music",
+            "ru": "Новый плеер YouTube Music",
+            "id": "Pemutar YouTube Music yang lebih baik",
+            "de": "Ein besserer YouTube-Music-Player",
+            "tr": "Daha iyi YouTube Music oynatıcı"
+          },
+          "detail": {
+            "en": "A bigger cover, larger title, a red play button, a wider volume slider and clearer times.",
+            "zh-Hans": "更大的封面、更大的标题、红色播放按钮、更宽的音量条和更清晰的时间。",
+            "hi": "बड़ा कवर, बड़ा शीर्षक, लाल प्ले बटन, चौड़ा वॉल्यूम स्लाइडर और साफ़ समय।",
+            "es": "Carátula más grande, título mayor, botón de reproducir rojo, control de volumen más ancho y tiempos más claros.",
+            "ar": "غلاف أكبر وعنوان أكبر وزر تشغيل أحمر وشريط صوت أعرض وأوقات أوضح.",
+            "fr": "Pochette plus grande, titre plus gros, bouton lecture rouge, curseur de volume plus large et durées plus lisibles.",
+            "bn": "বড় কভার, বড় শিরোনাম, লাল প্লে বোতাম, চওড়া ভলিউম স্লাইডার ও স্পষ্ট সময়।",
+            "pt-BR": "Capa maior, título maior, botão de tocar vermelho, controle de volume mais largo e tempos mais claros.",
+            "ru": "Крупнее обложка и название, красная кнопка воспроизведения, шире ползунок громкости и читаемее время.",
+            "id": "Sampul lebih besar, judul lebih besar, tombol putar merah, slider volume lebih lebar, dan waktu lebih jelas.",
+            "de": "Größeres Cover, größerer Titel, roter Wiedergabeknopf, breiterer Lautstärkeregler und besser lesbare Zeiten.",
+            "tr": "Daha büyük kapak, daha büyük başlık, kırmızı oynat düğmesi, daha geniş ses çubuğu ve daha okunaklı süreler."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.10.1",
       "items": [
         {

@@ -8093,6 +8093,32 @@
    "id": "Pil yang disembunyikan tetap bekerja dan tetap memakai slotnya. Pil itu muncul lagi saat meminta jawaban Anda.",
    "de": "Eine ausgeblendete Pille arbeitet weiter und behält ihren Platz. Sie erscheint wieder, wenn sie dich etwas fragt.",
    "tr": "Gizlenen hap çalışmaya ve yerini korumaya devam eder. Size bir şey sorarken yeniden görünür."
+  },
+  "Pin open": {
+   "zh-Hans": "固定展开",
+   "hi": "खुला रखें",
+   "es": "Mantener abierta",
+   "ar": "تثبيت مفتوحة",
+   "fr": "Garder ouverte",
+   "bn": "খোলা রাখুন",
+   "pt-BR": "Manter aberta",
+   "ru": "Закрепить открытой",
+   "id": "Tetap terbuka",
+   "de": "Offen halten",
+   "tr": "Açık tut"
+  },
+  "Unpin": {
+   "zh-Hans": "取消固定",
+   "hi": "अनपिन करें",
+   "es": "Soltar",
+   "ar": "إلغاء التثبيت",
+   "fr": "Détacher",
+   "bn": "আনপিন করুন",
+   "pt-BR": "Desafixar",
+   "ru": "Открепить",
+   "id": "Lepas sematan",
+   "de": "Lösen",
+   "tr": "Sabitlemeyi kaldır"
   }
  }
 }

@@ -244,6 +244,11 @@ export class Island {
         void Bridge.approvalDecline(req.requestId);
         this.closeApproval();
       },
+      togglePin: () => {
+        // A permission card keeps the island pinned until it is answered.
+        if (State.pendingApproval) return;
+        this.setPinned(!State.isPinned);
+      },
       toggleSound: () => {
         State.settings.soundEnabled = !State.settings.soundEnabled;
         Sound.setEnabled(State.settings.soundEnabled);

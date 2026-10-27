@@ -317,7 +317,7 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
     h("div", { class: "grow" }),
     volumeBox,
   );
-  const playingEl = h("div", { class: "np-card" }, head, progressRow, controls);
+  const playingEl = h("div", { class: ytm ? "np-card ytm" : "np-card" }, head, progressRow, controls);
 
   // Idle: the same layout as the other idle cards.
   const idleDot = dot("#22C55E", 5);
@@ -402,7 +402,7 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
     if (playIcon !== s.playing) {
       playIcon = s.playing;
       clear(play);
-      const icon = svg(s.playing ? ICONS.pause : ICONS.play, 9);
+      const icon = svg(s.playing ? ICONS.pause : ICONS.play, ytm ? 12 : 9);
       if (!s.playing) icon.style.transform = "translateX(1px)";
       play.append(icon);
     }
