@@ -15,7 +15,7 @@ import type { UpdateStatus } from "../core/update";
 import { SOUND_NAMES } from "../core/sound";
 import {
   MAX_DECLARED, PILL_CATEGORIES, availablePills, chooseMainPill, isComingSoon, mainPillChoices,
-  sanitizeDeclared, toggleDeclared, type PillDefinition,
+  pillDefinition, sanitizeDeclared, sanitizeHidden, toggleDeclared, toggleHidden, type PillDefinition,
 } from "../core/pills";
 import { h, clear } from "../views/dom";
 import { startHub, type PageId } from "../hub/shell";
@@ -32,6 +32,8 @@ import { mailboxSection } from "./mailbox";
 import { MAILBOX_ID } from "../core/mailbox";
 import { updateRows, updatesListener } from "./updates";
 import { colorDot } from "./colors";
+import { createMiniStill } from "../tobi/minibots";
+import { pillColor } from "../core/pill-colors";
 import { renderDiff, statusDot } from "./parts";
 import {
   LANGUAGES, N_, isRtl, onLanguageChange, resolveLanguage, setLanguage, systemLanguages, t, tn,
@@ -427,15 +429,62 @@ function apiSection(hasKey: boolean): HTMLElement {
  */
 function activePillsSection(connected: Record<string, boolean>): HTMLElement {
   const slots = h("div", { class: "hint" });
-  const main = h("select", {}) as HTMLSelectElement;
-  for (const def of mainPillChoices()) main.append(h("option", { value: def.id, text: def.name }));
-  main.addEventListener("change", () => {
-    const next = chooseMainPill(settings, main.value);
-    if (!next) return;
-    settings.mainPill = next.mainPill;
-    settings.activeIntegrations = next.activeIntegrations;
-    declaredChanged();
-  });
+  const main = h("div", { class: "main-cards", role: "radiogroup", "aria-label": t("Main tool") });
+  const shown = h("div", { class: "shown-list" });
+
+  function drawMain() {
+    clear(main);
+    for (const def of mainPillChoices()) {
+      const on = def.id === settings.mainPill;
+      const card = h("button", {
+        class: on ? "main-card on" : "main-card", role: "radio", "aria-checked": String(on),
+        onclick: () => {
+          const next = chooseMainPill(settings, def.id);
+          if (!next || on) return;
+          settings.mainPill = next.mainPill;
+          settings.activeIntegrations = next.activeIntegrations;
+          declaredChanged();
+        },
+      },
+        createMiniStill(def.id, pillColor(def.id, def.color, settings.pillColors), 34),
+        h("span", { class: "nm", text: def.name }),
+        h("span", { class: "mc-state", text: on ? t("Main") : "" }),
+      );
+      main.append(card);
+    }
+  }
+
+  /** Every pill the island carries, the main one first, each with a Hide / Show button. */
+  function drawShown() {
+    clear(shown);
+    const d = sanitizeDeclared(settings);
+    const hidden = sanitizeHidden(settings.hiddenPills, d);
+    for (const id of [d.mainPill, ...d.activeIntegrations]) {
+      const def = pillDefinition(id);
+      if (!def) continue;
+      const isMain = id === d.mainPill;
+      const off = hidden.includes(id);
+      const row = h("div", { class: off ? "pill-row is-hidden" : "pill-row" },
+        createMiniStill(id, pillColor(id, def.color, settings.pillColors), 24),
+        h("span", { class: "name", text: def.name }),
+      );
+      if (isMain) {
+        row.append(h("span", { class: "state", text: t("Main") }));
+      } else {
+        row.append(h("span", { class: "state", text: off ? t("Hidden") : "" }));
+        row.append(h("button", {
+          class: "mini-btn", text: off ? t("Show") : t("Hide"),
+          onclick: () => {
+            const next = toggleHidden(settings.hiddenPills ?? [], d, id);
+            if (!next) return;
+            settings.hiddenPills = next;
+            declaredChanged();
+          },
+        }));
+      }
+      shown.append(row);
+    }
+  }
   const groups = h("div", { style: "display:flex;flex-direction:column;gap:12px" });
 
   /** Why a pill would show nothing yet, as on the Mac's row. */
@@ -477,7 +526,9 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
     const used = settings.activeIntegrations.length;
     slots.textContent = t("{used}/{max} slots in use — the main tool doesn't take one.", { used, max: MAX_ACTIVE });
     slots.classList.toggle("full", used >= MAX_ACTIVE);
-    main.value = settings.mainPill;
+    settings.hiddenPills = sanitizeHidden(settings.hiddenPills, sanitizeDeclared(settings));
+    drawMain();
+    drawShown();
     clear(groups);
     for (const cat of PILL_CATEGORIES) {
       if (cat.id === "service") continue;
@@ -495,7 +546,12 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
     h("h2", {}, h("span", { text: t("Active pills") })),
     h("div", { class: "hint", text: t("Choose the tools you use. Tobi only shows what you declare here.") }),
     slots,
-    h("div", { class: "row" }, h("label", { text: t("Main tool") }), main),
+    h("h3", { class: "subhead", text: t("Main tool") }),
+    h("div", { class: "hint", text: t("The main tool comes first and Tobi opens on it.") }),
+    main,
+    h("h3", { class: "subhead", text: t("In the island") }),
+    h("div", { class: "hint", text: t("A hidden pill keeps working and its slot. It shows up again while it asks you something.") }),
+    shown,
     groups,
   );
 }
@@ -1170,10 +1226,10 @@ function shortcutsSection(initial: ShortcutsReport | null): HTMLElement {
       case "duplicate": return h("span", { class: "tag err", text: SHORTCUTS_UI.duplicate });
       case "invalid": return h("span", { class: "tag err", text: SHORTCUTS_UI.invalid });
       case "typesCharacter": return h("span", { class: "tag warn", text: SHORTCUTS_UI.types(st.typed ?? "?") });
-      case "unsupported": return h("span", { class: "tag", text: SHORTCUTS_UI.unavailable });
+      case "unsupported": return h("span", { class: "cap", text: SHORTCUTS_UI.unavailable });
       case "refused": return h("span", { class: "tag warn", text: SHORTCUTS_UI.refused });
       // Wayland: the desktop may run it on other keys than the ones asked for.
-      case "active": return st.trigger ? h("span", { class: "tag", text: SHORTCUTS_UI.desktopKeys(st.trigger) }) : null;
+      case "active": return st.trigger ? h("span", { class: "cap", text: SHORTCUTS_UI.desktopKeys(st.trigger) }) : null;
       default: return null;
     }
   }

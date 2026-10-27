@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Pills preview</title>
+<style>
+body{margin:0;background:#000;color:#cfd3dc;font:13px "Segoe UI",system-ui,sans-serif;padding:20px}
+.bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+button{background:#1a1b20;color:#cfd3dc;border:1px solid #2a2c33;padding:5px 10px;border-radius:6px;cursor:pointer}
+button.on{background:#2c2f38;border-color:#555}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.cell{display:flex;align-items:center;gap:14px;padding:10px 12px;border:1px solid #1d1e24;border-radius:10px;background:#0b0b0e}
+.big{width:72px;height:72px;display:grid;place-items:center}
+.big .mini{transform:scale(3)}
+.pill{display:flex;align-items:center;gap:7px;padding:4px 10px 4px 6px;border:1px solid #333;border-radius:14px;font-size:12px}
+.mini{display:inline-flex;align-items:center;justify-content:center;position:relative}
+.mini canvas{position:absolute}
+.col{display:flex;flex-direction:column;gap:8px}
+</style></head>
+<body><div class="bar" id="bar"></div><div class="grid" id="grid"></div>
+<script type="module" src="./pills-preview.ts"></script></body></html>
