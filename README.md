@@ -37,7 +37,7 @@ Chat with Claude, OpenAI, Gemini, DeepSeek, Qwen, Moonshot or a local model (Oll
 
 ### ✈️ Telegram, mail and WhatsApp (experimental)
 
-Your unread chats in the island: open one to read its last messages and reply (Enter sends, Shift+Enter starts a new line). Telegram signs in with your own account through your own API id (free, from my.telegram.org), the phone number and the code Telegram sends; Gmail signs in with your own Google OAuth client (the browser opens Google’s page), lists your unread mail, opens a message as plain text and lets you reply, write a new message, archive or delete to the bin; Any other mailbox (Yandex, Mail.ru, Yahoo, iCloud or your own server) works over IMAP with an app password; WhatsApp goes through a gateway on this computer. All are off by default, keep messages in memory only and never write them anywhere: **Settings → Integrations**.
+Your unread chats in the island: open one to read its last messages and reply (Enter sends, Shift+Enter starts a new line); click a message to see it whole, with its photo (Telegram), and copy the text or the photo. Telegram signs in with your own account through your own API id (free, from my.telegram.org), the phone number and the code Telegram sends; Gmail signs in with your own Google OAuth client (the browser opens Google’s page), lists your unread mail, opens a message as plain text and lets you reply, write a new message, archive or delete to the bin; Any other mailbox (Yandex, Mail.ru, Yahoo, iCloud or your own server) works over IMAP with an app password; WhatsApp goes through a gateway on this computer. All are off by default, keep messages in memory only and never write them anywhere: **Settings → Integrations**.
 
 ### 🫥 Hide when idle
 

@@ -7560,6 +7560,71 @@
    "id": "Kotak email Anda sendiri, lewat kata sandi aplikasi. Tobi dapat membaca, mengirim, mengarsipkan, dan membuang ke tempat sampah, tidak pernah menghapus permanen.",
    "de": "Dein eigenes Postfach mit einem App-Passwort. Tobi kann lesen, senden, archivieren und in den Papierkorb legen, nie endgültig löschen.",
    "tr": "Kendi posta kutunuz, bir uygulama parolasıyla. Tobi okuyabilir, gönderebilir, arşivleyebilir ve çöp kutusuna taşıyabilir, asla kalıcı olarak silmez."
+  },
+  "Open the message": {
+   "zh-Hans": "打开消息",
+   "hi": "संदेश खोलें",
+   "es": "Abrir el mensaje",
+   "ar": "فتح الرسالة",
+   "fr": "Ouvrir le message",
+   "bn": "বার্তাটি খুলুন",
+   "pt-BR": "Abrir a mensagem",
+   "ru": "Открыть сообщение",
+   "id": "Buka pesan",
+   "de": "Nachricht öffnen",
+   "tr": "Mesajı aç"
+  },
+  "Copy text": {
+   "zh-Hans": "复制文字",
+   "hi": "टेक्स्ट कॉपी करें",
+   "es": "Copiar texto",
+   "ar": "نسخ النص",
+   "fr": "Copier le texte",
+   "bn": "টেক্সট কপি করুন",
+   "pt-BR": "Copiar texto",
+   "ru": "Копировать текст",
+   "id": "Salin teks",
+   "de": "Text kopieren",
+   "tr": "Metni kopyala"
+  },
+  "Copy photo": {
+   "zh-Hans": "复制照片",
+   "hi": "फ़ोटो कॉपी करें",
+   "es": "Copiar foto",
+   "ar": "نسخ الصورة",
+   "fr": "Copier la photo",
+   "bn": "ছবি কপি করুন",
+   "pt-BR": "Copiar foto",
+   "ru": "Копировать фото",
+   "id": "Salin foto",
+   "de": "Foto kopieren",
+   "tr": "Fotoğrafı kopyala"
+  },
+  "The photo can’t be loaded": {
+   "zh-Hans": "无法加载照片",
+   "hi": "फ़ोटो लोड नहीं हो सकी",
+   "es": "No se puede cargar la foto",
+   "ar": "تعذّر تحميل الصورة",
+   "fr": "La photo ne peut pas être chargée",
+   "bn": "ছবিটি লোড করা যাচ্ছে না",
+   "pt-BR": "Não foi possível carregar a foto",
+   "ru": "Не удалось загрузить фото",
+   "id": "Foto tidak dapat dimuat",
+   "de": "Das Foto kann nicht geladen werden",
+   "tr": "Fotoğraf yüklenemiyor"
+  },
+  "Couldn’t copy the photo": {
+   "zh-Hans": "无法复制照片",
+   "hi": "फ़ोटो कॉपी नहीं हो सकी",
+   "es": "No se pudo copiar la foto",
+   "ar": "تعذّر نسخ الصورة",
+   "fr": "La photo n’a pas pu être copiée",
+   "bn": "ছবিটি কপি করা যায়নি",
+   "pt-BR": "Não foi possível copiar a foto",
+   "ru": "Не удалось скопировать фото",
+   "id": "Foto tidak dapat disalin",
+   "de": "Das Foto konnte nicht kopiert werden",
+   "tr": "Fotoğraf kopyalanamadı"
   }
  }
 }
