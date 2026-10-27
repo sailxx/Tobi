@@ -98,6 +98,8 @@ export class Island {
   private wasInIsland = false;
   /** A reply is being typed in a card (WhatsApp): the island stays open. */
   private holdingOpen = false;
+  /** Whether the island was last sized for an open conversation. */
+  private chatShown = false;
   /** Last shape handed to Rust for the click-through test. */
   private pushedRect = { x: -1, y: -1, w: -1, h: -1 };
 
@@ -144,6 +146,11 @@ export class Island {
     State.subscribe(() => {
       this.dirty = true;
       this.ensureRunning();
+      // A conversation opening or closing resizes the island.
+      if (State.chatOpen !== this.chatShown) {
+        this.chatShown = State.chatOpen;
+        this.animateGeometry(!State.chatOpen);
+      }
     });
   }
 
@@ -694,7 +701,7 @@ export class Island {
   // ── Geometry ────────────────────────────────────────────────────────────────
 
   private targetSize(): { w: number; h: number; r: number } {
-    let { w, h } = islandSize(State.mode, State.view, State.chatHistory.length);
+    let { w, h } = islandSize(State.mode, State.view, State.chatHistory.length, State.chatOpen);
     if (State.mode === "expanded" && State.view === "question" && State.pendingApproval?.questions) {
       h = QUESTION_PICKER_H;
     }
@@ -1089,10 +1096,12 @@ export class Island {
     // The drop canvas draws its own Tobi; two of them would overlap. Out on the
     // desktop, he isn't here at all.
     const away = State.tobiOnDesktop;
-    const visible = p.opacity > 0 && !greetingActive && !this.uploadActive && !away;
+    // An open messenger conversation has the whole card; Tobi steps out of it.
+    const inChat = State.mode === "expanded" && State.view === "overview" && State.chatOpen;
+    const visible = p.opacity > 0 && !greetingActive && !this.uploadActive && !away && !inChat;
     this.botCanvas.style.opacity = visible ? "1" : "0";
 
-    if (State.mode === "expanded" && State.view !== "uploading" && !greetingActive && !this.uploadActive && !away) {
+    if (State.mode === "expanded" && State.view !== "uploading" && !greetingActive && !this.uploadActive && !away && !inChat) {
       const d = p.diameter;
       const color = botGlowColor(State.effectiveState);
       this.botGlow.style.display = "block";

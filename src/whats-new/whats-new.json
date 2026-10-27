@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.10.1",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
+            "en": "Chats that stay open",
+            "zh-Hans": "不会自己关掉的聊天",
+            "hi": "खुली रहने वाली चैट",
+            "es": "Chats que se quedan abiertos",
+            "ar": "محادثات تبقى مفتوحة",
+            "fr": "Des conversations qui restent ouvertes",
+            "bn": "খোলা থাকা চ্যাট",
+            "pt-BR": "Conversas que ficam abertas",
+            "ru": "Чаты, которые не закрываются",
+            "id": "Obrolan yang tetap terbuka",
+            "de": "Chats, die offen bleiben",
+            "tr": "Açık kalan sohbetler"
+          },
+          "detail": {
+            "en": "A Telegram or WhatsApp chat no longer throws you out while you read it. It is taller and wider, shows only the last 10 messages in a larger font, and the reply field sits under Tobi.",
+            "zh-Hans": "阅读 Telegram 或 WhatsApp 聊天时，它不会再把你弹出去。聊天更高更宽，只显示最近 10 条消息，字号更大，回复框位于 Tobi 下方。",
+            "hi": "Telegram या WhatsApp चैट पढ़ते समय अब वह आपको बाहर नहीं फेंकती। चैट ज़्यादा ऊँची और चौड़ी है, बड़े अक्षरों में सिर्फ़ आख़िरी 10 संदेश दिखाती है, और जवाब का खाना Tobi के नीचे है।",
+            "es": "Un chat de Telegram o WhatsApp ya no te echa mientras lo lees. Es más alto y ancho, muestra solo los últimos 10 mensajes con letra más grande y el campo de respuesta queda bajo Tobi.",
+            "ar": "لم تعد محادثة تيليجرام أو واتساب تُخرجك أثناء قراءتها. صارت أطول وأعرض، وتعرض آخر 10 رسائل فقط بخط أكبر، وحقل الرد تحت توبي.",
+            "fr": "Une conversation Telegram ou WhatsApp ne vous éjecte plus pendant la lecture. Elle est plus haute et plus large, n’affiche que les 10 derniers messages en plus gros, et le champ de réponse passe sous Tobi.",
+            "bn": "Telegram বা WhatsApp চ্যাট পড়ার সময় আর আপনাকে বের করে দেয় না। চ্যাট এখন আরও উঁচু ও চওড়া, বড় অক্ষরে শুধু শেষ ১০টি বার্তা দেখায়, আর উত্তরের ঘরটি Tobi-র নিচে।",
+            "pt-BR": "Uma conversa do Telegram ou WhatsApp não te joga mais para fora enquanto você lê. Ela ficou mais alta e larga, mostra só as últimas 10 mensagens em fonte maior, e o campo de resposta fica embaixo do Tobi.",
+            "ru": "Чат Telegram или WhatsApp больше не выкидывает вас, пока вы читаете. Он стал выше и шире, показывает только последние 10 сообщений крупным шрифтом, а поле ответа стоит под Tobi.",
+            "id": "Obrolan Telegram atau WhatsApp tidak lagi mengeluarkan Anda saat dibaca. Obrolan lebih tinggi dan lebar, hanya menampilkan 10 pesan terakhir dengan huruf lebih besar, dan kolom balasan ada di bawah Tobi.",
+            "de": "Ein Telegram- oder WhatsApp-Chat wirft Sie beim Lesen nicht mehr hinaus. Er ist höher und breiter, zeigt nur die letzten 10 Nachrichten in größerer Schrift, und das Antwortfeld sitzt unter Tobi.",
+            "tr": "Bir Telegram veya WhatsApp sohbeti okurken artık sizi dışarı atmıyor. Daha uzun ve geniş, yalnızca son 10 mesajı daha büyük yazıyla gösteriyor ve yanıt alanı Tobi’nin altında."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.10.0",
       "items": [
         {

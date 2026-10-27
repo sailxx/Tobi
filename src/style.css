@@ -3017,6 +3017,135 @@ input[type="range"]::-webkit-slider-thumb {
   color: #f4505e;
 }
 
+/* ── The messenger chat card (views/chat-card.ts), over the shared wa-* rules the mail card also uses ──
+   A list row is two lines. An open conversation (State.chatOpen) makes the island taller and takes the
+   card's whole width, the pills step aside and Tobi steps out; the back button and the name sit in a
+   narrow column on the left, the reply field runs under the messages, and they get everything else. */
+
+.overview.chat-open > .left {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+.overview.chat-open > .right {
+  display: none;
+}
+
+.chat-card .wa-row {
+  gap: 8px;
+  padding: 3px 8px;
+}
+
+.chat-card .wa-row-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chat-card .wa-row-top {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.chat-card .wa-row-name {
+  font: 500 12px var(--font);
+  max-width: none;
+  flex: 0 1 auto;
+}
+
+.chat-card .wa-row .wa-preview {
+  font: 400 11px var(--font);
+  color: #858a93;
+}
+
+.chat-card .wa-row.unread .wa-preview {
+  color: #aeb3bb;
+}
+
+.chat-card.chatting {
+  padding: 0 0 8px;
+}
+
+.chat-card .wa-convo {
+  position: relative;
+}
+
+.chat-card .wa-back {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  width: 22px;
+  height: 22px;
+  z-index: 1;
+}
+
+.chat-card .wa-messages {
+  gap: 5px;
+  /* The back button on the left; the open-in-app arrow at the top right. */
+  margin: 0 22px 0 40px;
+  padding: 6px 0 4px;
+}
+
+.chat-card .wa-line {
+  padding-right: 36px;
+}
+
+.chat-card .wa-line.mine {
+  padding-right: 0;
+  padding-left: 36px;
+}
+
+.chat-card .wa-bubble {
+  padding: 5px 9px;
+  max-width: 100%;
+}
+
+.chat-card .wa-sender {
+  font-size: 10.5px;
+}
+
+.chat-card .wa-media {
+  font-size: 11px;
+}
+
+.chat-card .wa-text {
+  font: 400 12.5px/1.4 var(--font);
+  color: #d4d7dc;
+  word-break: break-word;
+  -webkit-line-clamp: 7;
+}
+
+.chat-card .wa-bubble.mine .wa-text {
+  color: #eceef1;
+}
+
+.chat-card .wa-reply {
+  gap: 8px;
+  padding: 5px 6px 5px 10px;
+  margin: 2px 10px 0 12px;
+  border-radius: 8px;
+}
+
+.chat-card .wa-field {
+  font: 400 12px/1.4 var(--font);
+  max-height: 50px;
+}
+
+.chat-card .wa-send {
+  width: 20px;
+  height: 20px;
+}
+
+.chat-card .wa-note {
+  font-size: 10.5px;
+  margin: 0 22px 0 40px;
+  padding: 2px 0;
+}
+
 html[data-dir="rtl"] #views :is(.wa-text, .wa-field, .wa-preview) {
   unicode-bidi: plaintext;
   text-align: start;

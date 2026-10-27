@@ -221,6 +221,9 @@ class AppState {
 
   stateOverride: BotStateName | null = null;
 
+  /** A messenger conversation is open (chat-card.ts): the island is taller and the card takes its whole width. */
+  chatOpen = false;
+
   /** Cursor in logical screen pixels, origin top-left (like AppState.mousePosition). */
   mouse = { x: 0, y: 0 };
   /** Cursor relative to the island's top-left corner. */
