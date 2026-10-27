@@ -16,6 +16,7 @@ import { pillDefinition, sessionSubtitle } from "../core/pills";
 import {
   PlanCard, buildPlanPill, claudePillVisible, codexPillVisible, planCardOpen, refreshCodexPlanUsage,
 } from "./usage";
+import { openCodeWindow } from "../island/code-link";
 import { buildDiffCard } from "./diff";
 import { buildReply, hasReply } from "./reply";
 import { lastTextStep } from "../core/diff";
@@ -362,6 +363,7 @@ function buildOverview(actions: ViewActions): ViewHost {
               closeDiff();
             },
             open: (path) => void Bridge.openFileInVSCode(path),
+            openCode: (path) => openCodeWindow(task.id, path),
           }));
         }
       } else if (task && sessionActive) {

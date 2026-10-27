@@ -2,6 +2,6 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "What Tobi's windows are allowed to do. Everything that touches the OS goes through Tobi's own commands.",
-  "windows": ["island", "settings", "tobi", "message"],
+  "windows": ["island", "settings", "tobi", "message", "code"],
   "permissions": ["core:default", "autostart:default"]
 }

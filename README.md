@@ -17,7 +17,7 @@
 
 ### 🤖 Live agents
 
-Claude Code, Codex, Cursor, Gemini CLI, Antigravity, Copilot CLI, OpenCode, Amp, Claude Desktop and more. Every step of a session shows in the window: what the agent reads, edits and runs. A file edit shows its name with `+N −M`, and a click opens the whole diff. When the task is done, Tobi does a happy little jump.
+Claude Code, Codex, Cursor, Gemini CLI, Antigravity, Copilot CLI, OpenCode, Amp, Claude Desktop and more. Every step of a session shows in the window: what the agent reads, edits and runs. A file edit shows its name with `+N −M`, and a click opens the whole diff. From the diff, **Code** opens the file in a window of its own: live, with line numbers, colours and the agent’s new lines marked, and an Edit mode to change it (Ctrl+S saves; if the agent wrote the file meanwhile, nothing is overwritten). It only opens files inside the session’s folder, never secrets such as `.env` or keys, and shows them only on this computer. When the task is done, Tobi does a happy little jump.
 
 ### ✅ Permissions and questions
 

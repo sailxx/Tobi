@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.8.0",
+      "items": [
+        {
+          "icon": "terminal",
+          "title": {
+            "en": "See the code your agent is writing",
+            "zh-Hans": "查看智能体正在写的代码",
+            "hi": "देखें कि आपका एजेंट कौन-सा कोड लिख रहा है",
+            "es": "Mira el código que escribe tu agente",
+            "ar": "شاهد الكود الذي يكتبه وكيلك",
+            "fr": "Voyez le code que votre agent écrit",
+            "bn": "আপনার এজেন্ট যে কোড লিখছে তা দেখুন",
+            "pt-BR": "Veja o código que o seu agente escreve",
+            "ru": "Смотрите код, который пишет агент",
+            "id": "Lihat kode yang sedang ditulis agen Anda",
+            "de": "Sehen Sie den Code, den Ihr Agent schreibt",
+            "tr": "Ajanınızın yazdığı kodu görün"
+          },
+          "detail": {
+            "en": "Open a file from a diff: it shows live with numbers and colours, the agent’s new lines marked. Press Edit to change it and Ctrl+S to save; if the agent wrote the file meanwhile, nothing is overwritten.",
+            "zh-Hans": "在差异中打开文件：带行号和配色实时显示，智能体新增的行会被标出。点按“编辑”修改，Ctrl+S 保存；若期间智能体改动了文件，不会覆盖。",
+            "hi": "डिफ़ से फ़ाइल खोलें: वह पंक्ति-संख्या और रंगों के साथ लाइव दिखती है, एजेंट की नई पंक्तियाँ चिह्नित रहती हैं। बदलने के लिए “संपादित करें” दबाएँ और सहेजने के लिए Ctrl+S; इस बीच एजेंट ने फ़ाइल बदली हो तो कुछ अधिलेखित नहीं होता।",
+            "es": "Abre un archivo desde un diff: se ve en directo con números y colores, con las líneas nuevas del agente marcadas. Pulsa Editar para cambiarlo y Ctrl+S para guardar; si el agente escribió el archivo entretanto, no se sobrescribe nada.",
+            "ar": "افتح ملفًا من الفروقات: يظهر مباشرة بأرقام الأسطر والألوان مع تمييز أسطر الوكيل الجديدة. اضغط «تحرير» لتعديله وCtrl+S للحفظ؛ وإن كتب الوكيل الملف في هذه الأثناء فلن يُستبدل شيء.",
+            "fr": "Ouvrez un fichier depuis un diff : il s’affiche en direct avec numéros et couleurs, les nouvelles lignes de l’agent sont marquées. Modifier pour le changer, Ctrl+S pour enregistrer ; si l’agent a écrit le fichier entre-temps, rien n’est écrasé.",
+            "bn": "ডিফ থেকে একটি ফাইল খুলুন: লাইন নম্বর ও রঙসহ লাইভ দেখা যায়, এজেন্টের নতুন লাইন চিহ্নিত থাকে। বদলাতে “সম্পাদনা” চাপুন, সংরক্ষণে Ctrl+S; ইতিমধ্যে এজেন্ট ফাইল বদলালে কিছুই ওভাররাইট হয় না।",
+            "pt-BR": "Abra um arquivo a partir de um diff: ele aparece ao vivo com números e cores, com as linhas novas do agente marcadas. Toque em Editar para mudar e Ctrl+S para salvar; se o agente escreveu o arquivo nesse meio-tempo, nada é sobrescrito.",
+            "ru": "Откройте файл из диффа: он виден вживую, с номерами строк и подсветкой, новые строки агента отмечены. Нажмите «Править», чтобы изменить, и Ctrl+S, чтобы сохранить; если агент тем временем записал файл, ничего не затрётся.",
+            "id": "Buka berkas dari diff: tampil langsung dengan nomor baris dan warna, baris baru dari agen ditandai. Tekan Edit untuk mengubah dan Ctrl+S untuk menyimpan; jika agen menulis berkas itu sementara itu, tidak ada yang tertimpa.",
+            "de": "Öffnen Sie eine Datei aus einem Diff: Sie erscheint live mit Zeilennummern und Farben, neue Zeilen des Agenten sind markiert. Mit Bearbeiten ändern, mit Strg+S speichern; hat der Agent die Datei inzwischen geschrieben, wird nichts überschrieben.",
+            "tr": "Bir diff’ten dosya açın: satır numaraları ve renklerle canlı görünür, ajanın yeni satırları işaretlenir. Değiştirmek için Düzenle’ye, kaydetmek için Ctrl+S’ye basın; bu sırada ajan dosyayı yazdıysa hiçbir şey ezilmez."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.7.3",
       "items": [
         {
