@@ -3296,3 +3296,70 @@ html[data-dir="rtl"] #views :is(.mail-text, .mail-input, .mail-subject) {
   padding: 1px 5px;
   cursor: default;
 }
+
+/* ── Pin in the header: the open island stays open ─────────────────────────── */
+
+.header-actions button.on svg {
+  color: var(--ink);
+}
+
+/* ── YouTube Music card: a bigger cover, a red play button, a bar that shows its progress ── */
+
+.np-card.ytm {
+  padding-top: 8px;
+}
+
+.np-card.ytm .np-head {
+  gap: 11px;
+}
+
+.np-card.ytm .np-art {
+  flex-basis: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+}
+
+.np-card.ytm .np-art::after {
+  border-radius: 4px;
+}
+
+.np-card.ytm .np-title {
+  font-size: 13px;
+}
+
+.np-card.ytm .np-sub {
+  font-size: 11.5px;
+}
+
+.np-card.ytm .np-progress {
+  padding-top: 6px;
+}
+
+.np-card.ytm .np-time {
+  color: var(--dim-2);
+}
+
+.np-card.ytm .np-fill {
+  height: 3px;
+}
+
+.np-card.ytm .np-controls {
+  padding-top: 3px;
+}
+
+.np-card.ytm .np-buttons {
+  gap: 12px;
+}
+
+.np-card.ytm .np-play {
+  width: 28px;
+  height: 28px;
+  background: #ff3d4a;
+  color: #fff;
+}
+
+.np-card.ytm .np-volume .np-bar {
+  flex-basis: 60px;
+  width: 60px;
+}

@@ -57,6 +57,8 @@ export interface ViewActions {
   /** Hands the pending request back to the terminal. */
   answerInTerminal(): void;
   toggleSound(): void;
+  /** The pin in the header: keeps the open island from folding away. */
+  togglePin(): void;
   setVolume(v: number): void;
   setAutoClose(seconds: number): void;
   openSettingsWindow(): void;
@@ -128,6 +130,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 13));
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 14));
+  const pinBtn = h("button", { onclick: () => actions.togglePin() }, svg(ICONS.pin, 14, { stroke: 2 }));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 14));
   // Plan usage pills (off by default): before the gear, Claude first, as on the Mac.
   const claudePill = buildPlanPill(false);
@@ -144,7 +147,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
     "div",
     { id: "header" },
     h("div", { class: "tabs" }, tabHome, tabChat, tabDrop),
-    h("div", { class: "header-actions" }, planPills, gearBtn, soundBtn),
+    h("div", { class: "header-actions" }, planPills, pinBtn, gearBtn, soundBtn),
   );
   const headerActions = el.lastElementChild as HTMLElement;
 
@@ -158,6 +161,10 @@ export function buildHeader(actions: ViewActions): ViewHost {
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
       gearBtn.append(svg(v === "settings" ? ICONS.gearFill : ICONS.gear, 14));
+      clear(pinBtn);
+      pinBtn.classList.toggle("on", State.isPinned);
+      pinBtn.title = State.isPinned ? t("Unpin") : t("Pin open");
+      pinBtn.append(State.isPinned ? svg(ICONS.pin, 14) : svg(ICONS.pin, 14, { stroke: 2 }));
       clear(soundBtn);
       soundBtn.append(svg(State.settings.soundEnabled ? ICONS.speakerOn : ICONS.speakerOff, 14));
       syncPlanPills();
