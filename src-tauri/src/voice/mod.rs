@@ -295,6 +295,12 @@ pub async fn voice_say_native(text: String, lang: Option<String>) -> bool {
             let _ = (text, lang);
             false
         }
+        // The webview speaks on the Mac; `say` is the fallback.
+        #[cfg(target_os = "macos")]
+        {
+            let _ = lang;
+            std::process::Command::new("say").arg(&text).status().is_ok_and(|s| s.success())
+        }
     })
     .await
     .unwrap_or(false)
@@ -509,6 +515,38 @@ fn find_app(wanted: &str) -> Option<(String, Box<dyn FnOnce()>)> {
     let (_, label, id) = best?;
     Some((label, Box::new(move || {
         let _ = std::process::Command::new("gtk-launch").arg(&id).spawn();
+    })))
+}
+
+/// The Mac's apps: `.app` bundles in the Applications folders, started with `open`.
+#[cfg(target_os = "macos")]
+fn find_app(wanted: &str) -> Option<(String, Box<dyn FnOnce()>)> {
+    let home = crate::platform::home_dir();
+    let dirs = [
+        std::path::PathBuf::from("/Applications"),
+        std::path::PathBuf::from("/System/Applications"),
+        std::path::PathBuf::from("/System/Applications/Utilities"),
+        home.join("Applications"),
+    ];
+    let mut best: Option<(usize, String, std::path::PathBuf)> = None;
+    for dir in dirs {
+        let Ok(entries) = std::fs::read_dir(&dir) else { continue };
+        for e in entries.flatten() {
+            let path = e.path();
+            if path.extension().is_none_or(|x| x != "app") {
+                continue;
+            }
+            let app_name = path.file_stem().unwrap_or_default().to_string_lossy().to_string();
+            let n = wake::normalize(&app_name);
+            let score = if n == wanted { 0 } else if n.starts_with(wanted) { 1 } else if n.contains(wanted) { 2 } else { continue };
+            if best.as_ref().is_none_or(|(s, _, _)| score < *s) {
+                best = Some((score, app_name, path));
+            }
+        }
+    }
+    let (_, label, path) = best?;
+    Some((label, Box::new(move || {
+        let _ = std::process::Command::new("open").arg(&path).spawn();
     })))
 }
 

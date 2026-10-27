@@ -54,7 +54,7 @@ export interface PillDefinition {
   connect: PillConnect;
 }
 
-export type HostOs = "windows" | "linux";
+export type HostOs = "windows" | "linux" | "macos";
 
 const hooks: PillConnect = { kind: "hooks" };
 const key = (k: string): PillConnect => ({ kind: "key", key: k });
@@ -164,14 +164,21 @@ export const MAX_DECLARED = 4;
 
 /** The OS this page runs on. Only the Windows webview says "Windows". */
 export const HOST_OS: HostOs =
-  typeof navigator !== "undefined" && /Windows/.test(navigator.userAgent ?? "") ? "windows" : "linux";
+  typeof navigator === "undefined"
+    ? "linux"
+    : /Windows/.test(navigator.userAgent ?? "")
+      ? "windows"
+      : /Macintosh|Mac OS X/.test(navigator.userAgent ?? "")
+        ? "macos"
+        : "linux";
 
 export function pillDefinition(id: string): PillDefinition | undefined {
   return PILL_CATALOG.find((p) => p.id === id);
 }
 
 function offeredOn(def: PillDefinition, os: HostOs): boolean {
-  return def.support === "yes" || def.support === "soon" || def.support === os;
+  // The Claude desktop app exists for Windows and macOS, so "windows" pills are offered on the Mac too.
+  return def.support === "yes" || def.support === "soon" || def.support === os || (def.support === "windows" && os === "macos");
 }
 
 /** The pills this build offers, in catalog order. */

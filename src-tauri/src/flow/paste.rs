@@ -30,6 +30,10 @@ fn set_text(clipboard: &mut Clipboard, text: &str) -> Result<(), arboard::Error>
         use arboard::SetExtLinux;
         clipboard.set().exclude_from_history().text(text.to_string())
     }
+    #[cfg(target_os = "macos")]
+    {
+        clipboard.set_text(text.to_string())
+    }
 }
 
 /// Copies `text` and leaves it there (the dictation could not be pasted).

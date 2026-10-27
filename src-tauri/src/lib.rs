@@ -342,6 +342,11 @@ fn open_session(session_id: Option<String>, path: Option<String>) -> bool {
         });
         true
     }
+    #[cfg(target_os = "macos")]
+    {
+        let _ = (owners, folder);
+        open_in_vscode(path)
+    }
 }
 
 /// The Claude Desktop pill's target: the Claude app (Windows only — it has no

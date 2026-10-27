@@ -1,4 +1,4 @@
-//! The Linux transport: a Unix socket in the user's runtime directory.
+//! The Linux and macOS transport: a Unix socket in a directory only the user can open.
 //!
 //! `$XDG_RUNTIME_DIR` is private to the user (mode 0700), so nobody else can
 //! even reach the socket. We still check, once connected, that the process on
@@ -18,6 +18,14 @@ use crate::CONNECT_TIMEOUT;
 /// variable is missing (a hook started from a stripped-down environment). The
 /// directory must be ours and closed to everyone else, or there is no relay.
 /// Must match `platform::relay_socket_path()` in the app exactly.
+#[cfg(target_os = "macos")]
+fn socket_path() -> Option<PathBuf> {
+    // macOS has no runtime directory: the app keeps its socket in its own private folder.
+    let dir = PathBuf::from(std::env::var_os("HOME")?).join("Library/Application Support/Tobi");
+    is_private_dir(&dir).then(|| dir.join("tobi.sock"))
+}
+
+#[cfg(target_os = "linux")]
 fn socket_path() -> Option<PathBuf> {
     let dir = std::env::var_os("XDG_RUNTIME_DIR")
         .map(PathBuf::from)
@@ -60,8 +68,29 @@ pub fn connect() -> Option<UnixStream> {
 /// parking us until the app gets round to accepting. Blocking again afterwards:
 /// the main thread's budget bounds every read and write.
 fn try_connect(path: &Path) -> io::Result<UnixStream> {
+    #[cfg(target_os = "linux")]
     let fd = unsafe {
         libc::socket(libc::AF_UNIX, libc::SOCK_STREAM | libc::SOCK_CLOEXEC | libc::SOCK_NONBLOCK, 0)
+    };
+    // macOS has neither flag on socket(): set them afterwards.
+    #[cfg(target_os = "macos")]
+    let fd = unsafe {
+        let fd = libc::socket(libc::AF_UNIX, libc::SOCK_STREAM, 0);
+        if fd >= 0 {
+            libc::fcntl(fd, libc::F_SETFD, libc::FD_CLOEXEC);
+            let flags = libc::fcntl(fd, libc::F_GETFL);
+            libc::fcntl(fd, libc::F_SETFL, flags | libc::O_NONBLOCK);
+            // A write to a closed socket must be an error, not SIGPIPE.
+            let one: libc::c_int = 1;
+            libc::setsockopt(
+                fd,
+                libc::SOL_SOCKET,
+                libc::SO_NOSIGPIPE,
+                &one as *const libc::c_int as *const libc::c_void,
+                std::mem::size_of::<libc::c_int>() as libc::socklen_t,
+            );
+        }
+        fd
     };
     if fd < 0 {
         return Err(io::Error::last_os_error());
@@ -96,6 +125,7 @@ fn try_connect(path: &Path) -> io::Result<UnixStream> {
 
 /// True when the process serving the socket runs as the same user we do.
 /// A failure to answer is treated as "not ours", as on Windows.
+#[cfg(target_os = "linux")]
 fn server_is_same_user(stream: &UnixStream) -> bool {
     let mut cred: libc::ucred = unsafe { std::mem::zeroed() };
     let mut len = std::mem::size_of::<libc::ucred>() as libc::socklen_t;
@@ -111,4 +141,10 @@ fn server_is_same_user(stream: &UnixStream) -> bool {
     rc == 0
         && len as usize == std::mem::size_of::<libc::ucred>()
         && cred.uid == unsafe { libc::getuid() }
+}
+
+#[cfg(target_os = "macos")]
+fn server_is_same_user(stream: &UnixStream) -> bool {
+    let (mut uid, mut gid): (libc::uid_t, libc::gid_t) = (0, 0);
+    unsafe { libc::getpeereid(stream.as_raw_fd(), &mut uid, &mut gid) == 0 && uid == libc::getuid() }
 }

@@ -23,7 +23,7 @@ export interface UpdateStatus {
   canInstall: boolean;
   phase: UpdatePhase;
   check: UpdateCheck;
-  platform: "windows" | "linux";
+  platform: "windows" | "linux" | "macos";
 }
 
 /** Rust's offers: the question, a version to announce, or the card asked for (tray, Check now). */

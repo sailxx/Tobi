@@ -21,6 +21,9 @@ pub mod os;
 #[cfg(target_os = "linux")]
 #[path = "os_linux.rs"]
 pub mod os;
+#[cfg(target_os = "macos")]
+#[path = "os_macos.rs"]
+pub mod os;
 #[cfg(target_os = "linux")]
 pub mod wayland;
 
@@ -91,9 +94,9 @@ fn is_terminal(id: &str) -> bool {
     {
         os::is_terminal(id)
     }
-    #[cfg(windows)]
+    #[cfg(any(windows, target_os = "macos"))]
     {
-        // Windows Terminal, conhost and the rest paste with Ctrl+V.
+        // Windows Terminal, conhost and the rest paste with Ctrl+V; the Mac's terminals with Cmd+V.
         let _ = id;
         false
     }
@@ -405,7 +408,13 @@ pub fn flow_status(flow: State<Arc<Flow>>) -> FlowStatus {
         },
         has_claude_key: cleanup::has_key(),
         mics: audio::input_devices(),
-        platform: if cfg!(windows) { "windows" } else { "linux" },
+        platform: if cfg!(windows) {
+            "windows"
+        } else if cfg!(target_os = "macos") {
+            "macos"
+        } else {
+            "linux"
+        },
         autostarted: crate::launched_at_login(),
         user_name: crate::platform::user_full_name()
             .and_then(|n| n.split_whitespace().next().map(String::from))

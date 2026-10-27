@@ -99,6 +99,19 @@ windows = { version = "0.61", features = [
 # The clipboard for Flow dictation, kept out of the clipboard history. MIT/Apache-2.0.
 arboard = { version = "3.6", default-features = false }
 
+[target.'cfg(target_os = "macos")'.dependencies]
+# Keychain (the login keychain), through Security.framework.
+keyring = { version = "3", features = ["apple-native"] }
+libc = "0.2"
+# Tauri's own macOS dependencies, for the island's NSWindow level and Spaces behaviour
+# (platform/macos.rs). Same versions as tauri, so nothing new is compiled.
+objc2 = "0.6"
+objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSWindow", "NSResponder"] }
+# A transparent window on macOS (the island's) needs Apple's private API; Tobi is not sold through the App Store.
+tauri = { version = "2", features = ["macos-private-api"] }
+# The clipboard for Flow dictation.
+arboard = { version = "3.6", default-features = false }
+
 [target.'cfg(target_os = "linux")'.dependencies]
 # Secret Service (GNOME Keyring, KWallet) over D-Bus, encrypted in transit.
 keyring = { version = "3", features = ["sync-secret-service", "crypto-rust"] }
