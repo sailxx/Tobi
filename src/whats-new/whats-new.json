@@ -3,7 +3,6 @@
   "releases": [
     {
       "version": "0.6.0",
-      "version": "0.5.1",
       "items": [
         {
           "icon": "chat",
@@ -34,6 +33,16 @@
             "id": "Klik pesan di chat Telegram atau WhatsApp untuk melihatnya utuh beserta fotonya, lalu salin teks atau fotonya.",
             "de": "Klicke in einem Telegram- oder WhatsApp-Chat auf eine Nachricht, um sie komplett mit Foto zu sehen und Text oder Foto zu kopieren.",
             "tr": "Telegram veya WhatsApp sohbetinde bir mesaja tıkla: tamamı fotoğrafıyla görünür, metni veya fotoğrafı kopyalayabilirsin."
+          }
+        }
+      ]
+    },
+    {
+      "version": "0.5.1",
+      "items": [
+        {
+          "icon": "chat",
+          "title": {
             "en": "The phone finds your computer",
             "zh-Hans": "手机能找到你的电脑",
             "hi": "फ़ोन को आपका कंप्यूटर मिल जाता है",
