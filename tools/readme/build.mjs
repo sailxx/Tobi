@@ -3,6 +3,7 @@
 // Запуск: cd tools/readme && npm install && node build.mjs
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createKit, ICONS } from './kit.mjs';
 
@@ -221,11 +222,28 @@ ${ls.map((l, k) => fitText(x + 20, y + 86 + k * 18, l, w - 30, { size: 13, weigh
 }
 
 // ---------- ДОРОЖНАЯ КАРТА ----------
+// Выпущенное берётся из src/whats-new/whats-new.json (запись добавляется с каждым релизом), дата из тега.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function releaseDate(ver) {
+  const git = (...a) => execFileSync('git', a, { cwd: REPO, encoding: 'utf8' }).trim();
+  let iso;
+  try { iso = git('log', '-1', '--format=%as', 'v' + ver); } catch { iso = ''; }
+  if (!iso) iso = new Date().toISOString().slice(0, 10); // релиз ещё без тега: сегодня
+  const [, m, d] = iso.split('-').map(Number);
+  return `${MONTHS[m - 1]} ${d}`;
+}
+function doneList(n = 11) {
+  const file = JSON.parse(fs.readFileSync(path.join(REPO, 'src/whats-new/whats-new.json'), 'utf8'));
+  return file.releases.filter((x) => x.items?.length).slice(0, n).reverse().map((x) => {
+    const it = x.items[0];
+    return [x.version, releaseDate(x.version), it.title.en];
+  });
+}
 function roadmap(t) {
-  const W = 880, r = t.roadmap;
+  const W = 880, r = { ...t.roadmap, done: doneList() };
   const head = sectionHead(r.chip, r.title);
   let b = head.s;
-  const top = head.y, RH = 50, n = r.done.length;
+  const top = head.y, RH = 42, n = r.done.length;
   const LH = 56 + n * RH + 6;
   const lx = 40, lw = 500;
   // левая колонка: выпущенное
@@ -233,14 +251,13 @@ function roadmap(t) {
 <text class="m" x="${lx + 24}" y="${top + 34}" font-size="12" font-weight="600" letter-spacing="1" fill="${HONEY}">${T(r.doneHead.toUpperCase())}</text></g>`;
   const x0 = lx + 34, y0 = top + 74;
   b += `<line x1="${x0}" y1="${y0}" x2="${x0}" y2="${y0 + (n - 1) * RH}" stroke="${HONEY}" stroke-opacity=".35" stroke-width="2"/>`;
-  r.done.forEach(([ver, date, title, desc], i) => {
+  r.done.forEach(([ver, date, title], i) => {
     const y = y0 + i * RH, last = i === n - 1;
     b += `<g class="r" ${delay(3 + i)}>`;
     if (last) b += `<circle cx="${x0}" cy="${y}" r="11" fill="${HONEY}" fill-opacity=".18"/>`;
     b += `<circle cx="${x0}" cy="${y}" r="5" fill="${HONEY}"/>`;
     b += `<text class="m" x="${x0 + 22}" y="${y + 4}" font-size="13" font-weight="700" fill="${last ? HONEY_HI : P.ink}">${T(ver)}</text>`;
-    b += fitText(x0 + 82, y + 1, title, 230, { size: 15, weight: 700 });
-    b += fitText(x0 + 82, y + 20, desc, 330, { size: 12.5, weight: 500, fill: P.muted });
+    b += fitText(x0 + 82, y + 5, title, 340, { size: 15, weight: 700 });
     b += `<text class="m" x="${lx + lw - 24}" y="${y + 4}" text-anchor="end" font-size="12" fill="${P.dim}">${T(date)}</text></g>`;
   });
   // правая колонка: дальше

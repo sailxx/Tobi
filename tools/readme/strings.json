@@ -225,65 +225,9 @@
     },
     "roadmap": {
       "chip": "Roadmap",
-      "title": "Where Tobi came from, *where he goes next*",
-      "alt": "Roadmap: releases from 0.1 to 0.7.1, what comes next and the known gaps",
+      "title": "Latest releases, *and what comes next*",
+      "alt": "Roadmap: latest releases, what comes next and the known gaps",
       "doneHead": "Released",
-      "done": [
-        [
-          "0.1",
-          "Oct 21",
-          "The island",
-          "Agents, permissions, Ctrl+Alt+N, Tobi himself"
-        ],
-        [
-          "0.1.8",
-          "Oct 23",
-          "Chat",
-          "Claude Code in the chat, no API key"
-        ],
-        [
-          "0.2",
-          "Oct 26",
-          "WhatsApp and Android",
-          "What’s new, Tobi for Android, phone link"
-        ],
-        [
-          "0.3",
-          "Oct 26",
-          "Telegram",
-          "Your own account, shared chat card"
-        ],
-        [
-          "0.4",
-          "Oct 26",
-          "Gmail",
-          "Read, reply, archive, delete to bin"
-        ],
-        [
-          "0.5",
-          "Oct 26",
-          "Any mailbox",
-          "IMAP and SMTP with an app password"
-        ],
-        [
-          "0.6",
-          "Oct 27",
-          "Message in full",
-          "Whole text, photo, copy"
-        ],
-        [
-          "0.7",
-          "Oct 27",
-          "Linux and macOS",
-          "Builds in CI and in the release"
-        ],
-        [
-          "0.7.1",
-          "Oct 27",
-          "Russian everywhere",
-          "Android 0.1.3"
-        ]
-      ],
       "nextHead": "Next",
       "next": [
         [

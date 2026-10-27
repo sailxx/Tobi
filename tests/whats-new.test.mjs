@@ -156,3 +156,10 @@ test("the blue only when Tobi has nothing else to say", () => {
 test("All changes", () => {
   assert.equal(releasePage("0.2.0"), "https://github.com/sailxx/Tobi/releases/tag/v0.2.0");
 });
+
+test("README images are rebuilt for this version (cd tools/readme && node build.mjs)", () => {
+  for (const [name, mark] of [["hero-en.svg", `V${PKG.version}`], ["roadmap-en.svg", `>${PKG.version}<`]]) {
+    const svg = readFileSync(new URL(`../assets/readme/${name}`, import.meta.url), "utf8");
+    assert.ok(svg.includes(mark), `${name} is stale: run node build.mjs in tools/readme`);
+  }
+});
