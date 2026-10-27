@@ -947,6 +947,7 @@ pub fn run() {
             telegram::telegram_island,
             telegram::telegram_open,
             telegram::telegram_close,
+            telegram::telegram_media,
             telegram::telegram_send,
             telegram::telegram_ignore,
             telegram::telegram_unignore,

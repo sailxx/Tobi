@@ -8,12 +8,16 @@
 // Shift+Enter starts a new line, Escape goes back to the list. Nothing is sent without the user's
 // own Enter or click, and while a reply is being typed the island stays open.
 //
+// A click on a message opens it whole: the full text, the photo (fetched then, never before) and
+// two buttons, Copy text and Copy photo. Back, or Escape, returns to the conversation.
+//
 // Built once and synced in place: the field keeps its draft and the keyboard while messages arrive.
 
 import { h, svg, clear, dot } from "./dom";
+import { writeClipboard } from "./markdown";
 import { ICONS } from "./icons";
 import { State } from "../core/state";
-import { canSend, initials, keyAction, lastMessages, preview, previewParts, timeAgo, type WaConversation, type WaMessage } from "../core/whatsapp";
+import { canSend, copyableText, hasPhoto, initials, keyAction, lastMessages, preview, previewParts, timeAgo, type WaConversation, type WaMessage } from "../core/whatsapp";
 import { language, t, tl } from "../i18n/i18n";
 
 /** What the card reads of a messenger's report (core/whatsapp.ts WaIslandView, core/telegram.ts TgIslandView). */
@@ -39,6 +43,8 @@ export interface ChatCardConfig {
     close(chat: string): Promise<unknown>;
     send(chat: string, text: string): Promise<boolean | null>;
     ignore(chat: string): Promise<unknown>;
+    /** The message's photo as a data: URL; only where the messenger can give it (Telegram). */
+    media?(chat: string, id: string): Promise<string | null>;
   };
 }
 
@@ -64,9 +70,42 @@ function avatar(color: string, name: string, isGroup: boolean, size = 16): HTMLE
   return el;
 }
 
-function bubble(m: WaMessage, isGroup: boolean): HTMLElement {
+/** A picture from a data: URL as PNG bytes: the clipboard takes PNG whatever the photo was. */
+function pngBlob(url: string): Promise<Blob | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      canvas.getContext("2d")?.drawImage(img, 0, 0);
+      canvas.toBlob((b) => resolve(b), "image/png");
+    };
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+async function copyPhoto(url: string): Promise<boolean> {
+  const Item = (window as { ClipboardItem?: typeof ClipboardItem }).ClipboardItem;
+  if (!Item || !navigator.clipboard?.write) return false;
+  try {
+    const blob = await pngBlob(url);
+    if (!blob) return false;
+    await navigator.clipboard.write([new Item({ "image/png": blob })]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function bubble(m: WaMessage, isGroup: boolean, onOpen: (m: WaMessage) => void): HTMLElement {
   const { label, value } = previewParts(m);
-  const box = h("div", { class: m.fromMe ? "wa-bubble mine" : "wa-bubble" });
+  const box = h("div", { class: m.fromMe ? "wa-bubble mine" : "wa-bubble", title: tl("Open the message") });
+  // A selection made by dragging is for copying, not for opening.
+  box.addEventListener("click", () => {
+    if (!window.getSelection?.()?.toString()) onOpen(m);
+  });
   if (isGroup && !m.fromMe && m.senderName) box.append(h("div", { class: "wa-sender", text: m.senderName }));
   if (label) box.append(h("div", { class: "wa-media", text: t(label) }));
   if (value) box.append(h("div", { class: "wa-text", text: value }));
@@ -92,13 +131,27 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
   const note = h("div", { class: "wa-note" });
   const convoView = h("div", { class: "wa-convo" }, convoHead, messages, reply, note);
 
-  const el = h("div", { class: "int-card wa-card", style: `--chat-accent:${cfg.color}` }, listView, convoView);
+  // ── One message, whole ──
+  const detailBack = h("button", { class: "int-back wa-back", title: tl("Back") }, svg(ICONS.chevronLeft, 10, { stroke: 2.4 }));
+  const detailWho = h("b", { class: "wa-name" });
+  const detailWhen = h("span", { class: "int-ago" });
+  const detailHead = h("div", { class: "wa-head" }, detailBack, detailWho, detailWhen);
+  const detailBody = h("div", { class: "wa-detail-body" });
+  const copyTextBtn = h("button", { class: "link-btn", text: tl("Copy text") });
+  const copyPhotoBtn = h("button", { class: "link-btn", text: tl("Copy photo") });
+  const detailNote = h("span", { class: "wa-detail-note" });
+  const detailActions = h("div", { class: "wa-detail-actions" }, copyTextBtn, copyPhotoBtn, detailNote);
+  const detailView = h("div", { class: "wa-convo wa-detail" }, detailHead, detailBody, detailActions);
+
+  const el = h("div", { class: "int-card wa-card", style: `--chat-accent:${cfg.color}` }, listView, convoView, detailView);
 
   let openChat: string | null = null;
   /** The row whose "Ignore this chat" is showing (a right-click on it). */
   let ignoring: string | null = null;
   let listKey = "";
   let convoKey = "";
+  /** The message open whole, with its photo once fetched (null until then or when there is none). */
+  let detail: { message: WaMessage; photo: string | null } | null = null;
 
   const current = (): WaConversation | undefined =>
     openChat ? cfg.view().conversations.find((c) => c.id === openChat) : undefined;
@@ -114,8 +167,86 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
     sync();
   }
 
+  function openDetail(m: WaMessage, isGroup: boolean) {
+    const chat = openChat;
+    if (!chat) return;
+    detail = { message: m, photo: null };
+    detailWho.textContent = m.fromMe ? t("You") : isGroup && m.senderName ? m.senderName : current()?.name ?? "";
+    detailWhen.textContent = new Date(m.date).toLocaleString(language(), { dateStyle: "medium", timeStyle: "short" });
+    setDetailNote("");
+    clear(detailBody);
+    const text = copyableText(m);
+    if (hasPhoto(m) && cfg.bridge.media) {
+      const slot = h("div", { class: "wa-photo wa-skeleton" });
+      detailBody.append(slot);
+      void cfg.bridge.media(chat, m.id).then((url) => {
+        // Gone back, or onto another message, while it loaded.
+        if (!detail || detail.message.id !== m.id) return;
+        if (!url) {
+          slot.className = "wa-photo failed";
+          slot.textContent = t("The photo can’t be loaded");
+          return;
+        }
+        detail.photo = url;
+        slot.className = "wa-photo";
+        slot.replaceChildren(h("img", { class: "wa-photo-img", src: url, alt: "" }));
+        syncDetailButtons();
+      });
+    } else {
+      const { label } = previewParts(m);
+      if (label) detailBody.append(h("div", { class: "wa-media", text: t(label) }));
+    }
+    if (text) detailBody.append(h("div", { class: "wa-detail-text", text }));
+    syncDetailButtons();
+    // Held open while reading: the island doesn't fold under the pointer.
+    host.holdOpen(true);
+    window.addEventListener("keydown", detailKey, true);
+    sync();
+  }
+
+  function closeDetail() {
+    if (!detail) return;
+    detail = null;
+    window.removeEventListener("keydown", detailKey, true);
+    host.holdOpen(field.value.trim().length > 0);
+    sync();
+  }
+
+  function detailKey(e: KeyboardEvent) {
+    if (e.key !== "Escape") return;
+    e.preventDefault();
+    e.stopPropagation();
+    closeDetail();
+  }
+
+  function syncDetailButtons() {
+    if (!detail) return;
+    copyTextBtn.style.display = copyableText(detail.message) ? "" : "none";
+    copyPhotoBtn.style.display = detail.photo ? "" : "none";
+  }
+
+  let noteTimer: number | null = null;
+  function setDetailNote(text: string) {
+    detailNote.textContent = text;
+    if (noteTimer != null) window.clearTimeout(noteTimer);
+    noteTimer = text ? window.setTimeout(() => (detailNote.textContent = ""), 1800) : null;
+  }
+
+  detailBack.addEventListener("click", closeDetail);
+  copyTextBtn.addEventListener("click", async () => {
+    if (!detail) return;
+    await writeClipboard(copyableText(detail.message));
+    setDetailNote(t("Copied"));
+  });
+  copyPhotoBtn.addEventListener("click", async () => {
+    if (!detail?.photo) return;
+    setDetailNote((await copyPhoto(detail.photo)) ? t("Copied") : t("Couldn’t copy the photo"));
+  });
+
   function close() {
     if (openChat == null) return;
+    detail = null;
+    window.removeEventListener("keydown", detailKey, true);
     void cfg.bridge.close(openChat);
     openChat = null;
     field.value = "";
@@ -245,7 +376,7 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
       convoName.textContent = c.name;
       convoName.title = c.id.split("@")[0];
       clear(messages);
-      for (const m of shown) messages.append(bubble(m, c.isGroup));
+      for (const m of shown) messages.append(bubble(m, c.isGroup, (x) => openDetail(x, c.isGroup)));
       // The newest at the bottom, in view.
       if (first || wasAtBottom) messages.scrollTop = messages.scrollHeight;
     }
@@ -272,7 +403,8 @@ export function buildChatCard(cfg: ChatCardConfig, host: ChatCardHost): ChatCard
       return;
     }
     listView.style.display = c ? "none" : "";
-    convoView.style.display = c ? "" : "none";
+    convoView.style.display = c && !detail ? "" : "none";
+    detailView.style.display = c && detail ? "" : "none";
     if (c) syncConversation(c);
     else syncList();
   }

@@ -4,20 +4,30 @@
 
 import { beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { emit, sent } from "./tauri.mjs";
+import { emit, internals, sent } from "./tauri.mjs";
 import { installFakeDom } from "./fakedom.mjs";
 import {
-  IDLE_WHATSAPP, WHATSAPP_ID, WhatsApp, canSend, duration, initials, installError, installFailure, installStepLabel,
+  IDLE_WHATSAPP, WHATSAPP_ID, WhatsApp, canSend, copyableText, duration, hasPhoto, initials, installError, installFailure, installStepLabel,
   keyAction, lastMessages, linkColor, linkLabel, preview, sendErrorLabel, showsLinkState, testResultLabel, timeAgo,
   webhookLine,
 } from "../src/core/whatsapp.ts";
 import { handlePillEvent, registerWhatsAppHandlers } from "../src/island/whatsapp.ts";
 import { buildWhatsAppCard } from "../src/views/whatsapp.ts";
+import { buildTelegramCard } from "../src/views/telegram.ts";
+import { Telegram, IDLE_TELEGRAM, TELEGRAM_ID } from "../src/core/telegram.ts";
 import { pillDefinition } from "../src/core/pills.ts";
 import { DEFAULT_SETTINGS, State } from "../src/core/state.ts";
 import { lookup, setLanguage } from "../src/i18n/i18n.ts";
 
 installFakeDom();
+
+// The card listens for Escape on the window while a message is open whole.
+const windowKeys = [];
+globalThis.addEventListener = (type, fn) => type === "keydown" && windowKeys.push(fn);
+globalThis.removeEventListener = (type, fn) => {
+  const i = windowKeys.indexOf(fn);
+  if (type === "keydown" && i >= 0) windowKeys.splice(i, 1);
+};
 
 const NOW = 1_800_000_000_000;
 
@@ -111,6 +121,14 @@ test("Enter sends, Shift+Enter is a new line, Escape goes back, a composition ne
   assert.equal(canSend("hi", false), true);
   const many = conversation({ messages: Array.from({ length: 20 }, (_, i) => msg({ id: `m${i}` })) });
   assert.deepEqual(lastMessages(many).map((m) => m.id), ["m10", "m11", "m12", "m13", "m14", "m15", "m16", "m17", "m18", "m19"]);
+});
+
+test("a message opens whole when it has text or a photo; copying takes the text as written", () => {
+  assert.equal(hasPhoto(msg({ media: { kind: "image" } })), true);
+  assert.equal(hasPhoto(msg({ media: { kind: "video" } })), false);
+  assert.equal(hasPhoto(msg()), false);
+  assert.equal(copyableText(msg({ text: "  line one\nline two \n" })), "line one\nline two");
+  assert.equal(copyableText(msg({ text: "", media: { kind: "image" } })), "", "a bare photo has no text to copy");
 });
 
 test("the words are translated", () => {
@@ -320,4 +338,88 @@ test("the conversation closes when WhatsApp is turned off or the island folds", 
   WhatsApp.view = { ...IDLE_WHATSAPP };
   c.sync();
   assert.equal(sent("whatsapp_close").length, closes + 2);
+});
+
+test("a click on a message opens it whole; Escape or Back returns to the conversation", () => {
+  const c = card();
+  WhatsApp.view = connected({ unread: 1, conversations: [conversation({ messages: [msg({ text: "A long one.\nSecond line." })] })] });
+  State.mode = "expanded";
+  State.focusId = WHATSAPP_ID;
+  c.sync();
+  c.el.find(".wa-row")[0].fire("click");
+  const [convo, detail] = [c.el.find(".wa-convo")[0], c.el.find(".wa-detail")[0]];
+  assert.equal(detail.style.display, "none");
+  c.el.find(".wa-bubble")[0].fire("click");
+  assert.equal(convo.style.display, "none");
+  assert.equal(detail.style.display, "");
+  assert.equal(c.el.find(".wa-detail-text")[0].textContent, "A long one.\nSecond line.");
+  assert.equal(c.calls.hold.at(-1), true, "the island stays open while a message is read");
+  assert.equal(windowKeys.length, 1);
+
+  // Escape closes the message, not the island or the conversation.
+  const esc = { key: "Escape", defaultPrevented: false, preventDefault() { this.defaultPrevented = true; }, stopPropagation() { this.stopped = true; } };
+  for (const fn of [...windowKeys]) fn(esc);
+  assert.equal(esc.stopped, true);
+  assert.equal(detail.style.display, "none");
+  assert.equal(convo.style.display, "");
+  assert.equal(c.calls.hold.at(-1), false);
+  assert.equal(windowKeys.length, 0);
+
+  // Open again, then Back.
+  c.el.find(".wa-bubble")[0].fire("click");
+  c.el.find(".wa-back")[1].fire("click");
+  assert.equal(detail.style.display, "none");
+
+  // Leaving the card with a message open drops its key listener too.
+  c.el.find(".wa-bubble")[0].fire("click");
+  State.mode = "compact";
+  State.notify();
+  assert.equal(windowKeys.length, 0);
+});
+
+test("a Telegram photo is fetched only when its message is opened, and its buttons follow", async () => {
+  const photo = "data:image/jpeg;base64,/9j/";
+  const invoke = internals.invoke;
+  internals.invoke = async (cmd, args) => {
+    const recorded = await invoke(cmd, args);
+    return cmd === "telegram_media" ? (args.id === "p1" ? photo : null) : recorded;
+  };
+  try {
+    State.settings = { ...DEFAULT_SETTINGS, activeIntegrations: [TELEGRAM_ID] };
+    State.loadIntegrationTasks();
+    const chat = "42";
+    Telegram.view = { ...IDLE_TELEGRAM, on: true, link: { state: "connected" }, unread: 1, conversations: [
+      conversation({ id: chat, messages: [
+        msg({ id: "p1", chat, media: { kind: "image" }, text: "look" }),
+        msg({ id: "p2", chat, media: { kind: "image" }, text: "" }),
+      ] }),
+    ] };
+    State.mode = "expanded";
+    State.focusId = TELEGRAM_ID;
+    const c = buildTelegramCard({ openSettings() {}, keyboard() {}, holdOpen() {} });
+    c.sync();
+    c.el.find(".wa-row")[0].fire("click");
+    const asked = () => sent("telegram_media").length;
+    assert.equal(asked(), 0, "opening the chat downloads nothing");
+    const [textBtn, photoBtn] = c.el.find(".wa-detail-actions")[0].children;
+
+    c.el.find(".wa-bubble")[0].fire("click");
+    assert.equal(c.el.find(".wa-skeleton").length, 1, "a placeholder while it loads");
+    await new Promise((r) => setTimeout(r, 0));
+    assert.deepEqual(sent("telegram_media").at(-1), { chat, id: "p1" });
+    assert.equal(c.el.find(".wa-photo-img")[0].getAttribute("src"), photo);
+    assert.equal(textBtn.style.display, "");
+    assert.equal(photoBtn.style.display, "");
+
+    // A photo that won't come: said so, no Copy photo; a bare photo has no Copy text.
+    c.el.find(".wa-back")[1].fire("click");
+    c.el.find(".wa-bubble")[1].fire("click");
+    await new Promise((r) => setTimeout(r, 0));
+    assert.match(c.el.find(".wa-photo")[0].textContent, /can’t be loaded/);
+    assert.equal(textBtn.style.display, "none");
+    assert.equal(photoBtn.style.display, "none");
+  } finally {
+    internals.invoke = invoke;
+    Telegram.view = { ...IDLE_TELEGRAM };
+  }
 });

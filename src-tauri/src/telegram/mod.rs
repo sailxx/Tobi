@@ -728,6 +728,59 @@ pub async fn telegram_open(chat: String) {
     changed();
 }
 
+/// The most a photo may weigh to be shown in the island: Telegram's own are a few hundred KB.
+const MAX_PHOTO_BYTES: usize = 12 * 1024 * 1024;
+
+/// The picture's type from its first bytes (Telegram sends JPEG, documents may be anything).
+fn image_mime(bytes: &[u8]) -> Option<&'static str> {
+    match bytes {
+        [0xFF, 0xD8, 0xFF, ..] => Some("image/jpeg"),
+        [0x89, b'P', b'N', b'G', ..] => Some("image/png"),
+        [b'G', b'I', b'F', b'8', ..] => Some("image/gif"),
+        [b'R', b'I', b'F', b'F', _, _, _, _, b'W', b'E', b'B', b'P', ..] => Some("image/webp"),
+        _ => None,
+    }
+}
+
+/// `data:` URL of a picture, None when the bytes are not one.
+fn image_data_url(bytes: &[u8]) -> Option<String> {
+    let mime = image_mime(bytes)?;
+    Some(format!("data:{mime};base64,{}", crate::claude::base64_for(bytes)))
+}
+
+/// The photo of one message, as a `data:` URL for the detail view (shown, and copied to the
+/// clipboard by the page). Fetched when the message is opened, never in advance; None when it has
+/// no picture, is too big, or Telegram doesn't answer.
+#[tauri::command]
+pub async fn telegram_media(chat: String, id: String) -> Option<String> {
+    use grammers_client::media::Media as M;
+    let (client, peer) = {
+        let c = ctl();
+        (c.online.as_ref().map(|o| o.client.clone()), c.peers.get(&chat).copied())
+    };
+    let (client, peer) = (client?, peer?);
+    let id: i32 = id.parse().ok()?;
+    let message = client.get_messages_by_id(peer, &[id]).await.ok()?.into_iter().next()??;
+    let media = message.media()?;
+    let picture = match &media {
+        M::Photo(_) => true,
+        M::Document(d) => d.mime_type().is_some_and(|m| m.starts_with("image/")),
+        _ => false,
+    };
+    if !picture {
+        return None;
+    }
+    let mut iter = client.iter_download(&media);
+    let mut bytes: Vec<u8> = vec![];
+    while let Ok(Some(chunk)) = iter.next().await {
+        bytes.extend(chunk);
+        if bytes.len() > MAX_PHOTO_BYTES {
+            return None;
+        }
+    }
+    image_data_url(&bytes)
+}
+
 #[tauri::command]
 pub fn telegram_close(chat: String) {
     let mut c = ctl();
@@ -1024,6 +1077,17 @@ mod tests {
             from_me: false,
             mentions_me: false,
         }
+    }
+
+    #[test]
+    fn a_picture_is_told_by_its_first_bytes() {
+        assert_eq!(image_mime(&[0xFF, 0xD8, 0xFF, 0xE0, 0]), Some("image/jpeg"));
+        assert_eq!(image_mime(&[0x89, b'P', b'N', b'G', 0x0D, 0x0A]), Some("image/png"));
+        assert_eq!(image_mime(&[b'R', b'I', b'F', b'F', 0, 0, 0, 0, b'W', b'E', b'B', b'P']), Some("image/webp"));
+        assert_eq!(image_mime(b"%PDF-1.7"), None);
+        assert_eq!(image_mime(&[]), None);
+        assert_eq!(image_data_url(&[0xFF, 0xD8, 0xFF]), Some("data:image/jpeg;base64,/9j/".to_string()));
+        assert_eq!(image_data_url(b"not a picture"), None);
     }
 
     #[test]

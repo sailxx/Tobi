@@ -480,6 +480,8 @@ export const Bridge = {
   /** A chat opened in the card: its latest messages, the receipt if Settings says so. */
   telegramOpen: (chat: string) => call<void>("telegram_open", { chat }),
   telegramClose: (chat: string) => call<void>("telegram_close", { chat }),
+  /** The photo of one message as a data: URL, fetched when its detail opens; null when there is none. */
+  telegramMedia: (chat: string, id: string) => call<string | null>("telegram_media", { chat, id }),
   /** Enter or the send button only. True once Telegram took it. */
   telegramSend: (chat: string, text: string) => call<boolean>("telegram_send", { chat, text }),
   telegramIgnore: (chat: string) => call<void>("telegram_ignore", { chat }),

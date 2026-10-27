@@ -169,6 +169,17 @@ export function preview(m: WaMessage, isGroup: boolean): string {
   return line;
 }
 
+/** Whether the message carries a picture the detail view can fetch and copy. */
+export function hasPhoto(m: WaMessage): boolean {
+  return m.media.kind === "image";
+}
+
+/** What "Copy text" puts on the clipboard: the whole message text, trimmed; "" when there is none
+ *  (a bare photo, a voice message) and the button stays away. */
+export function copyableText(m: WaMessage): string {
+  return m.text.trim();
+}
+
 /** waTimeAgo: now, 5m, 3h, 2d. */
 export function timeAgo(ms: number, now = Date.now()): string {
   const diff = (now - ms) / 1000;
