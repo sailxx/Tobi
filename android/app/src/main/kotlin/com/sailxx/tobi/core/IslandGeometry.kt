@@ -21,6 +21,8 @@ data class IslandBox(
     val cardW: Int, val cardH: Int,
     val approvalW: Int, val approvalH: Int,
     val cornerSmall: Int, val cornerLarge: Int,
+    /** One dp in pixels. */
+    val unit: Int = 0,
 )
 
 /**
@@ -54,12 +56,28 @@ object IslandGeometry {
             workingW = min(dp(WORKING_W_DP), maxW), workingH = top + dp(52),
             cardW = maxW, cardH = top + dp(96),
             approvalW = maxW, approvalH = top + dp(168),
-            cornerSmall = dp(14), cornerLarge = dp(22),
+            cornerSmall = dp(14), cornerLarge = dp(22), unit = dp(1),
         )
     }
 
     /** Size for a kind of content. */
-    fun sizeFor(box: IslandBox, kind: IslandSpec.Kind): Pair<Int, Int> = when (kind) {
+    /** The options the island can show to tap: a single question with one choice and up to [MAX_QUICK] options. Anything else is answered in the app. */
+    fun quickOptions(q: com.sailxx.tobi.link.QuestionRequest?): Int {
+        val one = q?.questions?.singleOrNull() ?: return 0
+        return if (!one.multiSelect && one.options.size in 1..MAX_QUICK) one.options.size else 0
+    }
+
+    const val MAX_QUICK = 4
+
+    /** How many rows of height the question card needs: its options, or one row for the button to the app. */
+    fun optionRows(q: com.sailxx.tobi.link.QuestionRequest?): Int = if (q == null) 0 else maxOf(1, quickOptions(q))
+
+    fun sizeFor(box: IslandBox, kind: IslandSpec.Kind, options: Int = 0): Pair<Int, Int> = when {
+        kind == IslandSpec.Kind.QUESTION && options > 0 && box.unit > 0 -> box.approvalW to (box.topInset + box.unit * (92 + 56 * options))
+        else -> sizeForKind(box, kind)
+    }
+
+    private fun sizeForKind(box: IslandBox, kind: IslandSpec.Kind): Pair<Int, Int> = when (kind) {
         IslandSpec.Kind.WORKING -> box.workingW to box.workingH
         IslandSpec.Kind.APPROVAL -> box.approvalW to box.approvalH
         else -> box.cardW to box.cardH

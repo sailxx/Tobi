@@ -277,6 +277,11 @@ class MainActivity : ComponentActivity() {
         }
         // A tap on a widget button: a screen of the closed list ([LaunchScreen]), even when the app is locked, not connected or not paired.
         model.launch.takeScreen()?.let { screen = it.screen }
+        // An option tapped on the island: the question sheet opens with it picked (and still asks for the lock to send).
+        model.takePendingQuestion()?.let { (pill, label) ->
+            model.questionFor(pill)?.let { r -> label?.let { model.preselect = r.fingerprint to it } }
+            questionPill = pill
+        }
         // Text shared to Tobi from another app (ShareActivity, which only keeps cleaned text): it waits in the model for the chat box.
         if (model.shareDraft.pending()) screen = Screen.CHAT
         val launch = model.launch.take() ?: return

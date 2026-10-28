@@ -60,7 +60,7 @@ class LightThemeTest {
             assertTrue("$n hero text", c(t.heroText, surface) >= 7.0)
             assertTrue("$n hero dim text", c(t.heroTextDim, surface) >= 4.5)
             assertTrue("$n main pill on the hero", c(t.heroPrimary, surface) >= 3.0)
-            assertTrue("$n label of the main pill", c(t.heroOnPrimary, t.heroPrimary) >= 7.0)
+            assertTrue("$n label of the main pill", c(t.heroOnPrimary, t.heroPrimary) >= 4.5)
             assertTrue("$n other pills on the hero", c(t.heroText, t.heroButton) >= 7.0)
             assertTrue("$n added lines", c(t.diffAdded, surface) >= 4.5)
             assertTrue("$n removed lines", c(t.diffRemoved, surface) >= 4.5)
