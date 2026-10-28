@@ -8314,6 +8314,45 @@
    "id": "Belum ada tugas. Tobi menampilkannya di sini saat agen selesai.",
    "de": "Noch keine Aufgaben. Tobi zeigt sie hier, sobald ein Agent fertig ist.",
    "tr": "Henüz görev yok. Bir ajan bitirdiğinde Tobi onu burada gösterir."
+  },
+  "Outfit": {
+   "zh-Hans": "装扮",
+   "hi": "पोशाक",
+   "es": "Atuendo",
+   "ar": "الزي",
+   "fr": "Tenue",
+   "bn": "পোশাক",
+   "pt-BR": "Roupa",
+   "ru": "Наряд",
+   "id": "Pakaian",
+   "de": "Outfit",
+   "tr": "Kıyafet"
+  },
+  "Pick what Tobi wears. He tries it on right away.": {
+   "zh-Hans": "选择 Tobi 穿什么，他会立刻试穿。",
+   "hi": "चुनें कि Tobi क्या पहने। वह तुरंत पहनकर दिखाएगा।",
+   "es": "Elige qué lleva Tobi. Se lo prueba al momento.",
+   "ar": "اختر ما يرتديه Tobi. سيجرّبه فورًا.",
+   "fr": "Choisissez la tenue de Tobi. Il l'essaie tout de suite.",
+   "bn": "Tobi কী পরবে বেছে নিন। সে সঙ্গে সঙ্গে পরে দেখাবে।",
+   "pt-BR": "Escolha o que o Tobi veste. Ele experimenta na hora.",
+   "ru": "Выберите, что надеть Тоби. Он примерит сразу.",
+   "id": "Pilih pakaian Tobi. Ia langsung mencobanya.",
+   "de": "Wähle, was Tobi trägt. Er probiert es sofort an.",
+   "tr": "Tobi'nin ne giyeceğini seç. Hemen dener."
+  },
+  "Not in the island": {
+   "zh-Hans": "不在岛上",
+   "hi": "आइलैंड में नहीं",
+   "es": "No está en la isla",
+   "ar": "ليس في الجزيرة",
+   "fr": "Pas dans l'île",
+   "bn": "আইল্যান্ডে নেই",
+   "pt-BR": "Fora da ilha",
+   "ru": "Не в острове",
+   "id": "Tidak di pulau",
+   "de": "Nicht im Island",
+   "tr": "Adada değil"
   }
  }
 }

@@ -10,7 +10,7 @@ import { hero, liveTobi, setWindowShown } from "./hero";
 import { icon, keyLabel } from "./ui";
 
 export type PageId =
-  | "home" | "dictation" | "notes" | "dictionary" | "snippets" | "styles" | "flowsettings"
+  | "home" | "wardrobe" | "dictation" | "notes" | "dictionary" | "snippets" | "styles" | "flowsettings"
   | "general" | "pills" | "agents" | "chat" | "voice" | "integrations" | "phone" | "shortcuts";
 
 /** One page of the sidebar. */
@@ -34,6 +34,7 @@ export const SECTIONS: Section[] = [
     id: "tobi", title: () => "Tobi",
     items: [
       { id: "home", icon: "home", title: () => t("Home") },
+      { id: "wardrobe", icon: "shirt", title: () => t("Wardrobe"), subtitle: () => t("Pick what Tobi wears. He tries it on right away.") },
       { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows.") },
       { id: "integrations", icon: "puzzle", title: () => t("Integrations"), subtitle: () => t("Stripe, GitHub, Vercel, n8n, Notion and the rest.") },
       { id: "phone", icon: "phone", title: () => t("Android phone"), subtitle: () => t("Your agents and their approvals on your Android phone, over your Wi-Fi.") },

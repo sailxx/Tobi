@@ -4,8 +4,10 @@
 
 import { Bridge, type AgentHookStatus } from "../core/bridge";
 import { clear, h } from "../views/dom";
-import { renderDiff, statusDot } from "./parts";
+import { renderDiff } from "./parts";
 import { t } from "../i18n/i18n";
+import { createMiniStill } from "../tobi/minibots";
+import { pillDefinition } from "../core/pills";
 
 /** In the current language (src/i18n); the settings window redraws on a change. */
 const TEXT = {
@@ -41,7 +43,7 @@ function errorText(err: unknown): string {
 }
 
 export function agentsSection(list: AgentHookStatus[] | null): HTMLElement {
-  const blocks = h("div", { style: "display:flex;flex-direction:column;gap:14px" });
+  const blocks = h("div", { class: "conn-list" });
   if (!list || list.length === 0) {
     blocks.append(h("div", { class: "hint", text: TEXT.none }));
   }
@@ -57,9 +59,9 @@ export function agentsSection(list: AgentHookStatus[] | null): HTMLElement {
 
 function agentBlock(initial: AgentHookStatus): HTMLElement {
   let status = initial;
-  const head = h("div", { class: "row" });
-  const body = h("div", { style: "display:flex;flex-direction:column;gap:10px" });
-  const block = h("div", { style: "display:flex;flex-direction:column;gap:8px" }, head, body);
+  const head = h("div", { class: "conn-row" });
+  const body = h("div", { class: "conn-body" });
+  const block = h("div", { class: "conn" }, head, body);
 
   async function refresh() {
     const fresh = (await Bridge.agentHooksList())?.find((a) => a.id === status.id);
@@ -80,15 +82,16 @@ function agentBlock(initial: AgentHookStatus): HTMLElement {
       install.disabled = true;
       install.title = TEXT.relayMissing;
     }
+    const pill = pillDefinition(`agent_${status.id}`);
     head.append(
-      h("div", { style: "display:flex;align-items:center;gap:8px;min-width:132px" },
-        statusDot(status.installed),
-        h("span", { style: "font-size:12.5px", text: status.name }),
+      h("span", { class: "app-tile" }, createMiniStill(`agent_${status.id}`, pill?.color ?? "#9398A1", 26)),
+      h("div", { class: "app-text" },
+        h("div", { class: "app-name", text: status.name }),
+        h("span", { class: "app-state", text: status.approvals ? TEXT.approvals : TEXT.displayOnly }),
       ),
-      h("span", { class: "hint", text: status.approvals ? TEXT.approvals : TEXT.displayOnly }),
-      h("span", { class: "spacer" }),
-      install,
     );
+    if (status.installed) head.append(h("span", { class: "tag ok", text: t("Connected") }));
+    head.append(install);
     if (status.installed) {
       head.append(h("button", {
         class: "danger",

@@ -1381,3 +1381,241 @@ button.hub-btn.primary {
 .hub-page #settings-root section > h2 + .hint {
   margin-top: -4px;
 }
+
+/* ── Wardrobe ─────────────────────────────────────────────────────────────── */
+
+.wardrobe-page {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.wardrobe-stage {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 20px 26px;
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  overflow: hidden;
+}
+
+/* Tobi under a spotlight: a soft cone from above, his light on the floor. */
+.wardrobe-stage .spot {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  display: grid;
+  place-items: center;
+}
+
+.wardrobe-stage .spot::before {
+  content: "";
+  position: absolute;
+  inset: 0 18% 0;
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.015) 100%);
+}
+
+.wardrobe-stage canvas {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  margin-top: 40px;
+}
+
+.wardrobe-stage b {
+  font: 700 19px var(--font);
+}
+
+.wardrobe-stage > span {
+  color: var(--hub-secondary);
+  font-size: 13px;
+  text-align: center;
+}
+
+.wardrobe-pick h2 {
+  font: 600 14px var(--font);
+  margin: 2px 0 12px;
+}
+
+.wardrobe-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.wardrobe-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 10px 14px;
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  color: var(--hub-text);
+  font: 600 13px var(--font);
+}
+
+.wardrobe-card:hover:not(:disabled) {
+  background: var(--hub-card-hover);
+}
+
+.wardrobe-card:active:not(:disabled) {
+  transform: none;
+}
+
+.wardrobe-card.on {
+  border-color: var(--hub-accent);
+  box-shadow: inset 0 0 0 1px var(--hub-accent);
+}
+
+/* The chosen outfit's tick, top right. */
+.wardrobe-card.on::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23f4f8ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat,
+    var(--hub-accent);
+}
+
+@media (max-width: 1000px) {
+  .wardrobe-page { grid-template-columns: minmax(0, 1fr); }
+  .wardrobe-stage { position: static; }
+}
+
+/* ── Apps (the island's pills) and connections (the agents) ───────────────── */
+
+.app-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.app-card,
+.conn-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.app-card {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #1c1d21;
+  border: 1px solid var(--hub-line);
+}
+
+.app-card.full {
+  opacity: 0.55;
+}
+
+.app-tile {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 11px;
+  background: #26272c;
+  display: grid;
+  place-items: center;
+}
+
+.app-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.app-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 14px var(--font);
+  color: var(--hub-text);
+}
+
+.app-state {
+  color: var(--hub-secondary);
+  font-size: 12.5px;
+}
+
+.app-state.in {
+  color: #6ee7b7;
+}
+
+.hub-page #settings-root .tag {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hub-page #settings-root .tag.ok {
+  background: rgba(52, 211, 153, 0.12);
+  color: #6ee7b7;
+}
+
+.hub-page #settings-root .pill-group {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+.hub-page #settings-root .pill-group > h3 {
+  font: 600 13px var(--font);
+  color: var(--hub-text);
+}
+
+.conn-list {
+  display: flex;
+  flex-direction: column;
+  margin: 4px 0 4px;
+}
+
+.conn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 0;
+  border-top: 1px solid var(--hub-line);
+}
+
+.conn-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-inline-start: 58px;
+}
+
+.conn-body:empty {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .app-cards { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* A subhead inside a card (Active pills: main tool, in the island) and its hint. */
+.hub-page #settings-root section > h3.subhead {
+  margin: 14px 0 8px;
+  color: var(--hub-text);
+  font: 600 13px var(--font);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.hub-page #settings-root section > h3.subhead + .hint {
+  margin-top: -4px;
+}
