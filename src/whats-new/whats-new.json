@@ -2,6 +2,42 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.12.0",
+      "items": [
+        {
+          "icon": "paint",
+          "title": {
+            "en": "A clearer window",
+            "zh-Hans": "更清晰的窗口",
+            "hi": "ज़्यादा साफ़ विंडो",
+            "es": "Una ventana más clara",
+            "ar": "نافذة أوضح",
+            "fr": "Une fenêtre plus claire",
+            "bn": "আরও স্পষ্ট উইন্ডো",
+            "pt-BR": "Uma janela mais clara",
+            "ru": "Окно стало яснее",
+            "id": "Jendela yang lebih jelas",
+            "de": "Ein klareres Fenster",
+            "tr": "Daha net bir pencere"
+          },
+          "detail": {
+            "en": "A blue accent, controls of one size in a straight column, and shorter, simpler texts across the window.",
+            "zh-Hans": "蓝色强调色、统一尺寸且对齐成列的控件，以及整个窗口中更短、更简单的文字。",
+            "hi": "नीला रंग, एक ही आकार के नियंत्रण सीधी कतार में, और पूरी विंडो में छोटे व सरल पाठ।",
+            "es": "Un acento azul, controles del mismo tamaño en una columna recta y textos más cortos y sencillos en toda la ventana.",
+            "ar": "لون مميز أزرق، وعناصر تحكم بحجم واحد في عمود مستقيم، ونصوص أقصر وأبسط في كل النافذة.",
+            "fr": "Un accent bleu, des commandes de même taille alignées en colonne et des textes plus courts et plus simples dans toute la fenêtre.",
+            "bn": "নীল রঙের জোর, সোজা সারিতে একই আকারের নিয়ন্ত্রণ, আর পুরো উইন্ডো জুড়ে ছোট ও সহজ লেখা।",
+            "pt-BR": "Um destaque azul, controles do mesmo tamanho em uma coluna reta e textos mais curtos e simples em toda a janela.",
+            "ru": "Голубой акцент, элементы одного размера ровной колонкой и более короткие, простые тексты во всём окне.",
+            "id": "Aksen biru, kontrol berukuran sama dalam satu kolom lurus, dan teks yang lebih pendek dan sederhana di seluruh jendela.",
+            "de": "Ein blauer Akzent, gleich große Bedienelemente in einer geraden Spalte und kürzere, einfachere Texte im ganzen Fenster.",
+            "tr": "Mavi vurgu, düz bir sütunda aynı boyda denetimler ve pencere boyunca daha kısa, daha sade metinler."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.11.1",
       "items": [
         {

@@ -1128,7 +1128,7 @@
    "fr": "Choisis les outils que tu utilises. Tobi n'affiche que ce que tu déclares ici.",
    "bn": "আপনি যে টুলগুলো ব্যবহার করেন তা বেছে নিন। Tobi শুধুমাত্র আপনার ঘোষণা করা জিনিস দেখায়।",
    "pt-BR": "Escolha as ferramentas que você usa. O Tobi mostra apenas o que você declarar aqui.",
-   "ru": "Выбери инструменты, которые ты используешь. Tobi показывает только то, что ты здесь объявишь.",
+   "ru": "Отметьте инструменты, которыми пользуетесь. Tobi показывает только их.",
    "id": "Pilih alat yang Anda gunakan. Tobi hanya menampilkan yang Anda deklarasikan di sini.",
    "de": "Wähle deine Werkzeuge. Tobi zeigt nur an, was du hier auswählst.",
    "tr": "Kullandığın araçları seç. Tobi yalnızca burada belirttiğin araçları gösterir."
@@ -1232,7 +1232,7 @@
    "fr": "Claude Code, Codex et les autres agents que Tobi suit.",
    "bn": "Claude Code, Codex আর অন্য এজেন্ট যাদের টোবি অনুসরণ করে।",
    "pt-BR": "Claude Code, Codex e os outros agentes que o Tobi acompanha.",
-   "ru": "Claude Code, Codex и другие агенты, за которыми следит Тоби.",
+   "ru": "Claude Code, Codex и другие агенты, за которыми следит Tobi.",
    "id": "Claude Code, Codex, dan agen lain yang diikuti Tobi.",
    "de": "Claude Code, Codex und die anderen Agenten, denen Tobi folgt.",
    "tr": "Claude Code, Codex ve Tobi'nin takip ettiği diğer ajanlar."
@@ -1271,7 +1271,7 @@
    "fr": "Claude nettoie ce que tu dis, dans le style de l'app où tu écris.",
    "bn": "আপনি যে অ্যাপে লিখছেন তার স্টাইলে Claude আপনার কথা পরিষ্কার করে।",
    "pt-BR": "O Claude limpa o que você diz, no estilo do app em que você escreve.",
-   "ru": "Claude приводит сказанное в порядок в стиле приложения, где вы пишете.",
+   "ru": "Claude правит текст под стиль приложения, где вы пишете.",
    "id": "Claude merapikan ucapanmu sesuai gaya aplikasi tempat kamu menulis.",
    "de": "Claude überarbeitet deine Worte im Stil der App, in der du schreibst.",
    "tr": "Claude söylediklerini yazdığın uygulamanın üslubuna göre düzenler."
@@ -2311,7 +2311,7 @@
    "fr": "Déposez dans le dossier des sons un fichier nommé comme l'un des sons de Tobi (finish.wav, approval.mp3, greet.m4a…) pour le remplacer, puis rechargez.",
    "bn": "Tobi-র কোনো সাউন্ডের নামে একটি ফাইল (finish.wav, approval.mp3, greet.m4a…) সাউন্ড ফোল্ডারে রাখুন, সেটি বদলে যাবে; তারপর Reload করুন।",
    "pt-BR": "Coloque na pasta de sons um arquivo com o nome de um dos sons do Tobi (finish.wav, approval.mp3, greet.m4a…) para substituí-lo e depois recarregue.",
-   "ru": "Положите в папку звуков файл с именем одного из звуков Tobi (finish.wav, approval.mp3, greet.m4a…), чтобы заменить его, затем перезагрузите.",
+   "ru": "Чтобы заменить звук, положите в папку файл с тем же именем (finish.wav, approval.mp3, greet.m4a…) и перезагрузите звуки.",
    "id": "Taruh file bernama seperti salah satu suara Tobi (finish.wav, approval.mp3, greet.m4a…) di folder suara untuk menggantinya, lalu muat ulang.",
    "de": "Lege eine Datei mit dem Namen eines Tobi-Klangs (finish.wav, approval.mp3, greet.m4a…) im Klangordner ab, um ihn zu ersetzen. Lade die Klänge anschließend neu.",
    "tr": "Tobi'nin seslerinden birini değiştirmek için aynı adı taşıyan bir dosyayı (finish.wav, approval.mp3, greet.m4a…) sesler klasörüne bırak, ardından sesleri yeniden yükle."
@@ -3026,7 +3026,7 @@
    "fr": "Maintenir une touche pour dicter partout",
    "bn": "যেকোনো জায়গায় ডিক্টেট করতে একটি কী চেপে ধরুন",
    "pt-BR": "Segure uma tecla para ditar em qualquer lugar",
-   "ru": "Удерживайте клавишу, чтобы диктовать где угодно",
+   "ru": "Зажмите клавишу и диктуйте",
    "id": "Tahan satu tombol untuk mendikte di mana saja",
    "de": "Eine Taste gedrückt halten, um überall zu diktieren",
    "tr": "Her yerde dikte etmek için bir tuşu basılı tut"
@@ -3065,7 +3065,7 @@
    "fr": "Maintiens {0} n'importe où, parle, relâche : c'est collé.",
    "bn": "যেকোনো জায়গায় {0} চেপে ধরুন, বলুন, ছেড়ে দিন: পেস্ট হয়ে যাবে।",
    "pt-BR": "Segure {0} em qualquer lugar, fale e solte: está colado.",
-   "ru": "Удерживайте {0} где угодно, говорите, отпустите — текст вставлен.",
+   "ru": "Зажмите {0}, говорите, отпустите. Текст вставится.",
    "id": "Tahan {0} di mana saja, bicara, lepas: langsung ditempel.",
    "de": "Halte überall {0} gedrückt, sprich und lasse los: Der Text wird eingefügt.",
    "tr": "Her yerde {0} tuşunu basılı tut, konuş, bırak: metin yapıştırılır."
@@ -3078,7 +3078,7 @@
    "fr": "Maintiens {0} dans n'importe quelle app, parle, relâche : tes mots sont collés là où tu écris.",
    "bn": "যেকোনো অ্যাপে {0} চেপে ধরুন, বলুন, ছেড়ে দিন: আপনি যেখানে লেখেন সেখানে কথা পেস্ট হবে।",
    "pt-BR": "Segure {0} em qualquer app, fale e solte: suas palavras são coladas onde você digita.",
-   "ru": "Удерживайте {0} в любом приложении, говорите, отпустите — слова вставятся туда, где вы печатаете.",
+   "ru": "Зажмите {0}, говорите, отпустите. Слова вставятся туда, где вы печатаете.",
    "id": "Tahan {0} di aplikasi apa pun, bicara, lepas: kata-katamu ditempel di tempat kamu mengetik.",
    "de": "Halte in einer beliebigen App {0} gedrückt, sprich und lasse los: Deine Worte werden dort eingefügt, wo du schreibst.",
    "tr": "Herhangi bir uygulamada {0} tuşunu basılı tut, konuş, bırak: sözlerin yazdığın yere yapıştırılır."
@@ -3221,7 +3221,7 @@
    "fr": "Survoler l'île l'ouvre ; elle se replie peu après que le pointeur la quitte. Cliquez dedans pour la garder ouverte.",
    "bn": "আইল্যান্ডের উপর পয়েন্টার রাখলে খোলে; পয়েন্টার সরালে একটু পরে আবার গুটিয়ে যায়। খোলা রাখতে ভিতরে ক্লিক করুন।",
    "pt-BR": "Passar o cursor pela ilha a abre; ela se fecha logo depois que o cursor sai. Clique dentro para mantê-la aberta.",
-   "ru": "Наведение открывает остров; он сворачивается вскоре после того, как указатель уходит. Щёлкните внутри, чтобы он остался открытым.",
+   "ru": "Остров открывается при наведении и сворачивается, когда курсор уходит. Щёлкните внутри, чтобы он остался открытым.",
    "id": "Mengarahkan kursor ke pulau akan membukanya; pulau menutup lagi sesaat setelah kursor pergi. Klik di dalamnya agar tetap terbuka.",
    "de": "Die Insel öffnet sich, wenn du den Mauszeiger darüber bewegst, und klappt kurz nach dem Verlassen wieder zu. Klicke hinein, damit sie geöffnet bleibt.",
    "tr": "İşaretçiyi adanın üzerine getirdiğinde ada açılır; işaretçi ayrıldıktan kısa süre sonra tekrar kapanır. Açık tutmak için içine tıkla."
@@ -4157,7 +4157,7 @@
    "fr": "Les noms et les mots que Tobi doit toujours bien écrire.",
    "bn": "যে নাম আর শব্দ Tobi-কে সবসময় ঠিক লিখতে হবে।",
    "pt-BR": "Os nomes e palavras que o Tobi deve sempre escrever certo.",
-   "ru": "Имена и слова, которые Tobi всегда должен писать правильно.",
+   "ru": "Имена и слова, которые Tobi должен писать правильно.",
    "id": "Nama dan kata yang harus selalu ditulis benar oleh Tobi.",
    "de": "Namen und Wörter, die Tobi immer richtig schreiben soll.",
    "tr": "Tobi'nun her zaman doğru yazması gereken adlar ve sözcükler."
@@ -4456,7 +4456,7 @@
    "fr": "Pas encore de snippet. Ton lien de rendez-vous, ta signature, ton adresse : dis quelques mots, reçois le texte entier.",
    "bn": "এখনো কোনো স্নিপেট নেই। আপনার বুকিং লিংক, স্বাক্ষর, ঠিকানা: কয়েকটি শব্দ বলুন, পুরো লেখা পান।",
    "pt-BR": "Nenhum trecho ainda. Seu link de agendamento, sua assinatura, seu endereço: diga poucas palavras e receba o texto inteiro.",
-   "ru": "Шаблонов пока нет. Ссылка для записи, подпись, адрес: скажите пару слов — получите весь текст.",
+   "ru": "Шаблонов пока нет. Добавьте подпись, ссылку или адрес и вызывайте их парой слов.",
    "id": "Belum ada cuplikan. Tautan jadwalmu, tanda tanganmu, alamatmu: ucapkan beberapa kata, dapatkan teks utuhnya.",
    "de": "Noch keine Textbausteine. Dein Buchungslink, deine Signatur, deine Adresse: Sage ein paar Wörter und erhalte den ganzen Text.",
    "tr": "Henüz metin kısayolu yok. Rezervasyon bağlantın, imzan, adresin: birkaç sözcük söyle, tüm metni al."
@@ -4534,7 +4534,7 @@
    "fr": "Aucun mot pour l'instant. Ajoute les noms, marques et mots techniques que Tobi écrit mal.",
    "bn": "এখনো কোনো শব্দ নেই। যে নাম, ব্র্যান্ড আর পরিভাষা Tobi ভুল লেখে সেগুলো যোগ করুন।",
    "pt-BR": "Nenhuma palavra ainda. Adicione nomes, marcas e termos técnicos que o Tobi escreve errado.",
-   "ru": "Слов пока нет. Добавьте имена, бренды и термины, которые Tobi пишет неправильно.",
+   "ru": "Слов пока нет. Добавьте имена, бренды и термины, которые Tobi пишет с ошибками.",
    "id": "Belum ada kata. Tambahkan nama, merek, dan istilah yang sering salah ditulis Tobi.",
    "de": "Noch keine Wörter. Füge Namen, Marken und Fachbegriffe hinzu, die Tobi falsch schreibt.",
    "tr": "Henüz sözcük yok. Tobi'nun yanlış yazdığı adları, markaları ve terimleri ekle."
@@ -6016,7 +6016,7 @@
    "fr": "Enlève les « euh », les répétitions et les corrections faites en parlant, et corrige la ponctuation.",
    "bn": "“উম”, পুনরাবৃত্তি আর বলার সময় করা সংশোধন সরিয়ে দেয় এবং যতিচিহ্ন ঠিক করে।",
    "pt-BR": "Tira os “é…”, as repetições e as correções feitas ao falar, e acerta a pontuação.",
-   "ru": "Убирает «э-э», повторы и поправки, сделанные на ходу, и исправляет пунктуацию.",
+   "ru": "Убирает «э-э», повторы и оговорки, расставляет знаки препинания.",
    "id": "Menghapus “eh”, pengulangan dan koreksi saat bicara, lalu merapikan tanda baca.",
    "de": "Entfernt „äh“, Wiederholungen und Korrekturen beim Sprechen und verbessert die Zeichensetzung.",
    "tr": "Konuşurken söylediğin “ıı” gibi dolgu seslerini, tekrarları ve düzeltmeleri kaldırır; noktalama işaretlerini düzeltir."
@@ -6380,7 +6380,7 @@
    "fr": "Dis la phrase en dictant : Tobi colle le texte entier à sa place.",
    "bn": "ডিক্টেট করার সময় বাক্যাংশটি বলুন: Tobi তার জায়গায় পুরো লেখা পেস্ট করবে।",
    "pt-BR": "Diga a frase ao ditar: o Tobi cola o texto inteiro no lugar dela.",
-   "ru": "Произнесите фразу во время диктовки — Tobi вставит вместо неё весь текст.",
+   "ru": "Скажите короткую фразу при диктовке, и Tobi вставит вместо неё весь текст.",
    "id": "Ucapkan pemicunya saat dikte: Tobi menempel teks utuhnya sebagai gantinya.",
    "de": "Sage beim Diktieren den Auslöser: Tobi fügt stattdessen den ganzen Text ein.",
    "tr": "Dikte ederken tetikleyici ifadeyi söyle: Tobi onun yerine tüm metni yapıştırır."
@@ -6718,7 +6718,7 @@
    "fr": "Afficher le forfait Codex dans l'encoche",
    "bn": "নচে Codex প্ল্যান দেখান",
    "pt-BR": "Mostrar o plano Codex no notch",
-   "ru": "Показывать тариф Codex в нотче",
+   "ru": "Показывать тариф Codex в острове",
    "id": "Tampilkan paket Codex di notch",
    "de": "Codex-Tarif in der Notch anzeigen",
    "tr": "Codex planını adada göster"
@@ -6770,7 +6770,7 @@
    "fr": "Afficher dans l'encoche",
    "bn": "নচে দেখান",
    "pt-BR": "Mostrar no notch",
-   "ru": "Показывать в нотче",
+   "ru": "Показывать в острове",
    "id": "Tampilkan di notch",
    "de": "In der Notch anzeigen",
    "tr": "Adada göster"
@@ -7186,7 +7186,7 @@
    "fr": "Tape deux fois, parle aussi longtemps que tu veux, tape une fois pour coller.",
    "bn": "দুবার চাপুন, যতক্ষণ খুশি বলুন, পেস্ট করতে একবার চাপুন।",
    "pt-BR": "Toque duas vezes, fale o quanto quiser, toque uma vez para colar.",
-   "ru": "Нажмите дважды, говорите сколько угодно, нажмите один раз, чтобы вставить.",
+   "ru": "Нажмите дважды, говорите сколько нужно, нажмите один раз, чтобы вставить.",
    "id": "Ketuk dua kali, bicara sepuasnya, ketuk sekali untuk menempel.",
    "de": "Zweimal drücken, beliebig lange sprechen, einmal drücken zum Einfügen.",
    "tr": "İki kez bas, istediğin kadar konuş, yapıştırmak için bir kez bas."
@@ -8109,7 +8109,7 @@
    "fr": "Quand Tobi entend les mots de gauche, il écrit ceux de droite.",
    "bn": "বাঁ দিকের শব্দ শুনলে Tobi ডান দিকের শব্দ লেখে।",
    "pt-BR": "Quando o Tobi ouve as palavras da esquerda, escreve as da direita.",
-   "ru": "Услышав слова слева, Tobi пишет слова справа.",
+   "ru": "Tobi заменяет слова слева на слова справа.",
    "id": "Saat Tobi mendengar kata di kiri, ia menulis kata di kanan.",
    "de": "Wenn Tobi die Wörter links hört, schreibt es die Wörter rechts.",
    "tr": "Tobi soldaki sözcükleri duyduğunda sağdakileri yazar."
@@ -8577,7 +8577,7 @@
    "fr": "Tes calls transcrits personne par personne, avec un résumé et les choses à faire. Sans bot dans la réunion.",
    "bn": "আপনার কল প্রতিজনের আলাদা ট্রান্সক্রিপ্টসহ, সারাংশ আর করণীয় তালিকা নিয়ে। মিটিংয়ে কোনো বট নেই।",
    "pt-BR": "Suas chamadas transcritas pessoa por pessoa, com um resumo e as tarefas. Sem bot na reunião.",
-   "ru": "Ваши звонки расшифрованы по участникам, с кратким итогом и задачами. Без бота во встрече.",
+   "ru": "Запись звонков с расшифровкой по участникам, итогом и задачами. Без бота.",
    "id": "Panggilanmu ditranskrip per orang, dengan ringkasan dan daftar tugas. Tanpa bot di rapat.",
    "de": "Deine Gespräche nach Personen transkribiert, mit Zusammenfassung und Aufgaben. Kein Bot im Meeting.",
    "tr": "Görüşmelerinin kişilere göre ayrılmış dökümü, özeti ve yapılacakları. Toplantıya bot katılmaz."
@@ -8590,7 +8590,7 @@
    "fr": "Tes calls s'afficheront ici. Clique sur Enregistrer un call quand il commence.",
    "bn": "আপনার কল এখানে দেখা যাবে। কল শুরু হলে কল রেকর্ড করুন-এ ক্লিক করুন।",
    "pt-BR": "Suas chamadas aparecerão aqui. Clique em Gravar uma chamada quando ela começar.",
-   "ru": "Здесь появятся ваши звонки. Нажмите «Записать звонок», когда он начнётся.",
+   "ru": "Звонков пока нет. Нажмите «Записать звонок».",
    "id": "Panggilanmu akan muncul di sini. Klik Rekam panggilan saat dimulai.",
    "de": "Deine Gespräche erscheinen hier. Klicke zu Beginn auf Gespräch aufnehmen.",
    "tr": "Görüşmelerin burada görünür. Görüşme başladığında Görüşme kaydet'e tıkla."
@@ -8603,7 +8603,7 @@
    "fr": "Tes dictées s'afficheront ici. Maintiens {0} dans n'importe quelle app et parle.",
    "bn": "আপনার ডিক্টেশন এখানে দেখা যাবে। যেকোনো অ্যাপে {0} চেপে ধরে বলুন।",
    "pt-BR": "Seus ditados aparecerão aqui. Segure {0} em qualquer app e fale.",
-   "ru": "Здесь появятся ваши диктовки. Удерживайте {0} в любом приложении и говорите.",
+   "ru": "Диктовок пока нет. Зажмите {0} и говорите.",
    "id": "Diktemu akan muncul di sini. Tahan {0} di aplikasi apa pun dan bicaralah.",
    "de": "Deine Diktate erscheinen hier. Halte in einer beliebigen App {0} gedrückt und sprich.",
    "tr": "Diktelerin burada görünür. Herhangi bir uygulamada {0} tuşunu basılı tut ve konuş."
