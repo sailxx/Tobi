@@ -2,6 +2,135 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.14.0",
+      "items": [
+        {
+          "icon": "paint",
+          "title": {
+            "en": "A small island",
+            "zh-Hans": "小巧的岛",
+            "hi": "छोटा आइलैंड",
+            "es": "Una isla pequeña",
+            "ar": "جزيرة صغيرة",
+            "fr": "Une petite île",
+            "bn": "ছোট আইল্যান্ড",
+            "pt-BR": "Uma ilha pequena",
+            "ru": "Маленький островок",
+            "id": "Pulau yang kecil",
+            "de": "Eine kleine Insel",
+            "tr": "Küçük ada"
+          },
+          "detail": {
+            "en": "Collapsed, it is a small pill with Tobi in the middle. Opened, it has Home, Chat, Search and Drop at the top.",
+            "zh-Hans": "收起时是一个中间有 Tobi 的小药丸，展开后顶部有主页、聊天、搜索和投放。",
+            "hi": "बंद होने पर यह बीच में Tobi वाली छोटी गोली है। खुलने पर ऊपर होम, चैट, खोज और ड्रॉप हैं।",
+            "es": "Cerrada, es una pequeña píldora con Tobi en el centro. Abierta, tiene Inicio, Chat, Buscar y Soltar arriba.",
+            "ar": "عند الطي تصبح حبة صغيرة وفي وسطها Tobi، وعند الفتح تجد في الأعلى الرئيسية والدردشة والبحث والإفلات.",
+            "fr": "Repliée, c'est une petite pilule avec Tobi au milieu. Ouverte, elle offre Accueil, Chat, Recherche et Dépôt en haut.",
+            "bn": "গুটিয়ে রাখলে এটি মাঝখানে Tobi-সহ ছোট একটি পিল। খুললে উপরে হোম, চ্যাট, খোঁজ আর ড্রপ।",
+            "pt-BR": "Recolhida, é uma pequena pílula com o Tobi no meio. Aberta, tem Início, Chat, Busca e Soltar no topo.",
+            "ru": "В свёрнутом виде это маленькая пилюля с Тоби посередине. В раскрытом сверху Главная, Чат, Поиск и Файлы.",
+            "id": "Saat diciutkan, ia pil kecil dengan Tobi di tengah. Saat dibuka, ada Beranda, Obrolan, Cari, dan Taruh di atas.",
+            "de": "Eingeklappt ist sie eine kleine Pille mit Tobi in der Mitte. Geöffnet hat sie oben Start, Chat, Suche und Ablage.",
+            "tr": "Kapalıyken ortasında Tobi olan küçük bir hap. Açıkken üstte Ana sayfa, Sohbet, Ara ve Bırak var."
+          }
+        },
+        {
+          "icon": "chat",
+          "title": {
+            "en": "Quick actions in the chat",
+            "zh-Hans": "聊天中的快捷操作",
+            "hi": "चैट में झटपट काम",
+            "es": "Acciones rápidas en el chat",
+            "ar": "إجراءات سريعة في الدردشة",
+            "fr": "Actions rapides dans le chat",
+            "bn": "চ্যাটে দ্রুত কাজ",
+            "pt-BR": "Ações rápidas no chat",
+            "ru": "Быстрые действия в чате",
+            "id": "Aksi cepat di obrolan",
+            "de": "Schnellaktionen im Chat",
+            "tr": "Sohbette hızlı işlemler"
+          },
+          "detail": {
+            "en": "Explain, Check my spelling, Translate and Summarize in one click, and you see which AI answers.",
+            "zh-Hans": "一键解释、检查拼写、翻译和总结，并能看到是哪个 AI 在回答。",
+            "hi": "एक क्लिक में समझाएँ, वर्तनी जाँचें, अनुवाद करें और सारांश दें, और दिखता है कि कौन-सा AI जवाब दे रहा है।",
+            "es": "Explicar, Revisar ortografía, Traducir y Resumir con un clic, y ves qué IA responde.",
+            "ar": "اشرح، وتدقيق الإملاء، وترجم، ولخّص بنقرة واحدة، وترى أي ذكاء اصطناعي يجيب.",
+            "fr": "Expliquer, Corriger l'orthographe, Traduire et Résumer en un clic, et vous voyez quelle IA répond.",
+            "bn": "এক ক্লিকে ব্যাখ্যা, বানান যাচাই, অনুবাদ আর সারাংশ, আর দেখা যায় কোন AI উত্তর দিচ্ছে।",
+            "pt-BR": "Explicar, Revisar ortografia, Traduzir e Resumir com um clique, e você vê qual IA responde.",
+            "ru": "Объяснить, проверить орфографию, перевести и пересказать в один клик, и видно, какой ИИ отвечает.",
+            "id": "Jelaskan, Periksa ejaan, Terjemahkan, dan Ringkas dalam satu klik, dan terlihat AI mana yang menjawab.",
+            "de": "Erklären, Rechtschreibung prüfen, Übersetzen und Zusammenfassen mit einem Klick, und du siehst, welche KI antwortet.",
+            "tr": "Açıkla, Yazımı denetle, Çevir ve Özetle tek tıkla; hangi yapay zekânın yanıtladığını görürsün."
+          }
+        },
+        {
+          "icon": "bolt",
+          "title": {
+            "en": "Search from the island",
+            "zh-Hans": "在岛上搜索",
+            "hi": "आइलैंड से खोज",
+            "es": "Buscar desde la isla",
+            "ar": "البحث من الجزيرة",
+            "fr": "Chercher depuis l'île",
+            "bn": "আইল্যান্ড থেকে খোঁজ",
+            "pt-BR": "Busca pela ilha",
+            "ru": "Поиск прямо в островке",
+            "id": "Cari dari pulau",
+            "de": "Suche auf der Insel",
+            "tr": "Adadan arama"
+          },
+          "detail": {
+            "en": "Find files in your folders, or start with g or yt to search Google or YouTube.",
+            "zh-Hans": "查找文件夹中的文件，或以 g 或 yt 开头搜索 Google 或 YouTube。",
+            "hi": "अपने फ़ोल्डरों में फ़ाइलें खोजें, या Google या YouTube खोजने के लिए g या yt से शुरू करें।",
+            "es": "Encuentra archivos en tus carpetas, o empieza con g o yt para buscar en Google o YouTube.",
+            "ar": "ابحث عن الملفات في مجلداتك، أو ابدأ بـ g أو yt للبحث في Google أو YouTube.",
+            "fr": "Trouvez des fichiers dans vos dossiers, ou commencez par g ou yt pour chercher sur Google ou YouTube.",
+            "bn": "আপনার ফোল্ডারে ফাইল খুঁজুন, অথবা Google বা YouTube-এ খুঁজতে g বা yt দিয়ে শুরু করুন।",
+            "pt-BR": "Encontre arquivos nas suas pastas, ou comece com g ou yt para buscar no Google ou no YouTube.",
+            "ru": "Файлы в ваших папках, а если начать с g или yt, то поиск в Google или YouTube.",
+            "id": "Temukan file di folder Anda, atau awali dengan g atau yt untuk mencari di Google atau YouTube.",
+            "de": "Finde Dateien in deinen Ordnern, oder beginne mit g oder yt, um bei Google oder YouTube zu suchen.",
+            "tr": "Klasörlerindeki dosyaları bul ya da Google veya YouTube'da aramak için g veya yt ile başla."
+          }
+        },
+        {
+          "icon": "heart",
+          "title": {
+            "en": "A new music card",
+            "zh-Hans": "全新的音乐卡片",
+            "hi": "नया संगीत कार्ड",
+            "es": "Una nueva tarjeta de música",
+            "ar": "بطاقة موسيقى جديدة",
+            "fr": "Une nouvelle carte musique",
+            "bn": "নতুন মিউজিক কার্ড",
+            "pt-BR": "Um novo cartão de música",
+            "ru": "Новая карточка музыки",
+            "id": "Kartu musik baru",
+            "de": "Eine neue Musikkarte",
+            "tr": "Yeni müzik kartı"
+          },
+          "detail": {
+            "en": "Spotify and YouTube Music with the cover, in colours taken from it. On Linux the island no longer hides under GNOME's top bar.",
+            "zh-Hans": "Spotify 和 YouTube Music 显示封面，并采用封面的颜色。在 Linux 上，岛不再藏在 GNOME 顶栏下面。",
+            "hi": "Spotify और YouTube Music कवर के साथ, उसी के रंगों में। Linux पर आइलैंड अब GNOME की ऊपरी पट्टी के नीचे नहीं छिपता।",
+            "es": "Spotify y YouTube Music con la portada, en sus colores. En Linux la isla ya no se esconde bajo la barra superior de GNOME.",
+            "ar": "Spotify وYouTube Music مع الغلاف وبألوانه. وعلى Linux لم تعد الجزيرة تختبئ تحت الشريط العلوي في GNOME.",
+            "fr": "Spotify et YouTube Music avec la pochette, dans ses couleurs. Sous Linux, l'île ne se cache plus sous la barre du haut de GNOME.",
+            "bn": "Spotify আর YouTube Music কভারসহ, তারই রঙে। Linux-এ আইল্যান্ড আর GNOME-এর উপরের বারের নিচে লুকায় না।",
+            "pt-BR": "Spotify e YouTube Music com a capa, nas cores dela. No Linux a ilha não se esconde mais sob a barra superior do GNOME.",
+            "ru": "Spotify и YouTube Music с обложкой и в её цветах. В Linux островок больше не прячется под верхней панелью GNOME.",
+            "id": "Spotify dan YouTube Music dengan sampul, dalam warnanya. Di Linux pulau tak lagi bersembunyi di bawah bilah atas GNOME.",
+            "de": "Spotify und YouTube Music mit dem Cover, in seinen Farben. Unter Linux versteckt sich die Insel nicht mehr unter der oberen Leiste von GNOME.",
+            "tr": "Spotify ve YouTube Music kapakla, onun renklerinde. Linux'ta ada artık GNOME'un üst çubuğunun altına saklanmıyor."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.13.0",
       "items": [
         {
