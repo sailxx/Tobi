@@ -13,7 +13,7 @@ data class Palette(
     companion object {
         val DARK = Palette(
             background = 0xFF0E0F12, card = 0xFF16171B, line = 0xFF26282E,
-            text = 0xFFF3F4F6, textDim = 0xFFA1A6B0, accent = 0xFF4DA3FF, onAccent = 0xFF0E0F12, error = 0xFFFF8A80,
+            text = 0xFFF3F4F6, textDim = 0xFFA1A6B0, accent = 0xFF6AA8F5, onAccent = 0xFF0E0F12, error = 0xFFFF8A80,
         )
 
         /** The light set: the same roles on a pale page. */

@@ -44,6 +44,7 @@ object Pills {
         PillDefinition("integration_calcom", "Cal.com", "#C9956A", PillCategory.SERVICE),
         PillDefinition("integration_stripe", "Stripe", "#0570DE", PillCategory.SERVICE),
         PillDefinition("integration_spotify", "Spotify", "#1DB954", PillCategory.SERVICE),
+        PillDefinition("integration_youtubemusic", "YouTube Music", "#FF3D4A", PillCategory.SERVICE),
         PillDefinition("integration_whatsapp", "WhatsApp", "#25D366", PillCategory.SERVICE),
         PillDefinition("integration_telegram", "Telegram", "#2AABEE", PillCategory.SERVICE),
         PillDefinition("integration_gmail", "Gmail", "#EA4335", PillCategory.SERVICE),

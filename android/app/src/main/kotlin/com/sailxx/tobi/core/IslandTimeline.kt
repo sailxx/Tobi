@@ -14,6 +14,15 @@ data class IslandSpec(
     /** False for a request whose command could not be shown in full: the island offers Deny only. */
     val canAllow: Boolean = true,
 ) {
+    /**
+     * When this began (ms since the epoch), for the timer on the island; 0 when there is none. Kept out of the constructor so that a
+     * session's timestamp moving never makes two specs of the same thing differ.
+     */
+    var sinceMs: Long = 0L
+
+    /** The question this island is about (a QUESTION the phone may answer); null for everything else. */
+    var question: com.sailxx.tobi.link.QuestionRequest? = null
+
     enum class Kind { WORKING, QUESTION, APPROVAL, FINISHED, ERROR, RATELIMIT }
 
     /** Working, a question and a permission request stay until something changes. */

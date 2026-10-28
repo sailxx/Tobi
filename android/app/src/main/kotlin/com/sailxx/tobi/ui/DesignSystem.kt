@@ -28,6 +28,8 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
@@ -130,8 +132,10 @@ fun PillButton(
         kind == PillKind.PRIMARY -> t.onPrimaryButton
         else -> t.text
     }
+    // The main pill is a soft gradient of its colour (Tobi's blue on the computer too); the others are flat.
+    val fill = if (kind == PillKind.PRIMARY) Brush.linearGradient(listOf(lerp(bg.c(), fg.c(), 0.1f), bg.c().let { Color(it.red * 0.82f, it.green * 0.82f, it.blue * 0.82f, it.alpha) })) else SolidColor(bg.c())
     Row(
-        modifier.alpha(if (enabled) 1f else 0.4f).heightIn(min = Spacing.MIN_TOUCH.dp).clip(CircleShape).background(bg.c())
+        modifier.alpha(if (enabled) 1f else 0.4f).heightIn(min = Spacing.MIN_TOUCH.dp).clip(CircleShape).background(fill)
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick).padding(horizontal = 22.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,

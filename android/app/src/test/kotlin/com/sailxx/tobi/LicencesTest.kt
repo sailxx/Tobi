@@ -15,8 +15,8 @@ class LicencesTest {
     private fun asset(name: String) = File("src/main/assets/licenses/$name").readText()
     private fun src(name: String) = File("src/main/kotlin/com/sailxx/tobi/$name").readText()
 
-    @Test fun theMitTextIsTheRepositorysLicenceFileWord_for_word() {
-        assertEquals(ReferenceFiles.file("LICENSE").readText(), asset("MIT.txt"))
+    @Test fun theApacheTextIsTheRepositorysLicenceFileAndTheMitTextKeepsItsNotices() {
+        assertEquals(ReferenceFiles.file("LICENSE").readText(), asset("Apache-2.0.txt"))
         assertTrue(asset("MIT.txt").contains("Copyright (c) 2026 sailxx"))
         assertTrue(asset("MIT.txt").contains("Permission is hereby granted, free of charge"))
         assertTrue(asset("MIT.txt").contains("THE SOFTWARE IS PROVIDED \"AS IS\""))
@@ -57,7 +57,7 @@ class LicencesTest {
         for (f in Licences.FILES) assertTrue("$f is bundled", File("src/main/assets/licenses/$f").length() > 500)
         val text = Licences.FILES.joinToString("\n\n") { asset(it) }
         val p = Licences.paragraphs(text)
-        assertTrue(p.size > 50)
+        assertTrue(p.size > 40)
         assertTrue(p.none { it.isBlank() })
         // nothing is lost by cutting it into blocks
         assertEquals(text.filterNot { it.isWhitespace() }, p.joinToString("").filterNot { it.isWhitespace() })

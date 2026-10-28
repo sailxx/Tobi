@@ -334,6 +334,7 @@ class AppModel(private val context: Context) : LinkListener {
         onAllow = { notifier.openAllow(it) },
         onDeny = { decide(it, allow = false) },
         onOpen = { notifier.openApp() },
+        onQuestion = { pill, label -> openQuestion(pill, label) },
     )
 
     fun overlayPermitted() = overlay.permitted()
@@ -387,7 +388,7 @@ class AppModel(private val context: Context) : LinkListener {
             overlay.hide()
             return
         }
-        overlay.setActive(IslandPlan.active(sessions, approvals, allowed = true, this::agentName))
+        overlay.setActive(IslandPlan.active(sessions, approvals, allowed = true, this::agentName, questions))
     }
 
     /**
@@ -800,6 +801,7 @@ class AppModel(private val context: Context) : LinkListener {
     override fun onQuestion(request: QuestionRequest) {
         main.post {
             questions = questions.filter { it.fingerprint != request.fingerprint } + request
+            refreshIsland()
             // Offered for 120 s from now, like an approval; the computer drops it at 115 s.
             expiry.remove(request.fingerprint)?.let { main.removeCallbacks(it) }
             val gone = Runnable { removeQuestion(request.fingerprint) }
@@ -811,7 +813,22 @@ class AppModel(private val context: Context) : LinkListener {
     private fun removeQuestion(fingerprint: String) {
         expiry.remove(fingerprint)?.let { main.removeCallbacks(it) }
         questions = questions.filter { it.fingerprint != fingerprint }
+        refreshIsland()
     }
+
+    /** An option tapped on the island: the app opens on that question with the option already picked; sending still waits for the lock. */
+    private var pendingQuestion: Pair<String, String?>? = null
+
+    fun openQuestion(pillId: String, label: String?) {
+        pendingQuestion = pillId to label
+        notifier.openApp()
+    }
+
+    /** The question the island sent the user to, once. */
+    fun takePendingQuestion(): Pair<String, String?>? = pendingQuestion.also { pendingQuestion = null }
+
+    /** The option the island had picked for this request, once. */
+    var preselect: Pair<String, String>? = null
 
     /** The question of this agent, if one waits for the phone's answer. */
     fun questionFor(pillId: String): QuestionRequest? = questions.firstOrNull { it.pillId == pillId }
