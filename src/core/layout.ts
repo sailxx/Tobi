@@ -65,21 +65,17 @@ export const NOTCH_W = 120;
 export const NOTCH_H = 32;
 /** The compact island: a small pill with Tobi in its middle. */
 export const COMPACT_W = 120;
-/** …a little wider when other agents sit to his right. */
-export const COMPACT_GRID_W = 176;
 /** …and the old wide one when it shows the date and time (Tobi left, the clock in the middle). */
 export const COMPACT_CLOCK_W = 288;
 export const EXPANDED_W = 640;
 
 /** What the compact island has to make room for besides Tobi. */
 export interface CompactExtras {
-  others?: number;
   clock?: boolean;
 }
 
 export function compactWidth(extras: CompactExtras = {}): number {
-  if (extras.clock) return COMPACT_CLOCK_W;
-  return (extras.others ?? 0) > 0 ? COMPACT_GRID_W : COMPACT_W;
+  return extras.clock ? COMPACT_CLOCK_W : COMPACT_W;
 }
 
 /** Where Tobi sits in the compact island: its middle, or the left end beside the clock. */
@@ -112,7 +108,7 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   find: { height: 236, botX: 50, botY: null, botDiameter: 46, agentMode: "column" },
   searching: { height: 160, botX: 52, botY: null, botDiameter: 44, agentMode: "column" },
   // Tobi: Claude's whole text (src/views/reply.ts), tall enough to read.
-  result: { height: 300, botX: 46, botY: 44, botDiameter: 40, agentMode: "column" },
+  result: { height: 300, botX: 64, botY: 112, botDiameter: 46, agentMode: "column" },
   note: { height: 160, botX: 60, botY: null, botDiameter: 50, agentMode: "column" },
   settings: { height: 160, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
   greeting: { height: 150, botX: 320, botY: 90, botDiameter: 0, agentMode: "none" },

@@ -51,8 +51,6 @@ const COMPACT = {
   height: NOTCH_H,
   botDiameter: Math.min(20, Math.max(0, NOTCH_H - 6)),
   botCenterY: NOTCH_H / 2,
-  miniGridScale: Math.min(1, Math.max(0, NOTCH_H - 4) / 28),
-  miniGridCenterX: COMPACT_W / 2 + 44,
 };
 
 // ── Easing ────────────────────────────────────────────────────────────────────
@@ -624,25 +622,6 @@ function drawParticles(x: CanvasRenderingContext2D, t: number, p: Pose) {
   }
 }
 
-const MINI_COLORS = ["#E86A6A", "#3E86E0", "#EFAE5A", "#8C73F2"];
-
-function drawMinis(x: CanvasRenderingContext2D, alpha: number) {
-  if (alpha <= 0.01) return;
-  const cx = GREETING_W / 2 - COMPACT.width / 2 + COMPACT.miniGridCenterX;
-  const cy = COMPACT.botCenterY;
-  const sp = 6 * COMPACT.miniGridScale;
-  const offsets: [number, number][] = [[-sp, -sp], [sp, -sp], [-sp, sp], [sp, sp]];
-  offsets.forEach(([dx, dy], i) => {
-    x.save();
-    x.translate(cx + dx, cy + dy);
-    const scale = alpha * COMPACT.miniGridScale;
-    x.scale(scale, scale);
-    x.fillStyle = MINI_COLORS[i];
-    x.fill(tobiPath(5.3, 4));
-    x.restore();
-  });
-}
-
 // ── Controller ────────────────────────────────────────────────────────────────
 
 /**
@@ -731,7 +710,6 @@ export class Greeting {
       drawParticles(x, t, p);
     }
 
-    drawMinis(x, p.minis);
     drawTobi(x, p);
   }
 }

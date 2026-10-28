@@ -216,24 +216,11 @@ body {
   width: 0;
 }
 
-/* Compact 2×2 mini grid, to the right of the notch. */
-#mini-grid {
-  position: absolute;
-  width: 29px;
-  height: 29px;
-  display: grid;
-  grid-template-columns: 13px 13px;
-  grid-auto-rows: 13px;
-  gap: 3px;
-  pointer-events: none;
-  transition: opacity 0.25s ease-in-out;
-}
-
-/* Date and time in the middle of the compact island, between Tobi and the grid. */
+/* Date and time in the middle of the compact island, right of Tobi. */
 #island-clock {
   position: absolute;
   left: 50px;
-  right: 56px;
+  right: 16px;
   top: 0;
   display: flex;
   align-items: center;
@@ -3871,4 +3858,15 @@ html[data-dir="rtl"] #views :is(.mail-text, .mail-input, .mail-subject) {
     radial-gradient(75% 120% at 50% 135%, color-mix(in srgb, var(--wash) 85%, transparent) 0%, transparent 72%),
     radial-gradient(55% 90% at 28% 120%, color-mix(in srgb, var(--wash) 45%, transparent) 0%, transparent 70%),
     linear-gradient(180deg, transparent 35%, color-mix(in srgb, var(--wash) 14%, transparent) 100%);
+}
+
+.np-card .np-buttons,
+.np-card.ytm .np-buttons {
+  gap: 10px;
+}
+
+.np-card .np-volume .np-bar,
+.np-card.ytm .np-volume .np-bar {
+  flex-basis: 40px;
+  width: 40px;
 }

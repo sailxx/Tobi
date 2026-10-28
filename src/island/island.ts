@@ -15,7 +15,7 @@ import { State } from "../core/state";
 import { isMusicPill, islandDances } from "../core/spotify";
 import { BotEngine, hexToRGB } from "../tobi/engine";
 import { Greeting } from "../tobi/greeting";
-import { createMiniBot, pruneMiniBots, syncMiniBotStates, tickMiniBots } from "../tobi/minibots";
+import { syncMiniBotStates, tickMiniBots } from "../tobi/minibots";
 import { SeasonCache, parseOutfit } from "../tobi/wardrobe";
 import { UploadCanvas } from "../upload/canvas";
 import { USC, UploadSeq } from "../upload/sequence";
@@ -66,7 +66,6 @@ export class Island {
   private wash!: HTMLElement;
   private washColor = "";
   private greetingCanvas!: HTMLCanvasElement;
-  private miniGrid!: HTMLElement;
   private compactKey = "";
   private clockEl!: HTMLElement;
   private clockTimer?: number;
@@ -312,7 +311,6 @@ export class Island {
     this.wash = h("div", { id: "island-wash" });
     this.botCanvas = h("canvas", { id: "bot-canvas" });
     this.greetingCanvas = h("canvas", { id: "greeting-canvas" });
-    this.miniGrid = h("div", { id: "mini-grid" });
     this.clockEl = h("div", { id: "island-clock" });
     this.countdown = h("div", { id: "countdown" });
 
@@ -348,7 +346,6 @@ export class Island {
       this.clipEl,
       this.botGlow,
       this.botCanvas,
-      this.miniGrid,
       this.clockEl,
       this.countdown,
     );
@@ -750,8 +747,6 @@ export class Island {
     this.islandEl.style.transform = `translateX(-50%)`;
     // These follow the island as it resizes, so they belong here rather than in
     // the state-driven DOM sync.
-    this.miniGrid.style.left = `${w - (State.settings.showClock ? 40 : 30) - 14.5}px`;
-    this.miniGrid.style.top = `${hh / 2 - 14.5}px`;
     this.clockEl.style.height = `${hh}px`;
     this.greetingCanvas.style.left = `${(w - EXPANDED_W) / 2}px`;
     this.uploadCanvas.el.style.left = `${(w - EXPANDED_W) / 2}px`;
@@ -1212,7 +1207,8 @@ export class Island {
     // In the wardrobe the hovered outfit swaps in at once, without the drop-in.
     const inWardrobe = State.mode === "expanded" && State.view === "wardrobe";
     const mainFocused = State.focusId == null || State.focusId === State.mainPillId;
-    const showOutfit = mainFocused || State.mode !== "expanded" || inWardrobe;
+    // The compact pill shows him as on the logo, headphones on, nothing else.
+    const showOutfit = State.mode === "expanded" && (mainFocused || inWardrobe);
     const outfit = State.wardrobePreview ?? this.seasons.get(parseOutfit(State.settings.tobiOutfit));
     this.engine.setOutfit(showOutfit ? outfit : "none", !inWardrobe);
     // Dances while music plays: always in the compact island, expanded only on
@@ -1302,28 +1298,12 @@ export class Island {
       }
     }
 
-    // The compact pill widens for the other agents (or the clock) and narrows back.
+    // The compact pill widens for the clock and narrows back.
     const extras = this.compactExtras();
-    const extrasKey = `${extras.others}|${extras.clock}`;
+    const extrasKey = String(extras.clock);
     if (extrasKey !== this.compactKey) {
       this.compactKey = extrasKey;
       if (State.mode === "compact") this.animateGeometry(false);
-    }
-
-    // Compact mini grid
-    const showGrid = State.mode === "compact";
-    this.miniGrid.style.opacity = showGrid ? "1" : "0";
-    if (showGrid) {
-      const others = State.otherTasks.slice(0, 4);
-      const key = others.map((t) => t.id).join("|");
-      if (this.miniGrid.dataset.key !== key) {
-        this.miniGrid.dataset.key = key;
-        this.miniGrid.replaceChildren();
-        for (const t of others) {
-          this.miniGrid.append(createMiniBot(t, 13));
-        }
-        pruneMiniBots();
-      }
     }
 
     this.updateClock();
@@ -1334,7 +1314,7 @@ export class Island {
 
   /** What the compact island makes room for besides Tobi. */
   private compactExtras(): CompactExtras {
-    return { others: Math.min(4, State.otherTasks.length), clock: State.settings.showClock };
+    return { clock: State.settings.showClock };
   }
 
   /** The clock sits in the middle of the compact island, where the notch is on a Mac. */
