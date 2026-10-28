@@ -15,8 +15,8 @@ import {
 } from "../core/providers";
 import { Sound } from "../core/sound";
 import { State, type ChatMessage } from "../core/state";
-import type { ViewHost } from "./views";
-import { N_, t, tl } from "../i18n/i18n";
+import type { ViewActions, ViewHost } from "./views";
+import { N_, language, t, tl } from "../i18n/i18n";
 
 const STRINGS = {
   placeholderFirst: N_("Ask me anything…"),
@@ -32,7 +32,62 @@ const STRINGS = {
   signInLine: N_("Sign in with your Claude account to chat on your subscription."),
   signIn: N_("Sign in"),
   waiting: N_("Waiting for the browser…"),
+  via: N_("via {0}"),
+  textFor: N_("Paste or type the text…"),
 };
+
+// ── Quick actions ─────────────────────────────────────────────────────────────
+//
+// The chips over the text field: with text typed, a click sends it with the
+// action's instruction; with none, the chip stays lit and the next message
+// gets it. The instruction goes to the model in English; the bubble shows the
+// chip's name and the text.
+
+export interface QuickAction {
+  id: "explain" | "spell" | "translate" | "summarize";
+  icon: string;
+  label: string;
+}
+
+export const QUICK_ACTIONS: readonly QuickAction[] = [
+  { id: "explain", icon: ICONS.bulb, label: N_("Explain") },
+  { id: "spell", icon: ICONS.spell, label: N_("Check my spelling") },
+  { id: "translate", icon: ICONS.globe, label: N_("Translate") },
+  { id: "summarize", icon: ICONS.lines, label: N_("Summarize") },
+];
+
+/** The language's name in English ("Russian"), for the translate instruction. */
+function languageName(code: string): string {
+  try {
+    return new Intl.DisplayNames(["en"], { type: "language" }).of(code) ?? "English";
+  } catch {
+    return "English";
+  }
+}
+
+/** What the model is asked for `text` with a quick action. */
+export function quickPrompt(id: QuickAction["id"], text: string, lang: string): string {
+  switch (id) {
+    case "explain":
+      return `Explain this simply and briefly, in the language it is written in:
+
+${text}`;
+    case "spell":
+      return `Correct the spelling, grammar and punctuation of this text. Keep its language and meaning. Reply with the corrected text only:
+
+${text}`;
+    case "translate": {
+      const to = languageName(lang);
+      return `Translate this into ${to}; if it is already in ${to}, translate it into English. Reply with the translation only:
+
+${text}`;
+    }
+    case "summarize":
+      return `Summarize this in a few short points, in the language it is written in:
+
+${text}`;
+  }
+}
 
 let nextId = 1;
 
@@ -238,7 +293,7 @@ function buildPicker(onChange: () => void): Picker {
 
 // ── View ──────────────────────────────────────────────────────────────────────
 
-export function buildPrompt(onHeightChange: () => void): ViewHost {
+export function buildPrompt(onHeightChange: () => void, actions?: Pick<ViewActions, "blip">): ViewHost {
   const chipRow = h("div", { class: "chip-row" });
   const log = h("div", { class: "chat-log" });
   const input = h("input", {
@@ -251,25 +306,55 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   const bar = h("div", { class: "chat-bar" }, input, send);
 
   const modelDot = h("i", { class: "model-dot" });
+  const modelVia = h("span", { class: "model-via" });
   const modelName = h("span", { class: "model-name" });
   const modelBtn = h(
     "button",
     { class: "model-btn", title: tl(STRINGS.switchModel) },
     modelDot,
+    modelVia,
     modelName,
     svg(ICONS.chevronUpDown, 9, { stroke: 2 }),
   );
   const modelRow = h("div", { class: "model-row" }, modelBtn);
+
+  let armed: QuickAction | null = null;
+  const quickRow = h("div", { class: "quick-row" });
+  const quickButtons = QUICK_ACTIONS.map((q) => {
+    const b = h("button", { class: "quick", title: tl(q.label) }, svg(q.icon, 13, { stroke: 1.9 }), h("span", { text: tl(q.label) }));
+    b.addEventListener("click", () => {
+      if (sending) return;
+      actions?.blip();
+      const text = input.value.trim();
+      if (text) {
+        armed = q;
+        void submit();
+        return;
+      }
+      armed = armed?.id === q.id ? null : q;
+      drawQuick();
+      input.focus();
+    });
+    quickRow.append(b);
+    return b;
+  });
+
+  function drawQuick() {
+    QUICK_ACTIONS.forEach((q, i) => quickButtons[i].classList.toggle("on", armed?.id === q.id));
+    input.placeholder = armed
+      ? t(STRINGS.textFor)
+      : t(State.chatHistory.length === 0 ? STRINGS.placeholderFirst : STRINGS.placeholderNext);
+  }
 
   const body = h("div", { class: "chat-body" });
   const picker = buildPicker(() => {
     body.classList.toggle("picking", picker.isOpen);
     drawModelButton();
   });
-  body.append(chipRow, log, picker.el, modelRow, bar);
+  body.append(modelRow, chipRow, log, picker.el, quickRow, bar);
 
-  const el = h("div", { class: "view" }, h("div", { class: "card wash chat-card" }, body));
-  (el.querySelector(".card") as HTMLElement).style.setProperty("--wash", "rgba(99,102,241,0.5)");
+  // No card of its own: the chat sits right on the island, which lights up warm under it.
+  const el = h("div", { class: "view" }, h("div", { class: "chat-card open-chat" }, body));
 
   let sending = false;
   let renderedCount = -1;
@@ -279,7 +364,9 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   function drawModelButton() {
     const p = providerDef(State.settings.chatProvider);
     modelDot.style.background = p.accent;
-    modelName.textContent = activeModel(State.settings) || t(STRINGS.noModel);
+    const model = activeModel(State.settings);
+    modelVia.textContent = model ? t(STRINGS.via, { 0: t(p.name) }) : "";
+    modelName.textContent = model || t(STRINGS.noModel);
     modelBtn.classList.toggle("open", picker.isOpen);
     modelBtn.disabled = sending;
   }
@@ -305,12 +392,17 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
     const query = input.value.trim();
     if (!query || sending) return;
     if (picker.isOpen) picker.close();
+    const quick = armed;
+    armed = null;
+    drawQuick();
     input.value = "";
     sending = true;
     drawModelButton();
     Sound.play("send");
 
-    State.chatHistory.push({ id: nextId++, role: "user", content: query });
+    const shown = quick ? `${t(quick.label)}: ${query}` : query;
+    const asked = quick ? quickPrompt(quick.id, query, language()) : query;
+    State.chatHistory.push({ id: nextId++, role: "user", content: shown });
     State.stateOverride = "thinking";
     State.notify();
     onHeightChange();
@@ -320,7 +412,7 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
       State.chatHistory.length === 1 && file ? { kind: "file", name: file.name, path: file.path } : null;
 
     try {
-      const reply = await Bridge.chatSend(query, context);
+      const reply = await Bridge.chatSend(asked, context);
       State.chatHistory.push({ id: nextId++, role: "assistant", content: reply.text });
       State.stateOverride = null;
       Sound.play("finish");
@@ -378,8 +470,9 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
       if (State.view !== "prompt" && picker.isOpen) picker.close();
       drawModelButton();
 
-      input.placeholder = t(State.chatHistory.length === 0 ? STRINGS.placeholderFirst : STRINGS.placeholderNext);
+      drawQuick();
       input.disabled = sending;
+      quickRow.classList.toggle("off", sending);
     },
     focus() {
       input.focus();

@@ -21,8 +21,7 @@ import { h, clear } from "../views/dom";
 import { startHub, type PageId } from "../hub/shell";
 import { FLOW_PAGE_RENDERERS } from "../hub/pages";
 import { agentsSection } from "./agents";
-import { wardrobeSection } from "./wardrobe";
-import { tobiName, tobiSections } from "./tobi";
+import { tobiName, tobiPage } from "./tobi";
 import { setEyeColors } from "../core/eye-colors";
 import { phoneSection } from "./phone";
 import { whatsappSection } from "./whatsapp";
@@ -1546,22 +1545,22 @@ async function render() {
   shortcutsListener = null;
   clear(root);
   const sections: Partial<Record<PageId, () => HTMLElement[]>> = {
-    general: () => [generalSection()],
-    tobi: () => tobiSections({ tobiName: settings.tobiName ?? "", eyeColors: settings.eyeColors ?? {} }, (change) => {
-      settings = { ...settings, ...change };
-      hub?.setName(tobiName(settings.tobiName));
-      void save();
-    }),
-    wardrobe: () => [wardrobeSection(tobiName(settings.tobiName), settings.tobiOutfit, (outfit) => {
-      settings.tobiOutfit = outfit;
-      void save();
-    })],
+    general: () => [generalSection(), shortcutsSection(shortcutReport)],
+    // Tobi himself: his name, his colours and his wardrobe, around one big Tobi.
+    tobi: () => tobiPage(
+      { tobiName: settings.tobiName ?? "", eyeColors: settings.eyeColors ?? {}, tobiOutfit: settings.tobiOutfit },
+      (change) => {
+        settings = { ...settings, ...change };
+        hub?.setName(tobiName(settings.tobiName));
+        void save();
+      },
+    ),
     pills: () => [activePillsSection(connected)],
-    agents: () => [claudeSection(status), agentsSection(agents), planSection(status)],
-    chat: () => [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)],
-    integrations: () => [integrationsSection(present), ...whatsappSections(), ...telegramSections(), ...gmailSections(), ...mailboxSections()],
-    phone: () => [phoneSection(settings.phoneLink ?? false, toggle, settings)],
-    shortcuts: () => [shortcutsSection(shortcutReport)],
+    agents: () => [claudeSection(status), agentsSection(agents), planSection(status), phoneSection(settings.phoneLink ?? false, toggle, settings)],
+    integrations: () => [
+      integrationsSection(present), ...whatsappSections(), ...telegramSections(), ...gmailSections(), ...mailboxSections(),
+      apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey),
+    ],
   };
   root.append(...(sections[notchPage]?.() ?? []));
   if (notchPage === "general") {

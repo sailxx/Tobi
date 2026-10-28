@@ -67,6 +67,6 @@ test("he slides to the side to wave, then comes back to the middle", () => {
 test("he lands where the compact island's Tobi sits", () => {
   const end = greetingPose(10, 5);
   assert.equal(end.y, NOTCH_H / 2);
-  assert.equal(end.x, GREETING_W / 2 - COMPACT_W / 2 + 40);
+  assert.equal(end.x, GREETING_W / 2);
   assert.equal(end.minis, 1);
 });

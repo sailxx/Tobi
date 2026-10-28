@@ -3408,3 +3408,467 @@ html[data-dir="rtl"] #views :is(.mail-text, .mail-input, .mail-subject) {
   flex-basis: 60px;
   width: 60px;
 }
+
+/* ── 0.14: the header's quit button ──────────────────────────────────────── */
+
+.header-actions {
+  gap: 12px;
+}
+
+.header-actions button {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  transition: color 0.15s ease-out, background 0.15s ease-out;
+}
+
+.header-actions button:hover {
+  color: var(--ink);
+}
+
+.header-actions button.power.armed {
+  color: #fff4f0;
+  background: #d9412f;
+}
+
+/* ── 0.14: the chat right on the island ──────────────────────────────────── */
+
+.chat-card.open-chat {
+  position: relative;
+  height: 100%;
+  background: transparent;
+  border: 0;
+}
+
+.open-chat .chat-body {
+  padding: 2px 6px 6px 92px;
+  gap: 7px;
+}
+
+.open-chat .model-row {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.open-chat .model-btn {
+  padding: 2px 8px 2px 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font: 500 11.5px var(--font);
+}
+
+.open-chat .model-btn:hover:not(:disabled),
+.open-chat .model-btn.open {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.quick-row {
+  display: flex;
+  gap: 6px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  transition: opacity 0.2s ease-out;
+}
+
+.quick-row.off {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.chat-body.picking .quick-row {
+  display: none;
+}
+
+.quick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 11px 0 9px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #eceef1;
+  font: 600 12px var(--font);
+  white-space: nowrap;
+  cursor: default;
+  transition: background 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.quick svg {
+  color: #f6a46f;
+  flex: 0 0 auto;
+}
+
+.quick:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.quick.on {
+  background: rgba(240, 116, 58, 0.24);
+  border-color: rgba(246, 164, 111, 0.55);
+}
+
+.open-chat .chat-bar {
+  height: 42px;
+  padding: 0 7px 0 14px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.open-chat .chat-input {
+  font-size: 13.5px;
+}
+
+.open-chat .send-btn {
+  color: #c4562a;
+}
+
+/* ── 0.14: the search (views/search.ts) ──────────────────────────────────── */
+
+.find-card {
+  background: transparent;
+  border: 0;
+}
+
+.find-body {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 6px 6px 92px;
+}
+
+.find-bar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 42px;
+  flex: 0 0 42px;
+  padding: 0 12px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.find-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: 400 13.5px var(--font);
+  cursor: text;
+}
+
+.find-input::placeholder {
+  color: var(--dim-3);
+}
+
+.find-keys {
+  font: 500 10.5px var(--mono);
+  color: var(--dim-3);
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.find-files {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.find-web {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.find-web:empty {
+  display: none;
+}
+
+.find-body.web-first .find-web {
+  order: 1;
+}
+
+.find-body.web-first .find-files {
+  order: 2;
+}
+
+.find-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink-2);
+  text-align: left;
+  cursor: default;
+}
+
+.find-row.web {
+  flex: 1 1 0;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.find-row:hover,
+.find-row.sel {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.find-ico {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #d5d8dd;
+}
+
+.find-row.google .find-ico {
+  background: rgba(66, 133, 244, 0.18);
+  color: #8fb6f7;
+}
+
+.find-row.youtube .find-ico {
+  background: rgba(244, 67, 54, 0.18);
+  color: #ff8a80;
+}
+
+.find-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+  font: 400 11px var(--font);
+  color: var(--dim);
+}
+
+.find-name b,
+.find-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.find-name b {
+  font: 600 12.5px var(--font);
+  color: var(--ink-2);
+}
+
+.find-row.web .find-name {
+  flex-direction: row;
+  align-items: baseline;
+  font-size: 12px;
+}
+
+.find-row.web .find-name b {
+  flex: 0 0 auto;
+}
+
+.find-reveal {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dim);
+  opacity: 0;
+  cursor: default;
+}
+
+.find-row:hover .find-reveal,
+.find-row.sel .find-reveal {
+  opacity: 1;
+}
+
+.find-reveal:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+}
+
+.find-note {
+  padding: 8px 4px;
+  font: 400 12px var(--font);
+  color: var(--dim-3);
+}
+
+/* ── 0.14: the player (views/spotify.ts): a big cover, its colours as light ── */
+
+.overview.music > .left {
+  flex: 0 0 430px;
+  width: 430px;
+}
+
+.np-root {
+  position: static;
+}
+
+.np-card {
+  height: 100%;
+  padding: 11px 14px 11px 104px;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 13px;
+}
+
+.np-ambient {
+  position: absolute;
+  inset: -30px;
+  z-index: -1;
+  background:
+    radial-gradient(60% 90% at 70% 50%, color-mix(in srgb, var(--np-color) 30%, transparent), transparent 75%);
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+  transition: opacity 0.4s ease-out;
+}
+
+.np-ambient.has-art {
+  filter: blur(26px) saturate(1.5) brightness(0.75);
+  opacity: 0.75;
+}
+
+/* Tobi's side of the card stays dark, the cover's light grows to the right. */
+.left-body:has(.np-card)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(12, 13, 15, 0.92) 0%, rgba(12, 13, 15, 0.55) 34%, rgba(12, 13, 15, 0.2) 100%);
+  pointer-events: none;
+}
+
+.left-body:has(.np-card) {
+  isolation: isolate;
+}
+
+.np-card > .np-art,
+.np-card > .np-main {
+  position: relative;
+  z-index: 1;
+}
+
+.np-card .np-art,
+.np-card.ytm .np-art {
+  flex: 0 0 auto;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 11px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.np-card .np-art::after,
+.np-card.ytm .np-art::after {
+  border-radius: 11px;
+}
+
+.np-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.np-card .np-title,
+.np-card.ytm .np-title {
+  font: 650 14px var(--font);
+  color: #fff;
+}
+
+.np-card .np-sub,
+.np-card.ytm .np-sub {
+  font: 400 11.5px var(--font);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.np-card .np-progress,
+.np-card.ytm .np-progress {
+  padding-top: 0;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.np-card .np-track {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.np-card .np-controls,
+.np-card.ytm .np-controls {
+  padding-top: 0;
+}
+
+.np-card .np-buttons,
+.np-card.ytm .np-buttons {
+  gap: 14px;
+}
+
+.np-card .np-icon {
+  width: 20px;
+  height: 22px;
+}
+
+.np-card .np-play,
+.np-card.ytm .np-play {
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  color: #101114;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+.np-card.ytm .np-play {
+  background: #ff3d4a;
+  color: #fff;
+}
+
+.np-card .np-vol-icon {
+  width: 15px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.np-card .np-volume .np-bar,
+.np-card.ytm .np-volume .np-bar {
+  flex-basis: 54px;
+  width: 54px;
+}
+
+.open-chat .model-via {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.open-chat .model-via:not(:empty)::after {
+  content: " ·";
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* The chat and the search: a warm light rising from the whole bottom edge. */
+#island-wash.warm {
+  background:
+    radial-gradient(75% 120% at 50% 135%, color-mix(in srgb, var(--wash) 85%, transparent) 0%, transparent 72%),
+    radial-gradient(55% 90% at 28% 120%, color-mix(in srgb, var(--wash) 45%, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, transparent 35%, color-mix(in srgb, var(--wash) 14%, transparent) 100%);
+}

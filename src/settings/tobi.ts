@@ -1,6 +1,8 @@
-// Tobi → Tobi: Tobi himself with what he got done, his name, and the colour
-// of his eyes for each group of states (busy or asking, done, error). A click
-// on a group's row shows Tobi in that state for a moment.
+// Tobi → Tobi: one page around one big Tobi. His name is the page's title and
+// is edited in place; under him, his wardrobe as a rail of round tokens
+// (hovering one tries it on him, a click keeps it), then the colour of each
+// group of states (busy or asking, done, error). A click on a group's row
+// shows him in that state for a moment.
 
 import { h, clear } from "../views/dom";
 import { t } from "../i18n/i18n";
@@ -13,6 +15,11 @@ import {
   type EyeGroup,
 } from "../core/eye-colors";
 import type { BotStateName } from "../core/layout";
+import { drawWardrobeIcon } from "../tobi/outfits";
+import {
+  OUTFIT_KEYS, OUTFIT_SELECTIONS, WARDROBE_STRINGS, parseOutfit, resolveOutfit, seasonalOutfit,
+  type OutfitSelection,
+} from "../tobi/wardrobe";
 
 /** "Tobi" unless he was given a name of his own. */
 export function tobiName(name: string | undefined): string {
@@ -28,47 +35,113 @@ const GROUP_TITLE: Record<EyeGroup, () => string> = {
 /** The state a group's row shows Tobi in when it is clicked. */
 const GROUP_DEMO: Record<EyeGroup, BotStateName> = { busy: "working", done: "finished", error: "error" };
 
+/** The size outfits.ts draws a wardrobe icon at, and the size a token shows it. */
+const ICON = 28;
+const TOKEN = 40;
+
 export interface TobiPrefs {
   tobiName: string;
   eyeColors: Record<string, string>;
+  tobiOutfit: string;
 }
 
-export function tobiSections(prefs: TobiPrefs, save: (change: Partial<TobiPrefs>) => void): HTMLElement[] {
-  // ── Tobi and what he did ──
+export function tobiPage(prefs: TobiPrefs, save: (change: Partial<TobiPrefs>) => void): HTMLElement[] {
   const canvas = h("canvas", {}) as HTMLCanvasElement;
   const engine = liveTobi(canvas);
-  const title = h("b", { text: tobiName(prefs.tobiName) });
-  const line = h("span", { text: " " });
+  const season = seasonalOutfit(new Date());
+  let outfit = parseOutfit(prefs.tobiOutfit);
+
+  // ── Who he is: the name, what he wears, what he did ──
+  const name = h("input", {
+    class: "tobi-name", type: "text", maxlength: "24", placeholder: "Tobi", value: prefs.tobiName,
+    "aria-label": t("What's his name?"), spellcheck: "false",
+  }) as HTMLInputElement;
+  const keepName = () => {
+    const next = name.value.trim();
+    name.value = next;
+    if (next === prefs.tobiName.trim()) return;
+    prefs = { ...prefs, tobiName: next };
+    save({ tobiName: next });
+  };
+  name.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") name.blur();
+    if (e.key === "Escape") {
+      name.value = prefs.tobiName;
+      name.blur();
+    }
+  });
+  name.addEventListener("blur", keepName);
+
+  const wearing = h("div", { class: "tobi-wearing" });
+  const done = h("b", { text: "–" });
+  const streak = h("b", { text: "–" });
   void Bridge.recapHistory(Date.now() / 1000 - 84 * 86_400).then((history) => {
     const s = homeStats(history?.turns ?? []);
-    line.textContent = `${number(s.done)} ${t("tasks done")} · ${number(s.streak)} ${t("days in a row")}`;
+    done.textContent = number(s.done);
+    streak.textContent = number(s.streak);
   });
-  const card = h("div", { class: "tobi-card" }, h("div", { class: "pic" }, canvas), h("div", { class: "who" }, title, line));
-
-  // ── His name ──
-  const field = h("input", { type: "text", maxlength: "24", placeholder: "Tobi", value: prefs.tobiName }) as HTMLInputElement;
-  const keep = h("button", { class: "primary", text: t("Save") }) as HTMLButtonElement;
-  const saveName = () => {
-    const name = field.value.trim();
-    field.value = name;
-    title.textContent = tobiName(name);
-    save({ tobiName: name });
-    prefs = { ...prefs, tobiName: name };
-    keep.disabled = true;
-  };
-  keep.disabled = true;
-  field.addEventListener("input", () => (keep.disabled = field.value.trim() === prefs.tobiName.trim()));
-  field.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !keep.disabled) saveName();
-  });
-  keep.addEventListener("click", saveName);
-  const nameSection = h("section", {},
-    h("h2", {}, h("span", { text: t("Name") })),
-    h("div", { class: "row" }, h("label", { text: t("What's his name?") }), field, keep),
-    h("div", { class: "hint", text: t("Shown in the Tobi window and the wardrobe. « OK Tobi » stays the wake word.") }),
+  const facts = h("div", { class: "tobi-facts" },
+    h("span", {}, done, h("span", { text: t("tasks done") })),
+    h("span", {}, streak, h("span", { text: t("days in a row") })),
+  );
+  const hero = h("div", { class: "tobi-hero" },
+    h("div", { class: "tobi-stage" }, canvas),
+    h("div", { class: "tobi-id" },
+      h("div", { class: "tobi-kicker", text: t("Name") }),
+      name,
+      h("div", { class: "tobi-hint", text: t("Shown in the Tobi window and the wardrobe. « OK Tobi » stays the wake word.") }),
+      wearing,
+      facts,
+    ),
   );
 
-  // ── His eyes ──
+  // ── His wardrobe ──
+  const wear = (selection: OutfitSelection) => {
+    engine.setOutfit(resolveOutfit(selection, new Date()));
+    wearing.textContent = selection === "auto"
+      ? WARDROBE_STRINGS.autoNow(t(OUTFIT_KEYS[season]))
+      : t(OUTFIT_KEYS[selection]);
+  };
+  const rail = h("div", { class: "outfit-rail", role: "radiogroup", "aria-label": t("Wardrobe") });
+  const tokens = new Map<OutfitSelection, HTMLElement>();
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  for (const selection of OUTFIT_SELECTIONS) {
+    const icon = h("canvas", { style: `width:${TOKEN}px;height:${TOKEN}px` }) as HTMLCanvasElement;
+    icon.width = Math.round(TOKEN * dpr);
+    icon.height = Math.round(TOKEN * dpr);
+    const ctx = icon.getContext("2d");
+    if (ctx) {
+      ctx.setTransform((dpr * TOKEN) / ICON, 0, 0, (dpr * TOKEN) / ICON, 0, 0);
+      drawWardrobeIcon(ctx, ICON, selection, season, WARDROBE_STRINGS.autoBadge);
+    }
+    const label = t(OUTFIT_KEYS[selection]);
+    const token = h("button", {
+      class: "outfit-token", role: "radio", title: label, "aria-label": label,
+      onclick: () => {
+        outfit = selection;
+        for (const [id, el] of tokens) {
+          el.classList.toggle("on", id === selection);
+          el.setAttribute("aria-checked", String(id === selection));
+        }
+        wear(selection);
+        save({ tobiOutfit: selection });
+      },
+    }, h("span", { class: "disc" }, icon), h("span", { class: "nm", text: label }));
+    token.classList.toggle("on", selection === outfit);
+    token.setAttribute("aria-checked", String(selection === outfit));
+    token.addEventListener("mouseenter", () => wear(selection));
+    token.addEventListener("mouseleave", () => wear(outfit));
+    tokens.set(selection, token);
+    rail.append(token);
+  }
+  wear(outfit);
+  const wardrobe = h("section", { class: "tobi-wardrobe" },
+    h("h2", {}, h("span", { text: t("Wardrobe") })),
+    h("div", { class: "hint", text: t("Pick what Tobi wears. He tries it on right away.") }),
+    rail,
+  );
+
+  // ── His colours ──
   let eyes = sanitizeEyes(prefs.eyeColors);
   const presets = h("div", { class: "eye-presets" });
   const rows = h("div", { class: "eye-rows" });
@@ -103,7 +176,7 @@ export function tobiSections(prefs: TobiPrefs, save: (change: Partial<TobiPrefs>
       const current = eyeColor(eyes, g);
       const swatches = h("div", { class: "swatches" });
       for (const c of EYE_SWATCHES[g]) {
-        const pick = h("button", {
+        swatches.append(h("button", {
           class: c === current ? "swatch on" : "swatch",
           style: `background:${c}`,
           title: c, "aria-label": c, "aria-pressed": String(c === current),
@@ -112,8 +185,7 @@ export function tobiSections(prefs: TobiPrefs, save: (change: Partial<TobiPrefs>
             setEyes({ ...eyes, [g]: c });
             show(g);
           },
-        });
-        swatches.append(pick);
+        }));
       }
       rows.append(h("div", { class: "eye-row", onclick: () => show(g) },
         h("i", { class: "dot", style: `background:${current}` }),
@@ -124,12 +196,12 @@ export function tobiSections(prefs: TobiPrefs, save: (change: Partial<TobiPrefs>
   }
   draw();
 
-  const eyesSection = h("section", {},
+  const colours = h("section", {},
     h("h2", {}, h("span", { text: t("State colours") })),
     h("div", { class: "hint", text: t("Pick a colour for each state. Click a row to see it.") }),
     presets,
     rows,
   );
 
-  return [card, nameSection, eyesSection];
+  return [hero, wardrobe, colours];
 }

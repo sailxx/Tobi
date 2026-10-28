@@ -19,7 +19,7 @@ function dayKey(ms: number): string {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
-function greeting(name: string | null | undefined, hour = new Date().getHours()): string {
+export function greeting(name: string | null | undefined, hour = new Date().getHours()): string {
   const part = hour < 5 || hour >= 18 ? "evening" : hour < 12 ? "morning" : "afternoon";
   if (name) {
     if (part === "morning") return t("Good morning, {0}", { 0: name });

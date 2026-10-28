@@ -8,6 +8,7 @@ import { onEvent } from "../core/bridge";
 import { FlowBridge, type FlowPrefs, type FlowStatus, type ModelsStatus } from "../core/flow";
 import { hero, liveTobi, setWindowShown } from "./hero";
 import { icon, keyLabel } from "./ui";
+import { greeting } from "./pages/home";
 
 export type PageId =
   | "home" | "tobi" | "wardrobe" | "dictation" | "notes" | "dictionary" | "snippets" | "styles" | "flowsettings"
@@ -20,6 +21,10 @@ interface Item {
   title: () => string;
   /** The line under the title (Flow pages draw it for themselves). */
   subtitle?: () => string;
+  /** More pages drawn under it, each under its own smaller title. */
+  parts?: PageId[];
+  /** Pages of the island's settings drawn into this one (renderNotch draws them together). */
+  holds?: PageId[];
 }
 
 /** A group of the sidebar, under its small label. */
@@ -34,39 +39,41 @@ export const SECTIONS: Section[] = [
     id: "tobi", title: () => "Tobi",
     items: [
       { id: "home", icon: "home", title: () => t("Home") },
-      { id: "tobi", icon: "bot", title: () => "Tobi", subtitle: () => t("His name, his colours and what he has done.") },
-      { id: "wardrobe", icon: "shirt", title: () => t("Wardrobe"), subtitle: () => t("Pick what Tobi wears. He tries it on right away.") },
-      { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows.") },
-      { id: "integrations", icon: "puzzle", title: () => t("Integrations"), subtitle: () => t("Stripe, GitHub, Vercel, n8n, Notion and the rest.") },
-      { id: "phone", icon: "phone", title: () => t("Android phone"), subtitle: () => t("Your agents and their approvals on your Android phone, over your Wi-Fi.") },
-      { id: "chat", icon: "chat", title: () => t("Chat"), subtitle: () => t("The AI of the island's chat, with your own keys.") },
-      { id: "voice", icon: "wave", title: () => "OK Tobi" },
+      { id: "tobi", icon: "bot", title: () => "Tobi", subtitle: () => t("His name, his colours and what he wears."), holds: ["wardrobe"] },
+      { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows, and your Android phone."), holds: ["phone"] },
+      { id: "integrations", icon: "puzzle", title: () => t("Integrations"), subtitle: () => t("Services in the island and the AI of its chat."), holds: ["chat"] },
     ],
   },
   {
     id: "voice", title: () => t("Voice"),
     items: [
-      { id: "dictation", icon: "mic", title: () => t("Dictation") },
+      { id: "dictation", icon: "mic", title: () => t("Dictation"), parts: ["voice", "flowsettings"] },
       { id: "notes", icon: "record", title: () => t("Notetaker") },
-      { id: "dictionary", icon: "book", title: () => t("Dictionary") },
-      { id: "snippets", icon: "bolt", title: () => t("Snippets") },
-      { id: "styles", icon: "text", title: () => t("Styles") },
+      { id: "dictionary", icon: "book", title: () => t("Dictionary"), parts: ["snippets", "styles"] },
     ],
   },
   {
     id: "settings", title: () => t("Settings"),
     items: [
-      { id: "general", icon: "sliders", title: () => t("General"), subtitle: () => t("Tobi, his sounds and how the island behaves.") },
+      { id: "general", icon: "sliders", title: () => t("General"), subtitle: () => t("Tobi, his sounds, how the island behaves and its keys."), holds: ["shortcuts"] },
       { id: "pills", icon: "grid", title: () => t("Active pills"), subtitle: () => t("The pills shown in the island, their order and their colours.") },
-      { id: "shortcuts", icon: "keyboard", title: () => t("Shortcuts"), subtitle: () => t("The keys that open the island and its actions.") },
-      { id: "flowsettings", icon: "gear", title: () => t("Dictation") },
     ],
   },
 ];
 
+/** The title of a page drawn as a part of another. */
+const PART_TITLES: Partial<Record<PageId, () => string>> = {
+  voice: () => "OK Tobi",
+  flowsettings: () => t("Settings"),
+  snippets: () => t("Snippets"),
+  styles: () => t("Styles"),
+};
+
 const ITEMS: Item[] = SECTIONS.flatMap((s) => s.items);
 
-const itemOf = (page: PageId) => ITEMS.find((x) => x.id === page) ?? ITEMS[0];
+/** The sidebar page that shows `page`, itself or as one of its parts. */
+const itemOf = (page: PageId) =>
+  ITEMS.find((x) => x.id === page || x.parts?.includes(page) || x.holds?.includes(page)) ?? ITEMS[0];
 
 /** What a page gets to draw itself and reach the rest of the window. */
 export interface HubContext {
@@ -135,8 +142,16 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
       drawStatus();
       await FlowBridge.setPrefs(next);
     },
-    // A page is called what the sidebar calls it (two pages are "Dictation": the group tells them apart).
-    hero: (page, _title, subtitle, actions = []) => hero(page, itemOf(page).title(), subtitle, actions),
+    // A page is called what the sidebar calls it; a part of a page gets a smaller title of its own.
+    hero: (page, _title, subtitle, actions = []) => {
+      const part = PART_TITLES[page];
+      if (part && itemOf(page).id !== page) {
+        const el = hero(page, part(), subtitle, actions);
+        el.classList.add("sub");
+        return el;
+      }
+      return hero(page, itemOf(page).title(), subtitle, actions);
+    },
   };
 
   function drawStatus() {
@@ -164,32 +179,46 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
     ctx.onLeave?.();
     ctx.onLeave = undefined;
     current = def.id;
+    // The window lives for days: his hello follows the time of day.
+    hello.textContent = greeting(null);
     for (const [id, el] of items) el.classList.toggle("on", id === def.id);
     const token = ++rendering;
     const page_ = h("div", { class: "hub-page" });
-    const renderer = opts.flowPages[def.id];
-    if (renderer) {
-      await renderer(page_, ctx);
-    } else {
-      page_.append(hero(def.id, def.title(), def.subtitle?.() ?? null));
-      const container = h("div", { id: "settings-root" });
-      page_.append(container);
-      await opts.renderNotch(def.id, container);
+    const leaves: (() => void)[] = [];
+    let target: HTMLElement | null = null;
+    for (const part of [def.id, ...(def.parts ?? [])]) {
+      const box = h("div", { class: "hub-part" });
+      page_.append(box);
+      if (part === page) target = box;
+      const renderer = opts.flowPages[part];
+      if (renderer) {
+        ctx.onLeave = undefined;
+        await renderer(box, ctx);
+        if (ctx.onLeave) leaves.push(ctx.onLeave);
+      } else {
+        box.append(hero(part, def.title(), def.subtitle?.() ?? null));
+        const container = h("div", { id: "settings-root" });
+        box.append(container);
+        await opts.renderNotch(part, container);
+      }
+      if (token !== rendering) return;
     }
-    if (token !== rendering) return;
+    ctx.onLeave = leaves.length ? () => leaves.forEach((leave) => leave()) : undefined;
     clear(scroll);
     scroll.append(page_);
     scroll.scrollTop = 0;
+    if (target && target !== page_.firstElementChild) target.scrollIntoView({ block: "start" });
   }
 
   // ── The sidebar ──
   const side = h("nav", { class: "hub-side" });
+  // Tobi himself at the top, saying hello in a bubble with his name on it.
   const logo = h("canvas", {});
   const brandName = h("b", { text: "Tobi" });
+  const hello = h("span", { text: greeting(null) });
   side.append(h("div", { class: "hub-brand" },
-    h("span", { class: "tile" }, logo),
-    h("div", { class: "name" }, brandName, h("span", { text: t("Settings") })),
-    h("span", { class: "ver", text: opts.version }),
+    h("span", { class: "me" }, logo),
+    h("div", { class: "say" }, brandName, hello),
   ));
   liveTobi(logo as HTMLCanvasElement);
   for (const section of SECTIONS) {
@@ -201,7 +230,8 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
       side.append(b);
     }
   }
-  side.append(h("div", { class: "spacer" }), h("div", { class: "hub-foot" }, statusLine));
+  side.append(h("div", { class: "spacer" }), h("div", { class: "hub-foot" }, statusLine,
+    opts.version ? h("span", { class: "hub-ver", text: `v${opts.version}` }) : null));
 
   clear(root);
   root.append(side, h("main", { class: "hub-panel" }, scroll));
@@ -210,7 +240,7 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
 
   void onEvent<string>("hub-page", (page) => {
     const id = (page === "settings" ? "general" : page) as PageId;
-    if (ITEMS.some((x) => x.id === id)) void show(id);
+    if (ITEMS.some((x) => x.id === id || x.parts?.includes(id) || x.holds?.includes(id))) void show(id);
   });
   void onEvent<FlowPrefs>("flow-prefs", (prefs) => {
     status = { ...status, prefs };

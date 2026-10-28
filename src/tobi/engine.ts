@@ -10,7 +10,6 @@ import type { BotEmoteName, BotStateName } from "../core/layout";
 import { currentEyes, onEyeColors, stateEyeColor } from "../core/eye-colors";
 import { PUMPKIN_BODY, drawOutfitBehind, drawOutfitFront, makeHead } from "./outfits";
 import type { Outfit } from "./wardrobe";
-import { drawPersonaBehind, drawPersonaFront, hasPersona, reducedMotion, type PersonaPose } from "./personas";
 import {
   BODY_BOTTOM_RGB, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP_RGB,
   EYE_INK, MOUTH_INK, MOUTH_TONGUE, PHONE_BOTTOM, PHONE_RGB, PHONE_TOP,
@@ -226,9 +225,8 @@ export class BotEngine {
   isMini = false;
   /** Solid body colour for mini bots / integration pills (null = Tobi gradient). */
   bodyColor: RGB | null = null;
-  /** The pill this mini Tobi stands for: its character (personas.ts) replaces the headphones. */
+  /** The pill this mini Tobi stands for. */
   persona: string | null = null;
-  private personaTints: { rgb: RGB; hi: string; mid: string } | null = null;
   /**
    * A new Tobi waits (whats-new/whats-new.ts): while Tobi is idle or asleep
    * he wears the up-arrow badge. The island turns his body blue alongside.
@@ -857,15 +855,14 @@ export class BotEngine {
     const dressed = !this.isMini && this.outfit !== "none";
     const head = dressed ? makeHead(R, this.yaw, this.pitch, this.physDx, this.physDy) : null;
     const outfitState = { presence: this.outfitPresence, morph: this.morph };
-    const persona = this.isMini && this.persona && this.bodyColor && hasPersona(this.persona) ? this.personaPose(R, rx, ry) : null;
+    // A pill's mini Tobi wears nothing: his colour, his face and his cheeks say who he is.
     if (head) drawOutfitBehind(x, this.outfit, head, outfitState);
-    else if (persona) drawPersonaBehind(x, this.persona!, persona);
-    else this.drawHeadphonesBand(x, R, rx, ry);
+    else if (!this.isMini) this.drawHeadphonesBand(x, R, rx, ry);
 
     const body = this.bodyPath(rx, ry, R);
     this.drawBody(x, body, R, rx, ry);
 
-    const blushVal = Math.max(this.blush, this.tint * 0.5) * (1 - this.morph);
+    const blushVal = Math.max(this.blush, this.tint * 0.5, this.isMini ? 0.8 : 0) * (1 - this.morph);
     if (blushVal > 0.01) {
       x.save();
       x.clip(body);
@@ -881,8 +878,7 @@ export class BotEngine {
 
     this.drawEyes(x, body, R, rx, ry);
     if (this.morph > 0.05) this.drawMouth(x, body, R);
-    if (persona) drawPersonaFront(x, this.persona!, persona);
-    else if (!head) this.drawHeadphonesCups(x, R, rx, ry);
+    if (!head && !this.isMini) this.drawHeadphonesCups(x, R, rx, ry);
 
     if (head) drawOutfitFront(x, this.outfit, head, outfitState);
 
@@ -893,19 +889,6 @@ export class BotEngine {
       this.drawBadge(x, this.badge, R, cx, cy);
     }
     this.drawParticles(x, R, cx, cy);
-  }
-
-  /** What a persona needs to draw: the body's size and turn, the time, and tints of its colour. */
-  private personaPose(R: number, rx: number, ry: number): PersonaPose {
-    const c = this.bodyColor!;
-    if (!this.personaTints || this.personaTints.rgb !== c) {
-      this.personaTints = { rgb: c, hi: rgba(mix3(c, [1, 1, 1], 0.74)), mid: rgba(mix3(c, [1, 1, 1], 0.4)) };
-    }
-    const busy = this.state === "working" || this.state === "thinking" || this.state === "searching";
-    return {
-      R, rx, ry, yaw: this.yaw, t: reducedMotion() ? 0 : now(), active: busy,
-      hi: this.personaTints.hi, mid: this.personaTints.mid, ink: MINI_INK,
-    };
   }
 
   private bodyPath(rx: number, ry: number, R: number): Path2D {
@@ -945,9 +928,21 @@ export class BotEngine {
   private drawBody(x: CanvasRenderingContext2D, body: Path2D, R: number, rx: number, ry: number) {
     const pumpkin = this.pumpkinAlpha;
     if (this.bodyColor) {
-      // Mini bots: flat solid fill — no gradient, no reflection, no highlight
-      x.fillStyle = rgba(this.bodyColor, 1);
+      // Mini bots: a soft bean of their colour, lighter on top, with one gloss.
+      const c = this.bodyColor;
+      const g = x.createLinearGradient(0, -ry, 0, ry);
+      g.addColorStop(0, rgba(mix3(c, [1, 1, 1], 0.38)));
+      g.addColorStop(0.55, rgba(c));
+      g.addColorStop(1, rgba(mix3(c, [0, 0, 0], 0.22)));
+      x.fillStyle = g;
       x.fill(body);
+      if (this.isMini) {
+        const gl = x.createRadialGradient(-rx * 0.3, -ry * 0.5, 0, -rx * 0.3, -ry * 0.5, R * 0.5);
+        gl.addColorStop(0, "rgba(255,255,255,0.5)");
+        gl.addColorStop(1, "rgba(255,255,255,0)");
+        x.fillStyle = gl;
+        x.fill(body);
+      }
       if (pumpkin <= 0.001) return;
     } else {
       const g = x.createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9);
@@ -1031,7 +1026,7 @@ export class BotEngine {
       this.drawEyeShape(x, shape, ew, eh, sd, ink);
       x.restore();
     }
-    if (!this.isMini && this.morph < 0.3 && (shape === "pill" || shape === "wide" || shape === "happy" || shape === "dot")) {
+    if (this.morph < 0.3 && (shape === "pill" || shape === "wide" || shape === "happy" || shape === "dot")) {
       this.drawSmile(x, R, rx, ry);
     }
     x.restore();
@@ -1133,7 +1128,7 @@ export class BotEngine {
 
   /** The white highlight of a glossy eye. */
   private eyeShine(x: CanvasRenderingContext2D, w: number, h: number) {
-    if (this.isMini || h < w * 0.5) return;
+    if (h < w * 0.5) return;
     x.save();
     x.fillStyle = "rgba(255,255,255,0.95)";
     x.beginPath();

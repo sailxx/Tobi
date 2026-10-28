@@ -39,7 +39,8 @@ export const GREETING_H = 150;
 const C0 = { x: 320, y: 90 };
 const HB = 58;
 export const ASP = BODY_RX / BODY_RY;
-const EAR_X = 40;
+// Tobi lands in the middle of the compact pill.
+const COMPACT_BOT_X = COMPACT_W / 2;
 const EAR_HB = 17;
 const CARD = { x: 10, y: 36, w: 620, h: 104 };
 const CARD_R = 20;
@@ -51,7 +52,7 @@ const COMPACT = {
   botDiameter: Math.min(20, Math.max(0, NOTCH_H - 6)),
   botCenterY: NOTCH_H / 2,
   miniGridScale: Math.min(1, Math.max(0, NOTCH_H - 4) / 28),
-  miniGridCenterX: COMPACT_W - 40,
+  miniGridCenterX: COMPACT_W / 2 + 44,
 };
 
 // ── Easing ────────────────────────────────────────────────────────────────────
@@ -208,7 +209,7 @@ function greetPose(t: number): Pose {
 function smallPose(): Pose {
   return {
     hb: (EAR_HB * COMPACT.botDiameter) / 20,
-    x: GREETING_W / 2 - COMPACT.width / 2 + EAR_X,
+    x: GREETING_W / 2 - COMPACT.width / 2 + COMPACT_BOT_X,
     y: COMPACT.botCenterY,
     sx: 1, sy: 1, tilt: 0,
     eye: "dot", open: 1, eyeRoll: 0,

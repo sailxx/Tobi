@@ -52,56 +52,59 @@ body.hub-window {
   border-inline-end: 1px solid var(--hub-line);
 }
 
+/* Tobi at the top of the sidebar, his name and hello in a bubble beside him. */
 .hub-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 2px 4px 10px;
+  gap: 4px;
+  padding: 4px 2px 14px;
 }
 
-.hub-brand .tile {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
-  border-radius: 10px;
-  background: #222327;
-  display: grid;
-  place-items: center;
+.hub-brand .me {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
 }
 
 .hub-brand canvas {
-  width: 32px;
-  height: 32px;
+  width: 52px;
+  height: 52px;
 }
 
-.hub-brand .name {
+.hub-brand .say {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  padding: 7px 12px 8px;
+  border-radius: 4px 14px 14px 14px;
+  background: #1f2126;
   line-height: 1.2;
 }
 
-.hub-brand .name b {
-  font: 700 15px var(--font);
+/* The bubble's tail, pointing at him. */
+.hub-brand .say::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -6px;
+  top: 0;
+  width: 8px;
+  height: 10px;
+  background: #1f2126;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
 }
 
-.hub-brand .name span {
+.hub-brand .say b {
+  font: 700 14px var(--font);
+  letter-spacing: -0.01em;
+}
+
+.hub-brand .say span {
   color: var(--hub-secondary);
   font-size: 12px;
-}
-
-.hub-brand .ver {
-  margin-inline-start: auto;
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--hub-secondary);
-  font: 600 10.5px var(--font);
-  font-variant-numeric: tabular-nums;
-}
-
-.hub-brand .ver:empty {
-  display: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hub-group {
@@ -162,9 +165,24 @@ body.hub-window {
 }
 
 .hub-foot {
+  display: flex;
+  align-items: center;
   border-top: 1px solid var(--hub-line);
   margin: 0 -12px -12px;
   padding: 8px 12px;
+}
+
+.hub-foot .hub-status {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hub-ver {
+  flex: 0 0 auto;
+  padding-inline-end: 6px;
+  color: var(--hub-muted);
+  font: 500 11px var(--mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .hub-status {
@@ -226,6 +244,25 @@ body.hub-window {
   font: 700 30px var(--font);
   letter-spacing: -0.02em;
   line-height: 1.15;
+}
+
+/* A page drawn as a part of another: a smaller title under a line. */
+.hub-part + .hub-part {
+  margin-top: 18px;
+  padding-top: 26px;
+  border-top: 1px solid var(--hub-line);
+}
+
+.hub-part {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  scroll-margin-top: 20px;
+}
+
+.hub-head.sub h1 {
+  font-size: 21px;
+  letter-spacing: -0.01em;
 }
 
 .hub-head p,
@@ -1382,120 +1419,6 @@ button.hub-btn.primary {
   margin-top: -4px;
 }
 
-/* ── Wardrobe ─────────────────────────────────────────────────────────────── */
-
-.wardrobe-page {
-  display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-}
-
-.wardrobe-stage {
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 0 20px 26px;
-  border-radius: 12px;
-  background: var(--hub-card);
-  border: 1px solid var(--hub-line);
-  overflow: hidden;
-}
-
-/* Tobi under a spotlight: a soft cone from above, his light on the floor. */
-.wardrobe-stage .spot {
-  position: relative;
-  width: 100%;
-  height: 260px;
-  display: grid;
-  place-items: center;
-}
-
-.wardrobe-stage .spot::before {
-  content: "";
-  position: absolute;
-  inset: 0 18% 0;
-  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.015) 100%);
-}
-
-.wardrobe-stage canvas {
-  position: relative;
-  width: 168px;
-  height: 168px;
-  margin-top: 40px;
-}
-
-.wardrobe-stage b {
-  font: 700 19px var(--font);
-}
-
-.wardrobe-stage > span {
-  color: var(--hub-secondary);
-  font-size: 13px;
-  text-align: center;
-}
-
-.wardrobe-pick h2 {
-  font: 600 14px var(--font);
-  margin: 2px 0 12px;
-}
-
-.wardrobe-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-}
-
-.wardrobe-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 10px 14px;
-  border-radius: 12px;
-  background: var(--hub-card);
-  border: 1px solid var(--hub-line);
-  color: var(--hub-text);
-  font: 600 13px var(--font);
-}
-
-.wardrobe-card:hover:not(:disabled) {
-  background: var(--hub-card-hover);
-}
-
-.wardrobe-card:active:not(:disabled) {
-  transform: none;
-}
-
-.wardrobe-card.on {
-  border-color: var(--hub-accent);
-  box-shadow: inset 0 0 0 1px var(--hub-accent);
-}
-
-/* The chosen outfit's tick, top right. */
-.wardrobe-card.on::after {
-  content: "";
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23f4f8ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat,
-    var(--hub-accent);
-}
-
-@media (max-width: 1000px) {
-  .wardrobe-page { grid-template-columns: minmax(0, 1fr); }
-  .wardrobe-stage { position: static; }
-}
-
 /* ── Apps (the island's pills) and connections (the agents) ───────────────── */
 
 .app-cards {
@@ -1622,47 +1545,6 @@ button.hub-btn.primary {
 
 /* ── Tobi: his card, his eyes ─────────────────────────────────────────────── */
 
-.tobi-card {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  padding: 26px 32px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #1b1c20 0%, var(--hub-card) 100%);
-  border: 1px solid var(--hub-line);
-}
-
-.tobi-card .pic {
-  width: 128px;
-  height: 128px;
-  flex: 0 0 128px;
-  display: grid;
-  place-items: center;
-}
-
-.tobi-card canvas {
-  width: 128px;
-  height: 128px;
-}
-
-.tobi-card .who {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.tobi-card .who b {
-  font: 700 24px var(--font);
-  letter-spacing: -0.01em;
-}
-
-.tobi-card .who span {
-  color: var(--hub-secondary);
-  font-size: 13.5px;
-  font-variant-numeric: tabular-nums;
-}
-
 .hub-page #settings-root .row input[type="text"][maxlength] {
   width: 220px;
 }
@@ -1744,4 +1626,178 @@ button.hub-btn.primary {
 
 .hub-page #settings-root .eye-row .swatch.on {
   box-shadow: 0 0 0 2px #1f2024, 0 0 0 4px var(--hub-text);
+}
+
+/* ── Tobi: one big Tobi, his name, his wardrobe, his colours ─────────────── */
+
+.tobi-hero {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  padding: 10px 34px 10px 10px;
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 140% at 0% 100%, rgba(47, 122, 230, 0.16) 0%, transparent 55%),
+    linear-gradient(180deg, #1a1b1f 0%, #141518 100%);
+  border: 1px solid var(--hub-line);
+}
+
+.tobi-stage {
+  position: relative;
+  width: 230px;
+  height: 260px;
+  flex: 0 0 230px;
+}
+
+/* The floor he stands on. */
+.tobi-stage::before {
+  content: "";
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 34px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent);
+}
+
+/* Taller than wide: room above him for a hat. */
+.tobi-stage canvas {
+  position: relative;
+  width: 230px;
+  height: 260px;
+}
+
+.tobi-id {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.tobi-kicker {
+  color: var(--hub-muted);
+  font: 600 11px var(--font);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hub-page #settings-root input.tobi-name {
+  width: 100%;
+  height: auto;
+  margin: 2px 0 2px -8px;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  box-shadow: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--hub-text);
+  font: 750 44px/1.1 var(--font);
+  letter-spacing: -0.03em;
+  outline: none;
+}
+
+.hub-page #settings-root input.tobi-name:hover {
+  border-color: var(--hub-line);
+}
+
+.hub-page #settings-root input.tobi-name:focus {
+  border-color: var(--hub-accent);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.tobi-hint {
+  color: var(--hub-muted);
+  font-size: 12px;
+}
+
+.tobi-wearing {
+  margin-top: 16px;
+  color: var(--hub-body);
+  font: 500 14px var(--font);
+}
+
+.tobi-facts {
+  display: flex;
+  gap: 26px;
+  margin-top: 14px;
+}
+
+.tobi-facts > span {
+  display: flex;
+  flex-direction: column;
+  color: var(--hub-secondary);
+  font-size: 12.5px;
+}
+
+.tobi-facts b {
+  color: var(--hub-text);
+  font: 700 24px var(--font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* The wardrobe: a rail of round tokens, the name under the one kept. */
+.outfit-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 4px;
+  margin-top: 4px;
+}
+
+.hub-page #settings-root .outfit-token {
+  width: 82px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 2px 4px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--hub-secondary);
+  font: 500 11.5px/1.25 var(--font);
+  text-align: center;
+}
+
+.outfit-token .disc {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #1c1d21;
+  box-shadow: inset 0 0 0 1px var(--hub-line);
+  transition: box-shadow 0.15s ease-out, background 0.15s ease-out;
+}
+
+.outfit-token:hover .disc {
+  background: #24262b;
+}
+
+.outfit-token.on .disc {
+  background: #1b2433;
+  box-shadow: inset 0 0 0 2px var(--hub-accent), 0 0 0 4px rgba(47, 122, 230, 0.16);
+}
+
+.hub-page #settings-root .outfit-token.on {
+  color: var(--hub-text);
+}
+
+.outfit-token .nm {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 1000px) {
+  .tobi-stage, .tobi-stage canvas { width: 170px; height: 170px; flex-basis: 170px; }
+  .hub-page #settings-root input.tobi-name { font-size: 34px; }
+}
+
+/* No name of his own yet: "Tobi" shows as his name, not as a faint hint. */
+.hub-page #settings-root input.tobi-name::placeholder {
+  color: var(--hub-text);
+  opacity: 1;
 }

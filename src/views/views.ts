@@ -9,6 +9,7 @@ import { State, type AgentTask } from "../core/state";
 import { washRGBA, type IslandViewName, type Wash } from "../core/layout";
 import { createMiniBot, pruneMiniBots } from "../tobi/minibots";
 import { buildPrompt } from "./chat";
+import { buildSearch } from "./search";
 import { buildChoose, buildUpload, buildUploading } from "./upload";
 import { renderIntegrationCard, type IntegrationCardHooks } from "./integrations";
 import { highlightRow, listRows, openRow } from "./github";
@@ -125,13 +126,34 @@ function stack(padLeft: number, padRight: number, ...children: Node[]): HTMLElem
 // ── Header ────────────────────────────────────────────────────────────────────
 
 export function buildHeader(actions: ViewActions): ViewHost {
-  const tabHome = h("button", { class: "tab", title: tl("Overview"), onclick: () => go("overview") }, svg(ICONS.house, 16));
-  const tabChat = h("button", { class: "tab", title: tl("Ask"), onclick: () => go("prompt") }, svg(ICONS.bubble, 16));
-  const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 16));
+  const tab = (title: Msg, icon: string, view: IslandViewName) =>
+    h("button", { class: "tab", title, "aria-label": title, onclick: () => go(view) }, svg(icon, 17, { stroke: 1.7 }));
+  const tabHome = tab(tl("Overview"), ICONS.houseLine, "overview");
+  const tabChat = tab(tl("Ask"), ICONS.bubbleLine, "prompt");
+  const tabFind = tab(tl("Search"), ICONS.search, "find");
+  const tabDrop = tab(tl("Drop"), ICONS.plusSquare, "upload");
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 16));
   const pinBtn = h("button", { onclick: () => actions.togglePin() }, svg(ICONS.pin, 16, { stroke: 2 }));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 16));
+  const foldBtn = h("button", { title: tl("Collapse"), onclick: () => actions.collapse() }, svg(ICONS.chevronUp, 16, { stroke: 2 }));
+  // Quits Tobi on a second click within three seconds: one stray click never closes the app.
+  const powerBtn = h("button", { class: "power", title: tl("Quit Tobi") }, svg(ICONS.power, 16, { stroke: 2 }));
+  let armed = 0;
+  powerBtn.addEventListener("click", () => {
+    if (armed) {
+      void Bridge.quit();
+      return;
+    }
+    actions.blip();
+    powerBtn.classList.add("armed");
+    powerBtn.title = t("Click again to quit");
+    armed = window.setTimeout(() => {
+      armed = 0;
+      powerBtn.classList.remove("armed");
+      powerBtn.title = t("Quit Tobi");
+    }, 3000);
+  });
   // Plan usage pills (off by default): before the gear, Claude first, as on the Mac.
   const claudePill = buildPlanPill(false);
   const codexPill = buildPlanPill(true);
@@ -146,8 +168,8 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { id: "header" },
-    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop),
-    h("div", { class: "header-actions" }, planPills, pinBtn, gearBtn, soundBtn),
+    h("div", { class: "tabs" }, tabHome, tabChat, tabFind, tabDrop),
+    h("div", { class: "header-actions" }, planPills, pinBtn, soundBtn, gearBtn, foldBtn, powerBtn),
   );
   const headerActions = el.lastElementChild as HTMLElement;
 
@@ -157,6 +179,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
       const v = State.view;
       tabHome.classList.toggle("on", v === "overview" || v === "empty");
       tabChat.classList.toggle("on", v === "prompt");
+      tabFind.classList.toggle("on", v === "find");
       tabDrop.classList.toggle("on", v === "upload");
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
@@ -467,6 +490,8 @@ function buildOverview(actions: ViewActions): ViewHost {
         }
       }
 
+      // The player takes a wider card: room for a big cover and its controls.
+      el.classList.toggle("music", mode === "spotify");
       jump.style.display = detailOpen || mode === "plan" || mode === "diff" ? "none" : "";
 
       // Ctrl+↓ Ctrl+↑ walk the open GitHub list (cardItemCount / cardSelection).
@@ -910,7 +935,8 @@ export function buildViews(
   map.set("confused", buildConfused());
   map.set("note", buildNote());
   map.set("settings", buildSettings(actions));
-  map.set("prompt", buildPrompt(onChatHeightChange));
+  map.set("prompt", buildPrompt(onChatHeightChange, actions));
+  map.set("find", buildSearch(actions));
   map.set("upload", buildUpload());
   map.set("uploading", buildUploading());
   map.set("choose", buildChoose(actions));
