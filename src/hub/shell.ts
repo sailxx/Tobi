@@ -10,7 +10,7 @@ import { hero, liveTobi, setWindowShown } from "./hero";
 import { icon, keyLabel } from "./ui";
 
 export type PageId =
-  | "home" | "wardrobe" | "dictation" | "notes" | "dictionary" | "snippets" | "styles" | "flowsettings"
+  | "home" | "tobi" | "wardrobe" | "dictation" | "notes" | "dictionary" | "snippets" | "styles" | "flowsettings"
   | "general" | "pills" | "agents" | "chat" | "voice" | "integrations" | "phone" | "shortcuts";
 
 /** One page of the sidebar. */
@@ -34,6 +34,7 @@ export const SECTIONS: Section[] = [
     id: "tobi", title: () => "Tobi",
     items: [
       { id: "home", icon: "home", title: () => t("Home") },
+      { id: "tobi", icon: "bot", title: () => "Tobi", subtitle: () => t("His name, his colours and what he has done.") },
       { id: "wardrobe", icon: "shirt", title: () => t("Wardrobe"), subtitle: () => t("Pick what Tobi wears. He tries it on right away.") },
       { id: "agents", icon: "terminal", title: () => t("Agents"), subtitle: () => t("Claude Code, Codex and the other agents Tobi follows.") },
       { id: "integrations", icon: "puzzle", title: () => t("Integrations"), subtitle: () => t("Stripe, GitHub, Vercel, n8n, Notion and the rest.") },
@@ -184,9 +185,10 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   // ── The sidebar ──
   const side = h("nav", { class: "hub-side" });
   const logo = h("canvas", {});
+  const brandName = h("b", { text: "Tobi" });
   side.append(h("div", { class: "hub-brand" },
     h("span", { class: "tile" }, logo),
-    h("div", { class: "name" }, h("b", { text: "Tobi" }), h("span", { text: t("Settings") })),
+    h("div", { class: "name" }, brandName, h("span", { text: t("Settings") })),
     h("span", { class: "ver", text: opts.version }),
   ));
   liveTobi(logo as HTMLCanvasElement);
@@ -220,6 +222,8 @@ export async function startHub(root: HTMLElement, opts: HubOptions) {
   });
   return {
     redraw: () => void show(current),
+    /** The name he was given (Tobi → Tobi), in the sidebar. */
+    setName: (name: string) => void (brandName.textContent = name),
     current: () => current,
   };
 }

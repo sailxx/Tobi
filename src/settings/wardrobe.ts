@@ -16,7 +16,7 @@ import {
 const ICON = 28;
 const SHOWN = 44;
 
-export function wardrobeSection(stored: string, choose: (selection: OutfitSelection) => void): HTMLElement {
+export function wardrobeSection(name: string, stored: string, choose: (selection: OutfitSelection) => void): HTMLElement {
   let current = parseOutfit(stored);
   const canvas = h("canvas", {}) as HTMLCanvasElement;
   const engine = liveTobi(canvas);
@@ -64,7 +64,7 @@ export function wardrobeSection(stored: string, choose: (selection: OutfitSelect
   wear(current);
 
   return h("div", { class: "wardrobe-page" },
-    h("div", { class: "wardrobe-stage" }, h("div", { class: "spot" }, canvas), h("b", { text: "Tobi" }), wearing),
+    h("div", { class: "wardrobe-stage" }, h("div", { class: "spot" }, canvas), h("b", { text: name }), wearing),
     h("div", { class: "wardrobe-pick" }, h("h2", { text: t("Outfit") }), grid),
   );
 }

@@ -1619,3 +1619,129 @@ button.hub-btn.primary {
 .hub-page #settings-root section > h3.subhead + .hint {
   margin-top: -4px;
 }
+
+/* ── Tobi: his card, his eyes ─────────────────────────────────────────────── */
+
+.tobi-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 26px 32px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1b1c20 0%, var(--hub-card) 100%);
+  border: 1px solid var(--hub-line);
+}
+
+.tobi-card .pic {
+  width: 128px;
+  height: 128px;
+  flex: 0 0 128px;
+  display: grid;
+  place-items: center;
+}
+
+.tobi-card canvas {
+  width: 128px;
+  height: 128px;
+}
+
+.tobi-card .who {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tobi-card .who b {
+  font: 700 24px var(--font);
+  letter-spacing: -0.01em;
+}
+
+.tobi-card .who span {
+  color: var(--hub-secondary);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hub-page #settings-root .row input[type="text"][maxlength] {
+  width: 220px;
+}
+
+.eye-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 12px;
+}
+
+.hub-page #settings-root .eye-presets button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #222327;
+  border: 1px solid var(--hub-line);
+  border-radius: 8px;
+}
+
+.hub-page #settings-root .eye-presets button.on {
+  background: var(--hub-accent);
+  background-image: var(--hub-accent-fill);
+  border-color: transparent;
+  color: var(--hub-on-accent);
+}
+
+.eye-presets .dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.eye-presets .dots i {
+  width: 6px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.eye-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.eye-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #1f2024;
+  cursor: pointer;
+}
+
+.eye-row .dot {
+  width: 10px;
+  height: 10px;
+}
+
+.eye-row .nm {
+  flex: 1 1 auto;
+  font: 600 13.5px var(--font);
+}
+
+.eye-row .swatches {
+  display: flex;
+  gap: 8px;
+}
+
+.hub-page #settings-root .eye-row .swatch {
+  width: 30px;
+  height: 30px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+}
+
+.hub-page #settings-root .eye-row .swatch.on {
+  box-shadow: 0 0 0 2px #1f2024, 0 0 0 4px var(--hub-text);
+}

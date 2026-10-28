@@ -22,6 +22,8 @@ import { startHub, type PageId } from "../hub/shell";
 import { FLOW_PAGE_RENDERERS } from "../hub/pages";
 import { agentsSection } from "./agents";
 import { wardrobeSection } from "./wardrobe";
+import { tobiName, tobiSections } from "./tobi";
+import { setEyeColors } from "../core/eye-colors";
 import { phoneSection } from "./phone";
 import { whatsappSection } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
@@ -51,7 +53,7 @@ let version = "";
 const windowRoot = document.getElementById("hub")!;
 /** Where the Notch page being shown draws its sections. */
 let root: HTMLElement = windowRoot;
-let hub: { redraw(): void; current(): PageId } | null = null;
+let hub: { redraw(): void; current(): PageId; setName(name: string): void } | null = null;
 
 async function save() {
   await Bridge.saveSettings(settings);
@@ -1475,6 +1477,8 @@ async function main() {
       await render();
     },
   });
+  hub.setName(tobiName(settings.tobiName));
+  setEyeColors(settings.eyeColors);
   onLanguageChange(() => {
     applyDirection();
     hub?.redraw();
@@ -1485,6 +1489,8 @@ async function main() {
   void onEvent<Settings>("settings-changed", (s) => {
     const before = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
     settings = { ...settings, ...s };
+    setEyeColors(settings.eyeColors);
+    hub?.setName(tobiName(settings.tobiName));
     shortcutsListener?.settingsChanged();
     for (const redraw of declaredViews) redraw();
     const after = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
@@ -1541,7 +1547,12 @@ async function render() {
   clear(root);
   const sections: Partial<Record<PageId, () => HTMLElement[]>> = {
     general: () => [generalSection()],
-    wardrobe: () => [wardrobeSection(settings.tobiOutfit, (outfit) => {
+    tobi: () => tobiSections({ tobiName: settings.tobiName ?? "", eyeColors: settings.eyeColors ?? {} }, (change) => {
+      settings = { ...settings, ...change };
+      hub?.setName(tobiName(settings.tobiName));
+      void save();
+    }),
+    wardrobe: () => [wardrobeSection(tobiName(settings.tobiName), settings.tobiOutfit, (outfit) => {
       settings.tobiOutfit = outfit;
       void save();
     })],

@@ -7,6 +7,7 @@
 import { Ease, lerp, type EaseFn } from "../core/anim";
 import { Sound } from "../core/sound";
 import type { BotEmoteName, BotStateName } from "../core/layout";
+import { currentEyes, onEyeColors, stateEyeColor } from "../core/eye-colors";
 import { PUMPKIN_BODY, drawOutfitBehind, drawOutfitFront, makeHead } from "./outfits";
 import type { Outfit } from "./wardrobe";
 import { drawPersonaBehind, drawPersonaFront, hasPersona, reducedMotion, type PersonaPose } from "./personas";
@@ -116,6 +117,28 @@ export const STATE_SOUND: Partial<Record<BotStateName, string>> = {
   question: "question", error: "error", finished: "finish", ratelimit: "rate",
   sleeping: "sleep", dizzy: "dizzy",
 };
+
+/** The built-in colours, kept to come back to when the user's are cleared. */
+const BUILT_IN = Object.fromEntries(
+  Object.entries(BOT_STATES).map(([k, v]) => [k, { color: v.color, badge: v.badge }]),
+) as Record<BotStateName, { color: RGB; badge: Badge | null }>;
+
+/** Bumped when the user's eye colours change: every engine picks them up on its next frame. */
+let eyeVersion = 0;
+
+function applyEyes() {
+  const eyes = currentEyes();
+  for (const name of Object.keys(BOT_STATES) as BotStateName[]) {
+    const own = stateEyeColor(eyes, name);
+    const cfg = BOT_STATES[name];
+    const built = BUILT_IN[name];
+    cfg.color = own ? hexToRGB(own) : built.color;
+    cfg.badge = built.badge && { ...built.badge, color: own ? hexToRGB(own) : built.badge.color };
+  }
+  eyeVersion++;
+}
+
+onEyeColors(applyEyes);
 
 const EMOTE_EYE: Record<BotEmoteName, EyeShape> = {
   love: "heart", surprised: "dot", proud: "star", wink: "wink",
@@ -248,6 +271,7 @@ export class BotEngine {
 
   col: RGB = C.idle;
   colT: RGB = C.idle;
+  private eyeVersion = eyeVersion;
 
   state: BotStateName = "idle";
   cfg: BotStateCfg = BOT_STATES.idle;
@@ -605,6 +629,11 @@ export class BotEngine {
   update(dt: number) {
     const n = now();
     const nowMs = performance.now();
+    if (this.eyeVersion !== eyeVersion) {
+      this.eyeVersion = eyeVersion;
+      this.colT = this.cfg.color;
+      this.setBadge(this.stateBadge());
+    }
 
     for (const tw of [...this.tweens.values()]) {
       const k = tw.keys[tw.index];

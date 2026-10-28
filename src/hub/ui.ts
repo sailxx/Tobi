@@ -34,6 +34,7 @@ export const HUB_ICONS: Record<string, string> = {
   window: "M3.5 5h17v14h-17zM3.5 9h17",
   home: "M4 11 12 4.5 20 11M6.5 9.5v10h11v-10M10 19.5v-5h4v5",
   chevron: "M9.5 6l6 6-6 6",
+  bot: "M12 3.5v3M7 6.5h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3zM9.5 11.5v1.5M14.5 11.5v1.5",
   shirt: "M9 4 4 6.5l1.8 4L8 9.6V20h8V9.6l2.2.9 1.8-4L15 4a3 3 0 0 1-6 0z",
   done: "M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM8.3 12.2l2.5 2.5 5-5",
   calendar: "M4.5 6h15v13.5h-15zM4.5 10h15M8.5 3.5v4M15.5 3.5v4M8.5 14l2 2 4-4",

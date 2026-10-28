@@ -29,6 +29,7 @@ import type { ViewCommand } from "./shortcuts";
 import { DRAG_THRESHOLD } from "../tobi/desktop-logic";
 import { Updates } from "./update";
 import { UPDATE_BLUE, showsUpdateHint } from "../whats-new/whats-new";
+import { setEyeColors } from "../core/eye-colors";
 
 const BOT_OVERHANG = 40;
 const UPDATE_BLUE_RGB = hexToRGB(UPDATE_BLUE);
@@ -1327,6 +1328,7 @@ export class Island {
 
   /** Applies settings coming from Rust at boot. */
   applySettings() {
+    setEyeColors(State.settings.eyeColors);
     Sound.setEnabled(State.settings.soundEnabled);
     Sound.setVolume(State.settings.soundVolume);
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;
