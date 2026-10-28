@@ -64,7 +64,9 @@ export const PANEL_H = 320;
 export const NOTCH_W = 120;
 export const NOTCH_H = 32;
 /** The compact island: a small pill with Tobi in its middle. */
-export const COMPACT_W = 76;
+export const COMPACT_W = 58;
+/** Tobi's size in the compact island. */
+export const COMPACT_BOT_D = 16;
 /** …and the old wide one when it shows the date and time (Tobi left, the clock in the middle). */
 export const COMPACT_CLOCK_W = 288;
 export const EXPANDED_W = 640;
@@ -179,7 +181,7 @@ export function botPosition(
     case "hidden":
       return { cx: NOTCH_W / 2, cy: 16, diameter: 6, opacity: 0 };
     case "compact":
-      return { cx: compactBotX(extras), cy: 16, diameter: 21, opacity: 1 };
+      return { cx: compactBotX(extras), cy: 16, diameter: COMPACT_BOT_D, opacity: 1 };
     case "expanded": {
       const layout = VIEW_LAYOUTS[view];
       if (view === "uploading") {
