@@ -4,7 +4,7 @@
 import { Tracked, Spring, clamp, FRAME_GAP, frameDue } from "../core/anim";
 import { Bridge, IS_TAURI, onDragDrop } from "../core/bridge";
 import {
-  EXPANDED_CORNER, EXPANDED_W, NOTCH_H, NOTCH_W, PANEL_H, PANEL_W,
+  COMPACT_CORNER, EXPANDED_CORNER, EXPANDED_W, NOTCH_H, NOTCH_W, PANEL_H, PANEL_W,
   ROUNDED_CORNER, VIEW_LAYOUTS, botGlowColor, botGlowOpacity, botPosition, type CompactExtras, chatPromptHeight,
   islandSize,
   QUESTION_PICKER_H,
@@ -717,7 +717,7 @@ export class Island {
     if (State.mode === "expanded" && State.view === "question" && State.pendingApproval?.questions) {
       h = QUESTION_PICKER_H;
     }
-    const r = State.mode === "expanded" ? EXPANDED_CORNER : ROUNDED_CORNER;
+    const r = State.mode === "expanded" ? EXPANDED_CORNER : State.mode === "compact" && h < NOTCH_H ? COMPACT_CORNER : ROUNDED_CORNER;
     return { w, h, r };
   }
 

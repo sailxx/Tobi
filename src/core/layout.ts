@@ -64,7 +64,9 @@ export const PANEL_H = 320;
 export const NOTCH_W = 120;
 export const NOTCH_H = 32;
 /** The compact island: a small pill with Tobi in its middle. */
-export const COMPACT_W = 80;
+export const COMPACT_W = 66;
+export const COMPACT_H = 24;
+export const COMPACT_CORNER = 10;
 /** Tobi's size in the compact island. */
 export const COMPACT_BOT_D = 14;
 /** …and the old wide one when it shows the date and time (Tobi left, the clock in the middle). */
@@ -78,6 +80,11 @@ export interface CompactExtras {
 
 export function compactWidth(extras: CompactExtras = {}): number {
   return extras.clock ? COMPACT_CLOCK_W : COMPACT_W;
+}
+
+/** The clock needs the full notch height; the plain pill is lower. */
+export function compactHeight(extras: CompactExtras = {}): number {
+  return extras.clock ? NOTCH_H : COMPACT_H;
 }
 
 /** Where Tobi sits in the compact island: its middle, or the left end beside the clock. */
@@ -154,7 +161,7 @@ export function islandSize(
       // slides into the top edge of the screen instead of sitting there as a bar.
       return { w: NOTCH_W, h: 0 };
     case "compact":
-      return { w: compactWidth(extras), h: NOTCH_H };
+      return { w: compactWidth(extras), h: compactHeight(extras) };
     case "expanded": {
       const h = view === "prompt" ? chatPromptHeight(chatCount) : view === "overview" && chatOpen ? CHAT_OPEN_H : VIEW_LAYOUTS[view].height;
       return { w: EXPANDED_W, h };
@@ -181,7 +188,7 @@ export function botPosition(
     case "hidden":
       return { cx: NOTCH_W / 2, cy: 16, diameter: 6, opacity: 0 };
     case "compact":
-      return { cx: compactBotX(extras), cy: 16, diameter: COMPACT_BOT_D, opacity: 1 };
+      return { cx: compactBotX(extras), cy: compactHeight(extras) / 2, diameter: COMPACT_BOT_D, opacity: 1 };
     case "expanded": {
       const layout = VIEW_LAYOUTS[view];
       if (view === "uploading") {

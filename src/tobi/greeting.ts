@@ -5,7 +5,7 @@
 
 import { closeCurve } from "../core/anim";
 import { Sound } from "../core/sound";
-import { COMPACT_BOT_D, COMPACT_W, NOTCH_H, NOTCH_W } from "../core/layout";
+import { COMPACT_BOT_D, COMPACT_H, COMPACT_W, NOTCH_W } from "../core/layout";
 import { BODY_BOTTOM, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP, EYE_INK, MOUTH_INK, MOUTH_TONGUE, PHONE_BOTTOM, PHONE_TOP } from "./look";
 
 // ── Timing (GT in the Swift file) ─────────────────────────────────────────────
@@ -48,9 +48,9 @@ const CARD_R = 20;
 /** IslandRestingLayout for the compact island the greeting lands in. */
 const COMPACT = {
   width: COMPACT_W,
-  height: NOTCH_H,
+  height: COMPACT_H,
   botDiameter: COMPACT_BOT_D,
-  botCenterY: NOTCH_H / 2,
+  botCenterY: COMPACT_H / 2,
 };
 
 // ── Easing ────────────────────────────────────────────────────────────────────
