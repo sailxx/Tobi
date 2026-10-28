@@ -166,3 +166,19 @@ test("numbers stay short enough for a stat chip", () => {
   assert.equal(formatCount(12_345), "12.3k");
   assert.equal(formatCount(123_456), "123k");
 });
+
+// ── The Tobi window's home page ───────────────────────────────────────────────
+
+test("home stats count all tasks, today's, and the days in a row up to today", async () => {
+  const { homeStats } = await import("../src/recap/summary.ts");
+  const now = new Date(2026, 9, 28, 15, 0);
+  const at = (day, hour) => {
+    const end = secs(new Date(2026, 9, day, hour, 0));
+    return { agent: "agent_claude", project: "tobi", start: end - 600, end, filesChanged: 0, linesAdded: 0, linesRemoved: 0, commandsRun: 0, questions: 0 };
+  };
+  assert.deepEqual(homeStats([at(28, 9), at(28, 11), at(27, 20), at(26, 10), at(24, 10)], now), { done: 5, today: 2, streak: 3 });
+  // Nothing yet today: the run up to yesterday still counts.
+  assert.deepEqual(homeStats([at(27, 20), at(26, 10)], now), { done: 2, today: 0, streak: 2 });
+  assert.deepEqual(homeStats([at(25, 10)], now), { done: 1, today: 0, streak: 0 });
+  assert.deepEqual(homeStats([], now), { done: 0, today: 0, streak: 0 });
+});

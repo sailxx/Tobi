@@ -1,24 +1,29 @@
 /* The Tobi window: an OLED-black sidebar and a dark panel holding the pages. */
 
 :root {
+  /* Two greys apart: the sidebar a step lighter than the page, the cards a step
+     lighter again. A cool near-black, never pure. */
+  --hub-side: #141518;
   --hub-panel: #0e0f11;
-  --hub-card: #18191c;
+  --hub-card: #17181b;
+  --hub-card-hover: #1c1d21;
   --hub-field: #1f2024;
-  --hub-line: rgba(255, 255, 255, 0.07);
-  --hub-text: #f5f6f8;
-  --hub-body: #e1e3e6;
-  --hub-secondary: #8e939c;
-  --hub-muted: #6b7079;
+  --hub-line: rgba(255, 255, 255, 0.065);
+  --hub-text: #f2f3f5;
+  --hub-body: #dfe1e5;
+  --hub-secondary: #8d929b;
+  --hub-muted: #676c75;
   --hub-accent: #2f7ae6;
   --hub-on-accent: #f4f8ff;
   /* A light blue, lighter on the top-left, deep enough for the light text on it. */
   --hub-accent-fill: linear-gradient(135deg, #3482ec 0%, #1d4fc0 100%);
   --hub-green: #34d399;
+  --hub-amber: #f5a524;
   --hub-red: #ff453a;
 }
 
 body.hub-window {
-  background: #000;
+  background: var(--hub-panel);
   color: var(--hub-text);
   font: 400 13px/1.45 var(--font);
   -webkit-font-smoothing: antialiased;
@@ -29,39 +34,80 @@ body.hub-window {
 #hub {
   display: flex;
   height: 100vh;
+  background: var(--hub-panel);
 }
 
 /* ── Sidebar ──────────────────────────────────────────────────────────────── */
 
 .hub-side {
-  width: 208px;
-  flex: 0 0 208px;
+  width: 240px;
+  flex: 0 0 240px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 18px 12px 14px;
+  gap: 1px;
+  padding: 14px 12px 12px;
   overflow-y: auto;
+  scrollbar-width: none;
+  background: var(--hub-side);
+  border-inline-end: 1px solid var(--hub-line);
 }
 
 .hub-brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 8px 14px;
-  font: 700 18px var(--font);
+  padding: 2px 4px 10px;
+}
+
+.hub-brand .tile {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-radius: 10px;
+  background: #222327;
+  display: grid;
+  place-items: center;
 }
 
 .hub-brand canvas {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+}
+
+.hub-brand .name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.hub-brand .name b {
+  font: 700 15px var(--font);
+}
+
+.hub-brand .name span {
+  color: var(--hub-secondary);
+  font-size: 12px;
+}
+
+.hub-brand .ver {
+  margin-inline-start: auto;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--hub-secondary);
+  font: 600 10.5px var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+.hub-brand .ver:empty {
+  display: none;
 }
 
 .hub-group {
-  font: 700 10.5px var(--font);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: var(--hub-muted);
-  padding: 12px 10px 6px;
+  font: 500 12px var(--font);
+  padding: 12px 10px 4px;
 }
 
 .hub-item {
@@ -69,29 +115,30 @@ body.hub-window {
   align-items: center;
   gap: 11px;
   width: 100%;
-  padding: 0 12px;
-  height: 36px;
-  border-radius: 10px;
+  padding: 0 10px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 8px;
   background: transparent;
-  color: #c7cad0;
+  color: #c3c6cc;
   font: 500 13.5px var(--font);
   text-align: start;
 }
 
 .hub-item svg {
-  width: 17px;
-  height: 17px;
-  flex: 0 0 17px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 .hub-item:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   transform: none;
 }
 
@@ -100,9 +147,13 @@ body.hub-window {
 }
 
 .hub-item.on {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.075);
   color: var(--hub-text);
   font-weight: 600;
+}
+
+.hub-item.on svg {
+  opacity: 1;
 }
 
 .hub-side .spacer {
@@ -110,13 +161,17 @@ body.hub-window {
   min-height: 12px;
 }
 
+.hub-foot {
+  border-top: 1px solid var(--hub-line);
+  margin: 0 -12px -12px;
+  padding: 8px 12px;
+}
+
 .hub-status {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 12px;
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 10px;
   color: var(--hub-secondary);
   font-size: 12px;
   line-height: 1.3;
@@ -127,22 +182,11 @@ body.hub-window {
   height: 7px;
 }
 
-.hub-version {
-  color: var(--hub-muted);
-  font-size: 11px;
-  padding: 8px 12px 0;
-}
-
 /* ── Panel ────────────────────────────────────────────────────────────────── */
 
 .hub-panel {
   flex: 1 1 auto;
   min-width: 0;
-  margin: 12px 12px 12px 0;
-  border-radius: 22px;
-  background: var(--hub-panel);
-  border: 1px solid var(--hub-line);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -150,14 +194,14 @@ body.hub-window {
 .hub-scroll {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 24px 28px 28px;
+  padding: 36px 44px 40px;
 }
 
 .hub-page {
-  max-width: 1100px;
+  max-width: 980px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
 }
 
 /* The notch's pages keep their sections as they ship, at the panel's width. */
@@ -167,7 +211,7 @@ body.hub-window {
   padding: 0;
 }
 
-/* ── Page head and tabs ───────────────────────────────────────────────────── */
+/* ── Page head ────────────────────────────────────────────────────────────── */
 
 .hub-head {
   display: flex;
@@ -175,11 +219,11 @@ body.hub-window {
   justify-content: space-between;
   gap: 16px;
   flex: 0 0 auto;
-  padding: 4px 2px 6px;
+  padding: 0 2px 4px;
 }
 
 .hub-head h1 {
-  font: 700 28px var(--font);
+  font: 700 30px var(--font);
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
@@ -188,7 +232,7 @@ body.hub-window {
 .hub-lead {
   font-size: 14px;
   color: var(--hub-secondary);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .hub-lead {
@@ -201,33 +245,6 @@ body.hub-window {
   align-items: center;
 }
 
-.hub-tabs {
-  display: flex;
-  gap: 4px;
-  padding: 3px;
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.05);
-  align-self: flex-start;
-}
-
-.hub-tabs button {
-  padding: 6px 16px;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--hub-secondary);
-  font: 600 13px var(--font);
-}
-
-.hub-tabs button:hover:not(:disabled) {
-  color: var(--hub-text);
-  background: transparent;
-}
-
-.hub-tabs button.on {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--hub-text);
-}
-
 .hub-list {
   display: flex;
   flex-direction: column;
@@ -236,6 +253,293 @@ body.hub-window {
 
 .hub-page > .hub-input[type="search"] {
   width: 100%;
+}
+
+/* ── Home ─────────────────────────────────────────────────────────────────── */
+
+.hub-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hub-stat {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+}
+
+.hub-stat > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.hub-stat b {
+  font: 700 28px/1.1 var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+.hub-stat span:not(.tile) {
+  color: var(--hub-secondary);
+  font-size: 13.5px;
+}
+
+/* The icon's square, tinted by its colour: on the stats, the links, the tip. */
+.hub-window .tile {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 10px;
+}
+
+.hub-stat .tile {
+  width: 42px;
+  height: 42px;
+}
+
+.hub-window .tile svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hub-window .green .tile,
+.hub-window .tile.green { background: rgba(52, 211, 153, 0.12); color: #6ee7b7; }
+.hub-window .blue .tile,
+.hub-window .tile.blue { background: rgba(78, 145, 240, 0.14); color: #8dbbf8; }
+.hub-window .amber .tile,
+.hub-window .tile.amber { background: rgba(245, 165, 36, 0.13); color: #fbbf5a; }
+
+.hub-home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+  align-items: start;
+}
+
+.hub-home-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.hub-home-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hub-home-bar h2 {
+  font: 600 14px var(--font);
+  flex: 1 1 auto;
+}
+
+.hub-home-bar .hub-input {
+  width: 260px;
+  height: 36px;
+}
+
+.hub-activity-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hub-activity {
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  padding: 8px 20px;
+}
+
+.hub-activity .day {
+  color: var(--hub-secondary);
+  font-size: 12.5px;
+  padding: 10px 0 6px;
+}
+
+.hub-activity .item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-top: 1px solid var(--hub-line);
+}
+
+.hub-activity .day + .item {
+  border-top: 0;
+}
+
+.hub-activity .item .text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hub-activity .item .title {
+  font: 500 14px var(--font);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hub-activity .item .meta {
+  color: var(--hub-secondary);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hub-activity .item .state {
+  color: var(--hub-green);
+  font: 600 13px var(--font);
+}
+
+.hub-activity-wrap > .hub-empty {
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  padding: 28px 20px;
+}
+
+/* While the history loads: grey bars where the rows will be. */
+.hub-skel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.hub-skel i,
+.hub-skel b {
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #1f2024 0%, #2a2b30 50%, #1f2024 100%);
+  background-size: 200% 100%;
+  animation: hub-skel 1.4s ease-in-out infinite;
+}
+
+.hub-skel i { width: 46%; }
+.hub-skel b { width: 28%; height: 8px; }
+
+@keyframes hub-skel {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-skel i,
+  .hub-skel b { animation: none; }
+}
+
+.hub-home-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Level with the activity's card, under its bar. */
+  margin-top: 48px;
+}
+
+.hub-links {
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  overflow: hidden;
+}
+
+.hub-link-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--hub-text);
+  text-align: start;
+}
+
+.hub-link-row + .hub-link-row {
+  border-top: 1px solid var(--hub-line);
+}
+
+.hub-link-row:hover:not(:disabled) {
+  background: var(--hub-card-hover);
+}
+
+.hub-link-row:active:not(:disabled) {
+  transform: none;
+}
+
+.hub-link-row .tile {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+}
+
+.hub-link-row .tile svg {
+  width: 18px;
+  height: 18px;
+}
+
+.hub-link-row .name {
+  flex: 1 1 auto;
+  font: 600 14px var(--font);
+}
+
+.hub-link-row > svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--hub-muted);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hub-tip {
+  border-radius: 12px;
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  padding: 16px 18px;
+}
+
+.hub-tip .title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 14px var(--font);
+}
+
+.hub-tip .title svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--hub-amber);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hub-tip p {
+  color: var(--hub-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+  margin-top: 6px;
+}
+
+@media (max-width: 1000px) {
+  .hub-home { grid-template-columns: minmax(0, 1fr); }
+  .hub-home-side { margin-top: 0; }
 }
 
 /* ── Cards, rows and controls of the Flow pages ───────────────────────────── */
@@ -881,11 +1185,6 @@ button.hub-btn.small {
   min-height: 32px;
 }
 
-#settings-root .row > label {
-  flex: 0 0 168px;
-  min-width: 0;
-}
-
 #settings-root .row.shortcut {
   min-height: 32px;
 }
@@ -925,4 +1224,160 @@ button.hub-btn.small {
 /* Text in the accent colour sits on dark cards: a lighter blue keeps it readable. */
 .hub-link {
   color: #6aa8f5;
+}
+
+/* ── The island's pages as grouped cards ──────────────────────────────────────
+   One card per section, its title on top; each setting is a row with its name on
+   the left and its control on the right, the hint under the name, a hairline
+   between settings. A row with no name belongs to the setting above it. */
+
+.hub-page #settings-root {
+  gap: 16px;
+}
+
+.hub-page #settings-root section {
+  background: var(--hub-card);
+  border: 1px solid var(--hub-line);
+  border-radius: 12px;
+  padding: 2px 20px 8px;
+  gap: 0;
+}
+
+.hub-page #settings-root section > h2 {
+  font: 600 14.5px var(--font);
+  padding: 14px 0 10px;
+}
+
+.hub-page #settings-root section > .row {
+  min-height: 54px;
+  padding: 10px 0;
+  gap: 12px;
+  border-top: 1px solid var(--hub-line);
+}
+
+.hub-page #settings-root section > .row:has(> label:empty) {
+  min-height: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.hub-page #settings-root .row > label {
+  flex: 1 1 200px;
+  min-width: 0;
+  color: var(--hub-text);
+  font: 600 13.5px var(--font);
+}
+
+.hub-page #settings-root .row > label:empty {
+  flex-basis: 0;
+}
+
+.hub-page #settings-root section > .hint {
+  margin: -10px 0 12px;
+  max-width: 62ch;
+  color: var(--hub-secondary);
+  line-height: 1.45;
+}
+
+.hub-page #settings-root section > :is(.pill-group, .shortcut-list, .main-cards, .shown-list, .notice, .diff) {
+  margin: 4px 0 12px;
+}
+
+.hub-page #settings-root .hint {
+  color: var(--hub-secondary);
+}
+
+/* Buttons and fields: one shape on every page. */
+.hub-page #settings-root button:not([class]),
+.hub-page #settings-root button.danger,
+button.hub-btn {
+  border-radius: 8px;
+  border: 1px solid var(--hub-line);
+}
+
+.hub-page #settings-root button:not([class]),
+button.hub-btn:not(.primary):not(.danger) {
+  background: #222327;
+}
+
+.hub-page #settings-root button:not([class]):hover:not(:disabled),
+button.hub-btn:not(.primary):not(.danger):hover:not(:disabled) {
+  background: #2a2b30;
+}
+
+.hub-page #settings-root button.primary,
+button.hub-btn.primary {
+  border-radius: 8px;
+  border: 0;
+}
+
+.hub-page #settings-root select,
+.hub-page #settings-root input[type="text"],
+.hub-page #settings-root input[type="number"],
+.hub-page #settings-root input[type="password"],
+.hub-input,
+.hub-select {
+  border-radius: 8px;
+  background: #121315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+/* The switch: wider, with the light knob on the accent. */
+.hub-window .switch {
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  background: #34363b;
+}
+
+.hub-window .switch::after {
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #f4f5f7;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.hub-window .switch.on::after {
+  transform: translateX(18px);
+}
+
+/* Choices as separate chips; the chosen one takes the accent. */
+.hub-segmented {
+  padding: 0;
+  background: transparent;
+  gap: 6px;
+}
+
+.hub-segmented button {
+  min-height: 32px;
+  border-radius: 8px;
+  padding: 5px 14px;
+  background: #222327;
+  border: 1px solid var(--hub-line);
+  font-weight: 600;
+}
+
+.hub-segmented button:hover:not(:disabled) {
+  background: #2a2b30;
+}
+
+.hub-segmented button.on {
+  background: var(--hub-accent);
+  background-image: var(--hub-accent-fill);
+  border-color: transparent;
+  color: var(--hub-on-accent);
+}
+
+/* The Flow pages' cards match the island's. */
+.hub-card {
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+/* A hint right under the card's title explains the whole card, not a row. */
+.hub-page #settings-root section > h2 + .hint {
+  margin-top: -4px;
 }

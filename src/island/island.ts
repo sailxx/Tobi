@@ -58,6 +58,9 @@ export class Island {
   private viewsEl!: HTMLElement;
   private botCanvas!: HTMLCanvasElement;
   private botGlow!: HTMLElement;
+  /** The open island's light from below, in the colour of what Tobi is doing. */
+  private wash!: HTMLElement;
+  private washColor = "";
   private greetingCanvas!: HTMLCanvasElement;
   private miniGrid!: HTMLElement;
   private clockEl!: HTMLElement;
@@ -301,6 +304,7 @@ export class Island {
 
     this.wakeStrip = h("div", { id: "wake-strip" });
     this.botGlow = h("div", { id: "bot-glow" });
+    this.wash = h("div", { id: "island-wash" });
     this.botCanvas = h("canvas", { id: "bot-canvas" });
     this.greetingCanvas = h("canvas", { id: "greeting-canvas" });
     this.miniGrid = h("div", { id: "mini-grid" });
@@ -328,6 +332,7 @@ export class Island {
     this.clipEl = h(
       "div",
       { id: "island-clip" },
+      this.wash,
       this.greetingCanvas,
       this.uploadCanvas.el,
       this.contentEl,
@@ -735,6 +740,8 @@ export class Island {
     this.islandEl.style.width = `${w}px`;
     this.islandEl.style.height = `${hh}px`;
     this.islandEl.style.borderRadius = `0 0 ${r}px ${r}px`;
+    // The flares that join the island to the top of the screen: never taller than the island, so a hidden one shows none.
+    this.islandEl.style.setProperty("--ear", `${Math.min(10, hh)}px`);
     this.islandEl.style.transform = `translateX(-50%)`;
     // These follow the island as it resizes, so they belong here rather than in
     // the state-driven DOM sync.
@@ -1128,9 +1135,20 @@ export class Island {
         this.glowOpacity = glowOpacity;
         this.botGlow.style.opacity = glowOpacity;
       }
+      // Idle, the open island stays black; busy, done or waiting, it lights up from below.
+      this.setWash(botGlowOpacity(State.effectiveState) >= 0.5 ? color : "");
     } else {
       this.botGlow.style.display = "none";
+      this.setWash("");
     }
+  }
+
+  /** Written only when it changes: the colour itself fades in CSS (`--wash` is a registered colour). */
+  private setWash(color: string) {
+    if (color === this.washColor) return;
+    this.washColor = color;
+    if (color) this.wash.style.setProperty("--wash", color);
+    this.wash.classList.toggle("on", color !== "");
   }
 
   private drawBot(dt: number) {
