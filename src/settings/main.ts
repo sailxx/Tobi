@@ -21,6 +21,9 @@ import { h, clear } from "../views/dom";
 import { startHub, type PageId } from "../hub/shell";
 import { FLOW_PAGE_RENDERERS } from "../hub/pages";
 import { agentsSection } from "./agents";
+import { wardrobeSection } from "./wardrobe";
+import { tobiName, tobiSections } from "./tobi";
+import { setEyeColors } from "../core/eye-colors";
 import { phoneSection } from "./phone";
 import { whatsappSection } from "./whatsapp";
 import { WHATSAPP_ID } from "../core/whatsapp";
@@ -50,7 +53,7 @@ let version = "";
 const windowRoot = document.getElementById("hub")!;
 /** Where the Notch page being shown draws its sections. */
 let root: HTMLElement = windowRoot;
-let hub: { redraw(): void; current(): PageId } | null = null;
+let hub: { redraw(): void; current(): PageId; setName(name: string): void } | null = null;
 
 async function save() {
   await Bridge.saveSettings(settings);
@@ -496,21 +499,29 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
     return null;
   }
 
+  /** One tool as a card: its Tobi, its name (the dot picks his colour), whether it is in the island, the switch. */
   function row(def: PillDefinition): HTMLElement {
     const isMain = def.id === settings.mainPill;
     const on = settings.activeIntegrations.includes(def.id);
     const full = !isMain && !on && settings.activeIntegrations.length >= MAX_ACTIVE;
-    const el = h("div", { class: full ? "pill-row full" : "pill-row" },
-      colorDot(def, "width:10px;height:10px", () => settings.pillColors, pickColor),
-      h("span", { class: "name", text: def.name }),
+    const why = isMain ? null : hint(def);
+    const state = h("span", {
+      class: why ? "app-state" : on || isMain ? "app-state in" : "app-state",
+      text: why ?? (on || isMain ? t("In the island") : t("Not in the island")),
+    });
+    const el = h("div", { class: full ? "app-card full" : "app-card" },
+      h("span", { class: "app-tile" }, createMiniStill(def.id, pillColor(def.id, def.color, settings.pillColors), 26)),
+      h("div", { class: "app-text" },
+        h("div", { class: "app-name" }, h("span", { text: def.name }),
+          colorDot(def, "width:9px;height:9px", () => settings.pillColors, pickColor)),
+        state,
+      ),
     );
     if (isMain) {
-      el.append(h("span", { class: "state", text: t("Main") }));
+      el.append(h("span", { class: "tag", text: t("Main") }));
       return el;
     }
-    const why = hint(def);
-    el.append(h("span", { class: "state", text: why ?? "" }));
-    const sw = h("button", { class: on ? "switch on" : "switch" }) as HTMLButtonElement;
+    const sw = h("button", { class: on ? "switch on" : "switch", "aria-label": def.name }) as HTMLButtonElement;
     sw.disabled = full;
     sw.addEventListener("click", () => {
       const next = toggleDeclared(settings, def.id);
@@ -534,7 +545,7 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
       if (cat.id === "service") continue;
       const pills = availablePills().filter((p) => p.category === cat.id);
       if (pills.length === 0) continue;
-      groups.append(h("div", { class: "pill-group" }, h("h3", { text: t(cat.title) }), ...pills.map(row)));
+      groups.append(h("div", { class: "pill-group" }, h("h3", { text: t(cat.title) }), h("div", { class: "app-cards" }, ...pills.map(row))));
     }
   }
   declaredViews.push(draw);
@@ -1466,6 +1477,8 @@ async function main() {
       await render();
     },
   });
+  hub.setName(tobiName(settings.tobiName));
+  setEyeColors(settings.eyeColors);
   onLanguageChange(() => {
     applyDirection();
     hub?.redraw();
@@ -1476,6 +1489,8 @@ async function main() {
   void onEvent<Settings>("settings-changed", (s) => {
     const before = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
     settings = { ...settings, ...s };
+    setEyeColors(settings.eyeColors);
+    hub?.setName(tobiName(settings.tobiName));
     shortcutsListener?.settingsChanged();
     for (const redraw of declaredViews) redraw();
     const after = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
@@ -1532,6 +1547,15 @@ async function render() {
   clear(root);
   const sections: Partial<Record<PageId, () => HTMLElement[]>> = {
     general: () => [generalSection()],
+    tobi: () => tobiSections({ tobiName: settings.tobiName ?? "", eyeColors: settings.eyeColors ?? {} }, (change) => {
+      settings = { ...settings, ...change };
+      hub?.setName(tobiName(settings.tobiName));
+      void save();
+    }),
+    wardrobe: () => [wardrobeSection(tobiName(settings.tobiName), settings.tobiOutfit, (outfit) => {
+      settings.tobiOutfit = outfit;
+      void save();
+    })],
     pills: () => [activePillsSection(connected)],
     agents: () => [claudeSection(status), agentsSection(agents), planSection(status)],
     chat: () => [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)],

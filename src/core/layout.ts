@@ -2,6 +2,8 @@
 // + IslandRootView.botPosition. All values are logical pixels, identical to the
 // macOS app's points.
 
+import { currentEyes, stateEyeColor } from "./eye-colors";
+
 export type IslandMode = "hidden" | "compact" | "expanded";
 
 export type IslandViewName =
@@ -180,6 +182,9 @@ export function botPosition(
 }
 
 export function botGlowColor(s: BotStateName): string {
+  // The user's eye colour for this state, when there is one: the glow and the island's light follow the eyes.
+  const own = stateEyeColor(currentEyes(), s);
+  if (own) return own;
   switch (s) {
     case "working":
       return "#3B9EFF";

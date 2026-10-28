@@ -2,6 +2,104 @@
   "about": "What's new, shown once in the island after Tobi updates itself (src/whats-new/). Every release adds its entry here, in the 12 languages: 1 to 4 items, a short title and one line each.",
   "releases": [
     {
+      "version": "0.13.0",
+      "items": [
+        {
+          "icon": "paint",
+          "title": {
+            "en": "A new Tobi window",
+            "zh-Hans": "全新的 Tobi 窗口",
+            "hi": "नई Tobi विंडो",
+            "es": "Una nueva ventana de Tobi",
+            "ar": "نافذة Tobi جديدة",
+            "fr": "Une nouvelle fenêtre Tobi",
+            "bn": "নতুন Tobi উইন্ডো",
+            "pt-BR": "Uma nova janela do Tobi",
+            "ru": "Новое окно Tobi",
+            "id": "Jendela Tobi yang baru",
+            "de": "Ein neues Tobi-Fenster",
+            "tr": "Yeni Tobi penceresi"
+          },
+          "detail": {
+            "en": "Every page in the sidebar, a home page with your finished tasks, settings as tidy cards and the island's tools as cards with a switch.",
+            "zh-Hans": "所有页面都在侧边栏中，主页显示已完成的任务，设置以整齐的卡片呈现，岛上的工具也变成带开关的卡片。",
+            "hi": "हर पेज साइडबार में, पूरे हुए कामों वाला होम पेज, साफ़ कार्डों में सेटिंग्स और स्विच वाले कार्डों में आइलैंड के टूल।",
+            "es": "Todas las páginas en la barra lateral, una página de inicio con tus tareas terminadas, ajustes en tarjetas ordenadas y las herramientas de la isla como tarjetas con interruptor.",
+            "ar": "كل الصفحات في الشريط الجانبي، وصفحة رئيسية بمهامك المنجزة، والإعدادات في بطاقات مرتبة، وأدوات الجزيرة في بطاقات بمفتاح.",
+            "fr": "Toutes les pages dans la barre latérale, un accueil avec vos tâches terminées, des réglages en cartes nettes et les outils de l'île en cartes avec un interrupteur.",
+            "bn": "সব পেজ সাইডবারে, শেষ হওয়া কাজসহ হোম পেজ, গোছানো কার্ডে সেটিংস আর সুইচসহ কার্ডে আইল্যান্ডের টুল।",
+            "pt-BR": "Todas as páginas na barra lateral, uma página inicial com suas tarefas concluídas, ajustes em cartões organizados e as ferramentas da ilha como cartões com interruptor.",
+            "ru": "Все страницы в боковой панели, «Главная» с готовыми задачами, настройки аккуратными карточками и инструменты острова карточками с переключателем.",
+            "id": "Semua halaman di bilah samping, beranda dengan tugas yang selesai, pengaturan dalam kartu rapi, dan alat pulau sebagai kartu dengan sakelar.",
+            "de": "Alle Seiten in der Seitenleiste, eine Startseite mit deinen erledigten Aufgaben, Einstellungen als aufgeräumte Karten und die Werkzeuge des Islands als Karten mit Schalter.",
+            "tr": "Tüm sayfalar kenar çubuğunda, biten görevlerinle bir ana sayfa, düzenli kartlarda ayarlar ve anahtarlı kartlarda adanın araçları."
+          }
+        },
+        {
+          "icon": "heart",
+          "title": {
+            "en": "Tobi and his wardrobe",
+            "zh-Hans": "Tobi 和他的衣柜",
+            "hi": "Tobi और उसका वार्डरोब",
+            "es": "Tobi y su armario",
+            "ar": "Tobi وخزانة ملابسه",
+            "fr": "Tobi et sa garde-robe",
+            "bn": "Tobi আর ওর ওয়ার্ডরোব",
+            "pt-BR": "Tobi e seu guarda-roupa",
+            "ru": "Тоби и его гардероб",
+            "id": "Tobi dan lemari pakaiannya",
+            "de": "Tobi und seine Garderobe",
+            "tr": "Tobi ve gardırobu"
+          },
+          "detail": {
+            "en": "Give Tobi a name, pick his colour for working, done and errors, and dress him in a wardrobe page where he tries every outfit on.",
+            "zh-Hans": "给 Tobi 起名字，为工作中、完成和出错选择颜色，并在衣柜页面里给他换装，每套衣服他都会试穿。",
+            "hi": "Tobi को नाम दें, काम, पूरा होने और गलती के लिए उसका रंग चुनें, और वार्डरोब पेज में उसे हर पोशाक पहनाकर देखें।",
+            "es": "Ponle nombre a Tobi, elige su color para trabajando, hecho y errores, y vístelo en una página de armario donde se prueba cada atuendo.",
+            "ar": "سمِّ Tobi، واختر لونه للعمل والإنجاز والأخطاء، وألبسه في صفحة خزانة يجرّب فيها كل زي.",
+            "fr": "Donnez un nom à Tobi, choisissez sa couleur au travail, une fois fini et en cas d'erreur, et habillez-le dans une page garde-robe où il essaie chaque tenue.",
+            "bn": "Tobi-র নাম দিন, কাজ, শেষ আর ভুলের জন্য ওর রং বেছে নিন, আর ওয়ার্ডরোব পেজে প্রতিটি পোশাক পরিয়ে দেখুন।",
+            "pt-BR": "Dê um nome ao Tobi, escolha a cor dele para trabalhando, pronto e erros, e vista-o numa página de guarda-roupa onde ele experimenta cada roupa.",
+            "ru": "Дайте Тоби имя, выберите его цвета для работы, готовности и ошибок и переоденьте его на странице гардероба: он примеряет каждый наряд.",
+            "id": "Beri Tobi nama, pilih warnanya saat bekerja, selesai, dan galat, lalu dandani ia di halaman lemari tempat ia mencoba setiap pakaian.",
+            "de": "Gib Tobi einen Namen, wähle seine Farbe für Arbeit, Fertig und Fehler und zieh ihn auf einer Garderobenseite an, auf der er jedes Outfit anprobiert.",
+            "tr": "Tobi'ye bir ad ver, çalışırken, bitince ve hatada rengini seç, onu her kıyafeti denediği gardırop sayfasında giydir."
+          }
+        },
+        {
+          "icon": "eye",
+          "title": {
+            "en": "An island that lights up",
+            "zh-Hans": "会发光的岛",
+            "hi": "चमकता आइलैंड",
+            "es": "Una isla que se ilumina",
+            "ar": "جزيرة تضيء",
+            "fr": "Une île qui s'illumine",
+            "bn": "আলো জ্বলা আইল্যান্ড",
+            "pt-BR": "Uma ilha que se ilumina",
+            "ru": "Остров со светом",
+            "id": "Pulau yang menyala",
+            "de": "Ein Island, das leuchtet",
+            "tr": "Işıldayan ada"
+          },
+          "detail": {
+            "en": "The island grows out of the top of the screen, and when open it glows from below in the colour of what Tobi is doing.",
+            "zh-Hans": "岛从屏幕顶部长出来，展开时会从下方发出 Tobi 当前状态的颜色。",
+            "hi": "आइलैंड स्क्रीन के ऊपर से निकलता है, और खुलने पर Tobi जो कर रहा है उसके रंग में नीचे से चमकता है।",
+            "es": "La isla sale del borde superior de la pantalla y, abierta, brilla desde abajo con el color de lo que hace Tobi.",
+            "ar": "تنبثق الجزيرة من أعلى الشاشة، وعند فتحها تتوهج من الأسفل بلون ما يفعله Tobi.",
+            "fr": "L'île sort du haut de l'écran et, ouverte, s'éclaire par le bas de la couleur de ce que fait Tobi.",
+            "bn": "আইল্যান্ড স্ক্রিনের ওপর থেকে বেরিয়ে আসে, আর খোলা থাকলে Tobi যা করছে তার রঙে নিচ থেকে জ্বলে।",
+            "pt-BR": "A ilha sai do topo da tela e, aberta, brilha por baixo na cor do que o Tobi está fazendo.",
+            "ru": "Остров вырастает из верхнего края экрана, а в раскрытом виде светится снизу цветом того, чем занят Тоби.",
+            "id": "Pulau muncul dari tepi atas layar, dan saat terbuka bersinar dari bawah dengan warna kegiatan Tobi.",
+            "de": "Das Island wächst aus dem oberen Bildschirmrand und leuchtet geöffnet von unten in der Farbe dessen, was Tobi gerade tut.",
+            "tr": "Ada ekranın üst kenarından çıkar ve açıkken Tobi'nin yaptığı işin renginde alttan ışıldar."
+          }
+        }
+      ]
+    },
+    {
       "version": "0.12.0",
       "items": [
         {

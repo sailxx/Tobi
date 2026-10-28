@@ -80,11 +80,56 @@ body {
   will-change: width, height, transform;
 }
 
+/* The flares on both sides of the top edge: the island grows out of the screen's
+   edge instead of hanging under it. island.ts keeps --ear no taller than the island. */
+#island::before,
+#island::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: var(--ear, 10px);
+  height: var(--ear, 10px);
+  pointer-events: none;
+}
+
+#island::before {
+  right: 100%;
+  background: radial-gradient(circle at 0 100%, transparent calc(var(--ear, 10px) - 0.5px), #000 var(--ear, 10px));
+}
+
+#island::after {
+  left: 100%;
+  background: radial-gradient(circle at 100% 100%, transparent calc(var(--ear, 10px) - 0.5px), #000 var(--ear, 10px));
+}
+
 #island-clip {
   position: absolute;
   inset: 0;
   overflow: hidden;
   border-radius: inherit;
+}
+
+/* The open island's light from below, in the colour of Tobi's state (island.ts
+   sets --wash): green when done, blue at work, amber when it waits for you. */
+@property --wash {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: transparent;
+}
+
+#island-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(70% 85% at 30% 118%, color-mix(in srgb, var(--wash) 62%, transparent) 0%, transparent 70%),
+    radial-gradient(90% 70% at 70% 125%, color-mix(in srgb, var(--wash) 34%, transparent) 0%, transparent 72%);
+  transition: opacity 0.5s ease-out, --wash 0.6s ease-out;
+}
+
+#island-wash.on {
+  opacity: 1;
 }
 
 #bot-canvas,
@@ -246,24 +291,24 @@ body {
 }
 
 .tab {
-  width: 30px;
-  height: 22px;
+  width: 34px;
+  height: 28px;
   display: grid;
   place-items: center;
   border: 0;
   background: transparent;
-  border-radius: 11px;
-  color: var(--dim-2);
+  border-radius: 9px;
+  color: #c9ccd2;
   cursor: default;
 }
 
 .tab:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: #b0b5be;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
 }
 
 .tab.on {
-  background: var(--tab-on);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--ink);
 }
 
@@ -277,7 +322,7 @@ body {
 .header-actions button {
   border: 0;
   background: transparent;
-  color: var(--dim-2);
+  color: #c9ccd2;
   display: grid;
   place-items: center;
   cursor: default;
