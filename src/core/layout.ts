@@ -64,9 +64,9 @@ export const PANEL_H = 320;
 export const NOTCH_W = 120;
 export const NOTCH_H = 32;
 /** The compact island: a small pill with Tobi in its middle. */
-export const COMPACT_W = 58;
+export const COMPACT_W = 80;
 /** Tobi's size in the compact island. */
-export const COMPACT_BOT_D = 16;
+export const COMPACT_BOT_D = 14;
 /** …and the old wide one when it shows the date and time (Tobi left, the clock in the middle). */
 export const COMPACT_CLOCK_W = 288;
 export const EXPANDED_W = 640;

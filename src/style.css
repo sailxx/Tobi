@@ -76,6 +76,7 @@ body {
   left: 50%;
   background: #000;
   border-radius: 0 0 14px 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.32);
   overflow: visible;
   will-change: width, height, transform;
 }

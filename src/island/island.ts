@@ -4,7 +4,7 @@
 import { Tracked, Spring, clamp, FRAME_GAP, frameDue } from "../core/anim";
 import { Bridge, IS_TAURI, onDragDrop } from "../core/bridge";
 import {
-  EXPANDED_CORNER, EXPANDED_W, NOTCH_W, PANEL_H, PANEL_W,
+  EXPANDED_CORNER, EXPANDED_W, NOTCH_H, NOTCH_W, PANEL_H, PANEL_W,
   ROUNDED_CORNER, VIEW_LAYOUTS, botGlowColor, botGlowOpacity, botPosition, type CompactExtras, chatPromptHeight,
   islandSize,
   QUESTION_PICKER_H,
@@ -742,8 +742,9 @@ export class Island {
     this.islandEl.style.width = `${w}px`;
     this.islandEl.style.height = `${hh}px`;
     this.islandEl.style.borderRadius = `0 0 ${r}px ${r}px`;
-    // The flares that join the island to the top of the screen: never taller than the island, so a hidden one shows none.
-    this.islandEl.style.setProperty("--ear", `${Math.min(10, hh)}px`);
+    // The flares that join the island to the top of the screen grow in only as it opens:
+    // the compact pill hangs plain, with no flares.
+    this.islandEl.style.setProperty("--ear", `${Math.min(10, Math.max(0, (hh - NOTCH_H) / 4))}px`);
     this.islandEl.style.transform = `translateX(-50%)`;
     // These follow the island as it resizes, so they belong here rather than in
     // the state-driven DOM sync.
