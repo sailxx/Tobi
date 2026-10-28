@@ -9,8 +9,10 @@
   --hub-body: #e1e3e6;
   --hub-secondary: #8e939c;
   --hub-muted: #6b7079;
-  --hub-accent: #fb923c;
-  --hub-on-accent: #170c04;
+  --hub-accent: #2f7ae6;
+  --hub-on-accent: #f4f8ff;
+  /* A light blue, lighter on the top-left, deep enough for the light text on it. */
+  --hub-accent-fill: linear-gradient(135deg, #3482ec 0%, #1d4fc0 100%);
   --hub-green: #34d399;
   --hub-red: #ff453a;
 }
@@ -308,11 +310,13 @@ button.hub-btn {
 
 button.hub-btn.primary {
   background: var(--hub-accent);
+  background-image: var(--hub-accent-fill);
   color: var(--hub-on-accent);
 }
 
 button.hub-btn.primary:hover:not(:disabled) {
-  background: #fdab63;
+  background: #3482ec;
+  background-image: linear-gradient(135deg, #4590f2 0%, #2860d0 100%);
 }
 
 button.hub-btn.danger {
@@ -362,7 +366,7 @@ button.hub-icon svg {
 .hub-input:focus,
 .hub-textarea:focus,
 .hub-select:focus {
-  border-color: rgba(251, 146, 60, 0.6);
+  border-color: rgba(78, 163, 255, 0.65);
 }
 
 .hub-textarea {
@@ -416,6 +420,7 @@ button.hub-icon svg {
   display: block;
   height: 100%;
   background: var(--hub-accent);
+  background-image: var(--hub-accent-fill);
   border-radius: 3px;
 }
 
@@ -530,7 +535,7 @@ button.hub-icon svg {
   border-radius: 14px;
   padding: 20px;
   background: var(--hub-card);
-  border: 1px solid rgba(251, 146, 60, 0.35);
+  border: 1px solid rgba(78, 163, 255, 0.35);
 }
 
 .hub-link {
@@ -788,4 +793,136 @@ button.hub-icon svg {
 
 .hub-note-detail > button {
   align-self: flex-start;
+}
+
+/* ── Finishing touches ────────────────────────────────────────────────────── */
+
+.hub-window ::selection {
+  background: rgba(78, 163, 255, 0.35);
+  color: var(--hub-text);
+}
+
+.hub-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #2c2e33 transparent;
+}
+
+/* Keyboard focus was only the browser default. */
+.hub-window button:focus-visible,
+.hub-window input:focus-visible,
+.hub-window select:focus-visible,
+.hub-window textarea:focus-visible {
+  outline: 2px solid rgba(78, 163, 255, 0.75);
+  outline-offset: 2px;
+}
+
+.hub-head h1,
+.hub-glow > div > div:first-child {
+  text-wrap: balance;
+}
+
+.hub-entry .when,
+.hub-line .ts,
+.hub-version {
+  font-variant-numeric: tabular-nums;
+}
+
+.hub-page > .hub-input[type="search"] {
+  height: 38px;
+}
+
+/* The row's tools are hidden from the eye, not from the keyboard. */
+.hub-entry:focus-within .tools {
+  opacity: 1;
+}
+
+/* ── Alignment: one height for every control, one column for the labels ───── */
+
+button.hub-btn {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+button.hub-btn.small {
+  min-height: 28px;
+}
+
+.hub-input,
+.hub-select {
+  min-height: 32px;
+}
+
+.hub-page > .hub-input[type="search"] {
+  height: 36px;
+}
+
+.hub-segmented button {
+  white-space: nowrap;
+}
+
+.hub-head .actions {
+  flex: 0 0 auto;
+}
+
+/* The island's pages: the same control height as the Tobi pages. */
+#settings-root button:not([class]),
+#settings-root button.primary,
+#settings-root button.danger {
+  min-height: 32px;
+}
+
+#settings-root select,
+#settings-root input[type="text"],
+#settings-root input[type="number"],
+#settings-root input[type="password"] {
+  min-height: 32px;
+}
+
+#settings-root .row > label {
+  flex: 0 0 168px;
+  min-width: 0;
+}
+
+#settings-root .row.shortcut {
+  min-height: 32px;
+}
+
+.hub-page #settings-root button.primary {
+  background: var(--hub-accent);
+  background-image: var(--hub-accent-fill);
+  color: var(--hub-on-accent);
+}
+
+.hub-page #settings-root button.primary:hover:not(:disabled) {
+  background-image: linear-gradient(135deg, #4590f2 0%, #2860d0 100%);
+}
+
+/* The island's own pages: the same button and field shapes as the Tobi pages. */
+#settings-root button:not([class]),
+#settings-root button.primary,
+#settings-root button.danger {
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-weight: 600;
+}
+
+#settings-root select,
+#settings-root input[type="text"],
+#settings-root input[type="number"],
+#settings-root input[type="password"] {
+  border-radius: 9px;
+}
+
+/* Switches follow the accent. */
+.hub-window .switch.on {
+  background: var(--hub-accent);
+  background-image: var(--hub-accent-fill);
+}
+
+/* Text in the accent colour sits on dark cards: a lighter blue keeps it readable. */
+.hub-link {
+  color: #6aa8f5;
 }

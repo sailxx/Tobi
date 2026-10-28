@@ -360,7 +360,7 @@
    "fr": "Discute avec Google AI, OpenAI ou OpenRouter à la place de Claude : ajoute une clé ici, puis clique sur le nom du modèle au-dessus de la zone de chat pour changer de fournisseur et de modèle. Les clés restent dans le trousseau du système. Ces fournisseurs n'ont ni recherche web ni outils : ils peuvent répondre, jamais agir sur cet ordinateur.",
    "bn": "Claude-এর বদলে Google AI, OpenAI বা OpenRouter-এর সঙ্গে চ্যাট করুন: এখানে একটি কী যোগ করুন, তারপর প্রদানকারী ও মডেল বদলাতে চ্যাট বক্সের উপরে মডেলের নামে ক্লিক করুন। কী সিস্টেম কীচেইনে থাকে। এই প্রদানকারীরা ওয়েব সার্চ বা টুল পায় না: তারা উত্তর দিতে পারে, এই কম্পিউটারে কখনো কিছু করে না।",
    "pt-BR": "Converse com Google AI, OpenAI ou OpenRouter em vez do Claude: adicione uma chave aqui e clique no nome do modelo acima da caixa de chat para trocar de provedor e de modelo. As chaves ficam no chaveiro do sistema. Esses provedores não têm busca na web nem ferramentas: podem responder, nunca agir neste computador.",
-   "ru": "Общайтесь с Google AI, OpenAI или OpenRouter вместо Claude: добавьте ключ здесь, затем нажмите на название модели над полем чата, чтобы сменить провайдера и модель. Ключи хранятся в системной связке ключей. У этих провайдеров нет веб-поиска и инструментов: они могут отвечать, но никогда не действуют на этом компьютере.",
+   "ru": "Выберите Google AI, OpenAI или OpenRouter вместо Claude: добавьте ключ, затем смените модель по её названию над полем чата. Ключи лежат в системном хранилище. Веб-поиска и инструментов у этих провайдеров нет, они только отвечают.",
    "id": "Mengobrol dengan Google AI, OpenAI, atau OpenRouter sebagai ganti Claude: tambahkan kunci di sini, lalu klik nama model di atas kotak obrolan untuk mengganti penyedia dan model. Kunci tetap di keychain sistem. Penyedia ini tidak punya pencarian web maupun alat: mereka bisa menjawab, tidak pernah bertindak di komputer ini.",
    "de": "Chatte mit Google AI, OpenAI oder OpenRouter statt mit Claude: Hinterlege hier einen Schlüssel und klicke dann auf den Modellnamen über dem Chatfeld, um Anbieter und Modell zu wechseln. Schlüssel bleiben im Systemschlüsselbund. Diese Anbieter erhalten weder Websuche noch Werkzeuge: Sie können antworten, aber auf diesem Computer keine Aktionen ausführen.",
    "tr": "Claude yerine Google AI, OpenAI veya OpenRouter ile sohbet et: buraya bir anahtar ekle, ardından sağlayıcı ve model değiştirmek için sohbet kutusunun üstündeki model adına tıkla. Anahtarlar sistemin anahtar zincirinde kalır. Bu sağlayıcılarda web araması ve araçlar yoktur: yanıt verebilirler, bu bilgisayarda işlem yapamazlar."
@@ -373,7 +373,7 @@
    "fr": "Discute avec un modèle que tu fais tourner toi-même : Ollama ou LM Studio (laisse l'adresse vide pour celle habituelle sur cet ordinateur), ou tout serveur qui parle l'API d'OpenAI, comme vLLM ou llama.cpp. Une fois connecté, choisis-le au-dessus de la zone de chat.",
    "bn": "নিজে চালানো মডেলের সঙ্গে চ্যাট করুন: Ollama বা LM Studio (এই কম্পিউটারের সাধারণ ঠিকানার জন্য ঠিকানা ফাঁকা রাখুন), অথবা OpenAI API বোঝে এমন যেকোনো সার্ভার, যেমন vLLM বা llama.cpp। সংযুক্ত হলে চ্যাট বক্সের উপরে সেটি বেছে নিন।",
    "pt-BR": "Converse com um modelo que você mesmo executa: Ollama ou LM Studio (deixe o endereço vazio para usar o padrão neste computador), ou qualquer servidor compatível com a API da OpenAI, como vLLM ou llama.cpp. Depois de conectado, escolha-o acima da caixa de chat.",
-   "ru": "Общайтесь с моделью, которую запускаете сами: Ollama или LM Studio (оставьте адрес пустым, чтобы использовать обычный адрес на этом компьютере) или любой сервер с API OpenAI, например vLLM или llama.cpp. После подключения выберите его над полем чата.",
+   "ru": "Подключите свою модель: Ollama, LM Studio (адрес можно оставить пустым) или любой сервер с API OpenAI, например vLLM или llama.cpp. Потом выберите её над полем чата.",
    "id": "Mengobrol dengan model yang Anda jalankan sendiri: Ollama atau LM Studio (kosongkan alamat untuk alamat biasa di komputer ini), atau server apa pun yang mendukung API OpenAI, seperti vLLM atau llama.cpp. Setelah terhubung, pilih di atas kotak obrolan.",
    "de": "Chatte mit einem selbst betriebenen Modell: Ollama oder LM Studio (für die übliche Adresse auf diesem Computer leer lassen) oder einem OpenAI-API-kompatiblen Server wie vLLM oder llama.cpp. Wähle das Modell nach dem Verbinden über dem Chatfeld aus.",
    "tr": "Kendin çalıştırdığın bir modelle sohbet et: Ollama veya LM Studio (bu bilgisayardaki varsayılan adres için adresi boş bırak) ya da vLLM veya llama.cpp gibi OpenAI API'siyle uyumlu bir sunucu. Bağlandıktan sonra sohbet kutusunun üstünden seç."
@@ -399,7 +399,7 @@
    "fr": "Jeton classique avec la portée repo, ou à granularité fine avec un accès en lecture aux Pull requests, Commit statuses et Actions.",
    "bn": "repo স্কোপসহ ক্লাসিক টোকেন, অথবা Pull requests, Commit statuses ও Actions-এ পড়ার অনুমতিসহ fine-grained টোকেন।",
    "pt-BR": "Token clássico com o escopo repo, ou refinado (fine-grained) com acesso de leitura a Pull requests, Commit statuses e Actions.",
-   "ru": "Классический токен с областью repo или детализированный (fine-grained) с доступом на чтение к Pull requests, Commit statuses и Actions.",
+   "ru": "Классический токен с правом repo или детализированный с чтением Pull requests, Commit statuses и Actions.",
    "id": "Token klasik dengan cakupan repo, atau fine-grained dengan akses baca ke Pull requests, Commit statuses, dan Actions.",
    "de": "Klassisches Token mit repo-Berechtigung oder ein fein abgestuftes Token mit Lesezugriff auf Pull Requests, Commit-Status und Actions.",
    "tr": "repo kapsamına sahip klasik token veya Pull requests, Commit statuses ve Actions için okuma erişimi olan ayrıntılı token."
@@ -672,7 +672,7 @@
    "fr": "Uniquement des compteurs et des noms de projet — jamais de commandes, de fichiers ni de prompts. Conservé sur cet ordinateur pendant 12 semaines.",
    "bn": "শুধু গণনা আর প্রজেক্টের নাম — কখনো কমান্ড, ফাইল বা প্রম্পট নয়। এই কম্পিউটারে ১২ সপ্তাহ রাখা হয়।",
    "pt-BR": "Somente contagens e nomes de projeto — nunca comandos, arquivos ou prompts. Mantido neste computador por 12 semanas.",
-   "ru": "Только счётчики и названия проектов — никогда команды, файлы или промпты. Хранится на этом компьютере 12 недель.",
+   "ru": "Только счётчики и названия проектов, без команд, файлов и промптов. Хранятся на компьютере 12 недель.",
    "id": "Hanya hitungan dan nama proyek — tidak pernah perintah, file, atau prompt. Disimpan di komputer ini selama 12 minggu.",
    "de": "Nur Zähler und Projektnamen — keine Befehle, Dateien oder Prompts. Wird 12 Wochen auf diesem Computer aufbewahrt.",
    "tr": "Yalnızca sayılar ve proje adları; komut, dosya veya istem içermez. Bu bilgisayarda 12 hafta tutulur."
@@ -1075,7 +1075,7 @@
    "fr": "Installe les hooks pour voir tes sessions Claude Code dans l'île et valider les permissions sans quitter ce que tu fais.",
    "bn": "আইল্যান্ডে আপনার Claude Code সেশন দেখতে এবং কাজ না থামিয়ে অনুমতি দিতে hooks ইনস্টল করুন।",
    "pt-BR": "Instale os hooks para ver suas sessões do Claude Code na ilha e aprovar permissões sem largar o que está fazendo.",
-   "ru": "Установите хуки, чтобы видеть сессии Claude Code в острове и давать разрешения, не отрываясь от работы.",
+   "ru": "Установите хуки, чтобы видеть сессии Claude Code в острове и отвечать на запросы прямо в нём.",
    "id": "Pasang hooks untuk melihat sesi Claude Code di pulau dan menyetujui izin tanpa meninggalkan pekerjaan Anda.",
    "de": "Installiere die Hooks, um deine Claude Code-Sitzungen in der Insel zu sehen und Berechtigungen zu genehmigen, ohne deine Arbeit zu unterbrechen.",
    "tr": "Claude Code oturumlarını adada görmek ve işini bırakmadan izinleri onaylamak için hook'ları kur."
@@ -1478,7 +1478,7 @@
    "fr": "Pas encore de clé — le chat en a besoin.",
    "bn": "এখনো কোনো কী নেই — চ্যাটের একটি লাগবে।",
    "pt-BR": "Ainda não há chave — o chat precisa de uma.",
-   "ru": "Ключа пока нет — он нужен для чата.",
+   "ru": "Для чата нужен ключ.",
    "id": "Belum ada kunci — obrolan membutuhkannya.",
    "de": "Noch kein Schlüssel — der Chat benötigt einen.",
    "tr": "Henüz anahtar yok — sohbet için gerekli."
@@ -1530,7 +1530,7 @@
    "fr": "Aucune télémétrie. Les requêtes réseau ne vont qu'aux services que tu configures toi-même.",
    "bn": "কোনো টেলিমেট্রি নেই। নেটওয়ার্ক অনুরোধ শুধু আপনার নিজের সেট করা পরিষেবাগুলোতেই যায়।",
    "pt-BR": "Sem telemetria. As requisições de rede só vão para os serviços que você mesmo configura.",
-   "ru": "Никакой телеметрии. Сетевые запросы идут только к сервисам, которые вы настроили сами.",
+   "ru": "Телеметрии нет. Запросы идут только к сервисам, которые вы подключили.",
    "id": "Tanpa telemetri. Permintaan jaringan hanya ke layanan yang Anda atur sendiri.",
    "de": "Keine Telemetrie. Netzwerkanfragen gehen nur an Dienste, die du selbst einrichtest.",
    "tr": "Telemetri yok. Ağ istekleri yalnızca kendin yapılandırdığın servislere gönderilir."
@@ -1595,7 +1595,7 @@
    "fr": "Rien ne quitte ton PC : le serveur tourne sur cet ordinateur.",
    "bn": "আপনার PC থেকে কিছুই বাইরে যায় না: সার্ভার এই কম্পিউটারেই চলে।",
    "pt-BR": "Nada sai do seu PC: o servidor roda neste computador.",
-   "ru": "Ничего не покидает ваш ПК: сервер работает на этом компьютере.",
+   "ru": "Данные не уходят с компьютера: сервер работает у вас.",
    "id": "Tidak ada yang keluar dari PC Anda: server berjalan di komputer ini.",
    "de": "Nichts verlässt deinen PC: Der Server läuft auf diesem Computer.",
    "tr": "Hiçbir veri bilgisayarından çıkmaz: sunucu bu bilgisayarda çalışır."
@@ -1738,7 +1738,7 @@
    "fr": "Jeton d’accès personnel avec les autorisations read_api et read_user.",
    "bn": "read_api ও read_user অনুমতিসহ ব্যক্তিগত অ্যাক্সেস টোকেন।",
    "pt-BR": "Token de acesso pessoal com os escopos read_api e read_user.",
-   "ru": "Личный токен доступа с правами read_api и read_user.",
+   "ru": "Личный токен с правами read_api и read_user.",
    "id": "Token akses pribadi dengan cakupan read_api dan read_user.",
    "de": "Persönliches Zugriffstoken mit den Berechtigungen read_api und read_user.",
    "tr": "read_api ve read_user kapsamlarına sahip kişisel erişim belirteci."
@@ -2141,7 +2141,7 @@
    "fr": "Affiche les autres agents de code dans l'île. Tobi ajoute ses entrées à la configuration de chaque agent : tu vois la modification exacte et l'emplacement de la sauvegarde avant que quoi que ce soit soit écrit, et la désinstallation ne retire que ce que Tobi a ajouté.",
    "bn": "অন্যান্য কোডিং এজেন্টকে আইল্যান্ডে দেখান। Tobi প্রতিটি এজেন্টের নিজস্ব কনফিগে তার এন্ট্রি যোগ করে: কিছু লেখার আগে আপনি সঠিক পরিবর্তন এবং ব্যাকআপ কোথায় যাবে তা দেখতে পান, আর আনইনস্টল করলে শুধু Tobi যা যোগ করেছিল তা-ই সরানো হয়।",
    "pt-BR": "Mostre outros agentes de programação na ilha. O Tobi adiciona as próprias entradas à configuração de cada agente: você vê a alteração exata e para onde vai o backup antes de qualquer gravação, e desinstalar remove só o que o Tobi adicionou.",
-   "ru": "Показывайте другие агенты для кода в острове. Tobi добавляет свои записи в конфигурацию каждого агента: до любой записи вы видите точное изменение и куда пойдёт резервная копия, а удаление убирает только то, что добавил Tobi.",
+   "ru": "Показывайте в острове других агентов для кода. Tobi добавляет свои записи в настройки агента, заранее показывает изменение и путь к копии. Удаление убирает только их.",
    "id": "Tampilkan agen coding lain di pulau. Tobi menambahkan entrinya ke konfigurasi masing-masing agen: Anda melihat perubahan persisnya dan lokasi cadangan sebelum apa pun ditulis, dan mencopot pemasangan hanya menghapus yang ditambahkan Tobi.",
    "de": "Zeige weitere Programmieragenten in der Insel. Tobi ergänzt Einträge in der jeweiligen Agentenkonfiguration: Du siehst die genaue Änderung und den Backup-Pfad, bevor etwas geschrieben wird. Beim Deinstallieren wird nur entfernt, was Tobi hinzugefügt hat.",
    "tr": "Diğer kodlama ajanlarını adada göster. Tobi kendi girdilerini her ajanın yapılandırmasına ekler: herhangi bir şey yazılmadan önce tam değişikliği ve yedeğin konumunu görürsün. Kaldırıldığında yalnızca Tobi'nun ekledikleri silinir."
@@ -2154,7 +2154,7 @@
    "fr": "Affiche l'utilisation de ton forfait Claude (limites sur 5 heures et à la semaine) dans l'en-tête de l'île. Tobi ajoute un relais de ligne d'état dans ~/.claude/settings.json. Si tu as déjà une ligne d'état, elle continue de fonctionner comme avant. Forfaits Pro et Max uniquement.",
    "bn": "আইল্যান্ডের হেডারে আপনার Claude প্ল্যানের ব্যবহার (৫ ঘণ্টা ও সাপ্তাহিক সীমা) দেখায়। Tobi ~/.claude/settings.json-এ একটি স্ট্যাটাস লাইন রিলে যোগ করে। আপনার আগে থেকে স্ট্যাটাস লাইন থাকলে সেটি আগের মতোই চলবে। শুধু Pro ও Max প্ল্যান।",
    "pt-BR": "Mostra o uso do seu plano Claude (limites de 5 horas e semanal) no cabeçalho da ilha. O Tobi adiciona um relay de linha de status em ~/.claude/settings.json. Se você já tem uma linha de status, ela continua funcionando como antes. Apenas planos Pro e Max.",
-   "ru": "Показывает использование тарифа Claude (лимиты на 5 часов и на неделю) в заголовке острова. Tobi добавляет ретранслятор строки состояния в ~/.claude/settings.json. Если у вас уже есть строка состояния, она работает как прежде. Только тарифы Pro и Max.",
+   "ru": "Показывает лимиты тарифа Claude (5 часов и неделя) в шапке острова. Tobi добавляет строку состояния в ~/.claude/settings.json, ваша прежняя продолжит работать. Только Pro и Max.",
    "id": "Menampilkan pemakaian paket Claude Anda (batas 5 jam dan mingguan) di header pulau. Tobi menambahkan relay baris status di ~/.claude/settings.json. Jika Anda sudah punya baris status, baris itu tetap berjalan seperti biasa. Khusus paket Pro dan Max.",
    "de": "Zeigt deine Claude-Tarifnutzung (5-Stunden- und Wochenlimits) im Insel-Kopfbereich. Tobi ergänzt einen Statuszeilen-Relay in ~/.claude/settings.json. Eine bestehende Statuszeile funktioniert wie bisher. Nur für Pro- und Max-Tarife.",
    "tr": "Claude plan kullanımını (5 saatlik ve haftalık sınırlar) adanın başlığında gösterir. Tobi, ~/.claude/settings.json içine bir durum satırı aracısı ekler. Mevcut durum satırın varsa eskisi gibi çalışmaya devam eder. Yalnızca Pro ve Max planları için."
@@ -2167,7 +2167,7 @@
    "fr": "Affiche l'utilisation de ton forfait Codex (limite hebdomadaire et réinitialisations gratuites restantes) dans l'en-tête de l'île. Tobi interroge la CLI Codex (codex app-server) quand l'onglet s'affiche ; rien n'est installé. Codex doit être connecté avec ChatGPT.",
    "bn": "আইল্যান্ডের হেডারে আপনার Codex প্ল্যানের ব্যবহার (সাপ্তাহিক সীমা ও বাকি ফ্রি রিসেট) দেখায়। ট্যাব দেখা গেলে Tobi Codex CLI (codex app-server)-কে জিজ্ঞেস করে; কিছুই ইনস্টল হয় না। Codex-এ ChatGPT দিয়ে সাইন ইন থাকতে হবে।",
    "pt-BR": "Mostra o uso do seu plano Codex (limite semanal e redefinições grátis restantes) no cabeçalho da ilha. O Tobi consulta a CLI do Codex (codex app-server) quando a aba aparece; nada é instalado. O Codex precisa estar conectado com o ChatGPT.",
-   "ru": "Показывает использование тарифа Codex (недельный лимит и оставшиеся бесплатные сбросы) в заголовке острова. Tobi спрашивает Codex CLI (codex app-server), когда видна вкладка; ничего не устанавливается. В Codex нужно войти через ChatGPT.",
+   "ru": "Показывает лимиты тарифа Codex (неделя и бесплатные сбросы) в шапке острова. Tobi опрашивает Codex CLI, пока вкладка открыта, и ничего не устанавливает. Нужен вход через ChatGPT.",
    "id": "Menampilkan pemakaian paket Codex Anda (batas mingguan dan sisa reset gratis) di header pulau. Tobi menanyakan Codex CLI (codex app-server) saat tab tampil; tidak ada yang dipasang. Codex harus masuk dengan ChatGPT.",
    "de": "Zeigt deine Codex-Tarifnutzung (Wochenlimit und verbleibende kostenlose Zurücksetzungen) im Insel-Kopfbereich. Tobi fragt die Codex CLI (codex app-server) ab, wenn die Pill angezeigt wird; es wird nichts installiert. Codex muss mit ChatGPT angemeldet sein.",
    "tr": "Codex plan kullanımını (haftalık sınır ve kalan ücretsiz sıfırlama hakları) adanın başlığında gösterir. Araç göründüğünde Tobi, Codex CLI'a (codex app-server) sorgu gönderir; hiçbir şey kurulmaz. Codex'te ChatGPT ile oturum açılmış olmalı."
@@ -2765,7 +2765,7 @@
    "fr": "Ils marchent depuis n'importe quelle app. Clique sur un raccourci pour le changer, puis appuie sur les nouvelles touches — Esc annule, Backspace le retire.",
    "bn": "যেকোনো অ্যাপ থেকে কাজ করে। বদলাতে একটি শর্টকাটে ক্লিক করুন, তারপর নতুন কী চাপুন — Esc বাতিল করে, Backspace সেটি সরায়।",
    "pt-BR": "Funcionam em qualquer app. Clique num atalho para alterá-lo e pressione as novas teclas — Esc cancela, Backspace remove.",
-   "ru": "Работают из любого приложения. Нажмите на сочетание, чтобы изменить его, затем нажмите новые клавиши — Esc отменяет, Backspace удаляет.",
+   "ru": "Работают в любом приложении. Нажмите сочетание, затем новые клавиши. Esc отменяет, Backspace удаляет.",
    "id": "Berfungsi dari aplikasi apa pun. Klik pintasan untuk mengubahnya, lalu tekan tombol baru — Esc membatalkan, Backspace menghapusnya.",
    "de": "Arbeite in jeder App. Klicke auf eine Tastenkombination und drücke die neuen Tasten — Esc bricht ab, die Rücktaste entfernt sie.",
    "tr": "Her uygulamada çalışır. Değiştirmek için bir kısayola tıkla, ardından yeni tuşlara bas — Esc iptal eder, Backspace kaldırır."
@@ -3513,7 +3513,7 @@
    "fr": "{used}/{max} emplacements utilisés — l'outil principal n'en prend pas.",
    "bn": "{used}/{max} স্লট ব্যবহৃত — প্রধান টুল কোনো স্লট নেয় না।",
    "pt-BR": "{used}/{max} espaços em uso — a ferramenta principal não ocupa nenhum.",
-   "ru": "Занято мест: {used}/{max} — основной инструмент место не занимает.",
+   "ru": "Занято {used} из {max}. Основной инструмент не считается.",
    "id": "{used}/{max} slot terpakai — alat utama tidak memakai slot.",
    "de": "{used}/{max} Plätze belegt — das Hauptwerkzeug belegt keinen.",
    "tr": "{used}/{max} yuva kullanımda — ana araç yuva kullanmaz."
@@ -3591,7 +3591,7 @@
    "fr": "Les chiffres viennent de l'outil en ligne de commande Claude Code. L'app de bureau Claude ne les transmet pas : si tu n'utilises que l'app de bureau, la jauge reste vide.",
    "bn": "এই সংখ্যাগুলো Claude Code কমান্ড-লাইন টুল থেকে আসে। Claude ডেস্কটপ অ্যাপ এগুলো পাঠায় না, তাই শুধু ডেস্কটপ অ্যাপ ব্যবহার করলে গেজ খালি থাকবে।",
    "pt-BR": "Os números vêm da ferramenta de linha de comando do Claude Code. O app Claude para desktop não os envia, então o medidor fica vazio se você usa só o app para desktop.",
-   "ru": "Данные приходят из консольного инструмента Claude Code. Настольное приложение Claude их не передаёт, поэтому индикатор останется пустым, если вы пользуетесь только им.",
+   "ru": "Данные берутся из Claude Code в консоли. Если вы работаете только в приложении Claude, индикатор будет пустым.",
    "id": "Angka-angka ini berasal dari alat baris perintah Claude Code. Aplikasi desktop Claude tidak mengirimkannya, jadi pengukur tetap kosong jika Anda hanya memakai aplikasi desktop.",
    "de": "Die Zahlen stammen aus dem Kommandozeilenprogramm Claude Code. Die Claude-Desktop-App meldet sie nicht; wenn du nur die Desktop-App nutzt, bleibt die Anzeige leer.",
    "tr": "Sayılar Claude Code komut satırı aracından gelir. Claude masaüstü uygulaması bunları bildirmez; yalnızca masaüstü uygulamasını kullanıyorsan gösterge boş kalır."
@@ -3656,7 +3656,7 @@
    "fr": "Envoie les sessions de tes agents à Tobi for Android et réponds aux demandes d'autorisation depuis le téléphone. Désactivé par défaut ; il n'écoute que sur ton réseau local.",
    "bn": "আপনার এজেন্টদের সেশন Tobi for Android-এ পাঠান এবং ফোন থেকে অনুমতির অনুরোধের উত্তর দিন। ডিফল্টে বন্ধ; এটি শুধু আপনার লোকাল নেটওয়ার্কে শোনে।",
    "pt-BR": "Envie as sessões dos seus agentes ao Tobi for Android e responda a pedidos de permissão pelo celular. Desativado por padrão; só escuta na sua rede local.",
-   "ru": "Отправляйте сессии ваших агентов в Tobi for Android и отвечайте на запросы разрешений с телефона. По умолчанию выключено; слушает только в вашей локальной сети.",
+   "ru": "Сессии агентов приходят в Tobi for Android, и вы отвечаете на запросы с телефона. По умолчанию выключено, работает только в вашей сети.",
    "id": "Kirim sesi agen Anda ke Tobi for Android dan jawab permintaan izin dari ponsel. Nonaktif secara default; hanya mendengarkan di jaringan lokal Anda.",
    "de": "Sende die Sitzungen deiner Agenten an Tobi für Android und beantworte Berechtigungsanfragen auf dem Telefon. Standardmäßig aus; lauscht nur im lokalen Netzwerk.",
    "tr": "Ajanlarının oturumlarını Android için Tobi'ya gönder ve izin isteklerini telefondan yanıtla. Varsayılan olarak kapalıdır; yalnızca yerel ağında dinler."
@@ -3669,7 +3669,7 @@
    "fr": "Autoriser sur le téléphone demande l'empreinte ou le verrouillage d'écran. Refuser, non.",
    "bn": "ফোনে অনুমতি দিতে ফিঙ্গারপ্রিন্ট বা স্ক্রিন লক লাগে। প্রত্যাখ্যানে লাগে না।",
    "pt-BR": "Permitir no celular pede a digital ou o bloqueio de tela. Negar não pede.",
-   "ru": "Чтобы разрешить на телефоне, нужен отпечаток пальца или блокировка экрана. Для отказа — не нужен.",
+   "ru": "Разрешить с телефона можно по отпечатку или коду экрана. Отказать можно без них.",
    "id": "Mengizinkan di ponsel meminta sidik jari atau kunci layar. Menolak tidak.",
    "de": "Erlauben auf dem Telefon erfordert Fingerabdruck oder Bildschirmsperre. Ablehnen nicht.",
    "tr": "Telefonda izin vermek parmak izi veya ekran kilidi gerektirir. Reddetmek gerektirmez."
@@ -4241,7 +4241,7 @@
    "fr": "Dicte partout sur ton ordinateur",
    "bn": "আপনার কম্পিউটারে যেকোনো জায়গায় ডিক্টেট করুন",
    "pt-BR": "Dite em qualquer lugar do seu computador",
-   "ru": "Диктуйте где угодно на компьютере",
+   "ru": "Диктуйте в любом приложении",
    "id": "Dikte di mana saja di komputermu",
    "de": "Überall auf deinem Computer diktieren",
    "tr": "Bilgisayarında her yerde dikte et"
@@ -4254,7 +4254,7 @@
    "fr": "Parakeet, sur ton ordinateur",
    "bn": "Parakeet, আপনার কম্পিউটারে",
    "pt-BR": "Parakeet, no seu computador",
-   "ru": "Parakeet на вашем компьютере",
+   "ru": "Модель Parakeet",
    "id": "Parakeet, di komputermu",
    "de": "Parakeet auf deinem Computer",
    "tr": "Parakeet, bilgisayarında"
@@ -4267,7 +4267,7 @@
    "fr": "Le plus précis, hors ligne, 25 langues. Téléchargé une fois (environ {0} Mo).",
    "bn": "সবচেয়ে নির্ভুল, অফলাইন, ২৫টি ভাষা। একবার ডাউনলোড হয় (প্রায় {0} MB)।",
    "pt-BR": "O mais preciso, offline, 25 idiomas. Baixado uma vez (cerca de {0} MB).",
-   "ru": "Самый точный, офлайн, 25 языков. Скачивается один раз (около {0} МБ).",
+   "ru": "Работает без интернета, 25 языков. Скачивается один раз, около {0} МБ.",
    "id": "Paling akurat, offline, 25 bahasa. Diunduh sekali (sekitar {0} MB).",
    "de": "Höchste Genauigkeit, offline, 25 Sprachen. Einmaliger Download (etwa {0} MB).",
    "tr": "En doğru sonuçlar, çevrimdışı, 25 dil. Bir kez indirilir (yaklaşık {0} MB)."
@@ -4332,7 +4332,7 @@
    "fr": "Celui que Tobi écoute pour la dictée et les appels.",
    "bn": "যেটি Tobi ডিক্টেশন ও কলের জন্য শোনে।",
    "pt-BR": "O que o Tobi escuta para ditados e chamadas.",
-   "ru": "Тот, который Tobi слушает для диктовки и звонков.",
+   "ru": "Его Tobi слушает при диктовке и звонках.",
    "id": "Yang didengarkan Tobi untuk dikte dan panggilan.",
    "de": "Das Mikrofon, das Tobi für Diktate und Gespräche verwendet.",
    "tr": "Tobi'nun dikte ve görüşmeler için dinlediği mikrofon."
@@ -4345,7 +4345,7 @@
    "fr": "Ta voix ne quitte jamais cet ordinateur : Parakeet la transforme en texte ici, et l'enregistrement est jeté dès qu'il est collé.",
    "bn": "আপনার কণ্ঠ এই কম্পিউটার ছেড়ে যায় না: Parakeet এখানেই এটিকে লেখায় রূপান্তর করে, আর পেস্ট হওয়ামাত্র রেকর্ডিং মুছে যায়।",
    "pt-BR": "Sua voz nunca sai deste computador: o Parakeet a transforma em texto aqui, e a gravação é descartada assim que é colada.",
-   "ru": "Ваш голос не покидает этот компьютер: Parakeet превращает его в текст здесь, а запись удаляется сразу после вставки.",
+   "ru": "Голос не покидает компьютер: Parakeet делает текст на месте, запись удаляется сразу после вставки.",
    "id": "Suaramu tidak pernah meninggalkan komputer ini: Parakeet mengubahnya menjadi teks di sini, dan rekamannya dibuang begitu ditempel.",
    "de": "Deine Stimme verlässt diesen Computer nie: Parakeet wandelt sie hier in Text um; die Aufnahme wird gelöscht, sobald der Text eingefügt ist.",
    "tr": "Sesin bu bilgisayardan asla dışarı çıkmaz: Parakeet burada metne dönüştürür; kayıt, metin yapıştırılır yapıştırılmaz silinir."
@@ -4358,7 +4358,7 @@
    "fr": "Avec Claude, la transcription (jamais l'audio) part chez Anthropic avec ta clé de Notch → Chat.",
    "bn": "Claude-এ, ট্রান্সক্রিপ্ট (অডিও কখনো নয়) Notch → চ্যাট থেকে আপনার কী দিয়ে Anthropic-এ যায়।",
    "pt-BR": "Com o Claude, a transcrição (nunca o áudio) vai para a Anthropic com sua chave de Notch → Chat.",
-   "ru": "С Claude расшифровка (но никогда не звук) уходит в Anthropic с вашим ключом из Notch → Чат.",
+   "ru": "С Claude в Anthropic уходит только текст, без звука, с вашим ключом из раздела «Чат».",
    "id": "Dengan Claude, transkrip (tidak pernah audionya) dikirim ke Anthropic dengan kuncimu dari Notch → Obrolan.",
    "de": "Mit Claude wird das Transkript mit deinem Schlüssel aus Notch → Chat an Anthropic gesendet, niemals das Audio.",
    "tr": "Claude ile döküm, Çentik → Sohbet bölümündeki anahtarınla Anthropic'e gönderilir; ses asla gönderilmez."
@@ -4371,7 +4371,7 @@
    "fr": "Tout reste sur cet ordinateur. Préviens les personnes de l'appel que tu enregistres.",
    "bn": "সবকিছু এই কম্পিউটারেই থাকে। কলে থাকা মানুষদের জানান যে আপনি রেকর্ড করছেন।",
    "pt-BR": "Tudo fica neste computador. Avise as pessoas da chamada que você está gravando.",
-   "ru": "Всё остаётся на этом компьютере. Предупредите участников звонка, что вы ведёте запись.",
+   "ru": "Всё хранится на компьютере. Предупредите участников, что идёт запись.",
    "id": "Semuanya tetap di komputer ini. Beri tahu orang di panggilan bahwa kamu merekam.",
    "de": "Alles bleibt auf diesem Computer. Informiere die Gesprächsteilnehmer über die Aufnahme.",
    "tr": "Her şey bu bilgisayarda kalır. Görüşmedeki kişilere kayıt yaptığını söyle."
@@ -4384,7 +4384,7 @@
    "fr": "Pas quand Tobi démarre avec l'ordinateur.",
    "bn": "Tobi কম্পিউটারের সাথে চালু হলে নয়।",
    "pt-BR": "Não quando o Tobi inicia com o computador.",
-   "ru": "Не при запуске Tobi вместе с компьютером.",
+   "ru": "Окно не открывается при запуске компьютера.",
    "id": "Tidak saat Tobi mulai bersama komputer.",
    "de": "Nicht, wenn Tobi mit dem Computer startet.",
    "tr": "Tobi bilgisayarla birlikte başlatıldığında geçerli değildir."
@@ -4397,7 +4397,7 @@
    "fr": "L'historique, les statistiques et tes notes restent sur cet ordinateur, dans le dossier de Tobi. Les dictées ne sont jamais gardées en audio ; l'audio d'un appel est supprimé dès que sa transcription est écrite.",
    "bn": "ইতিহাস, পরিসংখ্যান আর আপনার নোট এই কম্পিউটারে Tobi-র ফোল্ডারেই থাকে। ডিক্টেশন কখনো অডিও হিসেবে সংরক্ষিত হয় না; কলের অডিও ট্রান্সক্রিপ্ট লেখা হলেই মুছে যায়।",
    "pt-BR": "O histórico, as estatísticas e suas notas ficam neste computador, na pasta do Tobi. Os ditados nunca são salvos como áudio; o áudio de uma chamada é apagado assim que a transcrição é escrita.",
-   "ru": "История, статистика и ваши заметки остаются на этом компьютере, в папке Tobi. Диктовки никогда не сохраняются как звук; звук звонка удаляется сразу после записи расшифровки.",
+   "ru": "История, статистика и заметки лежат на компьютере в папке Tobi. Диктовки не сохраняются как звук, звук звонка удаляется после расшифровки.",
    "id": "Riwayat, statistik, dan catatanmu tetap di komputer ini, di folder Tobi. Dikte tidak pernah disimpan sebagai audio; audio panggilan dihapus begitu transkripnya ditulis.",
    "de": "Verlauf, Statistik und Notizen bleiben auf diesem Computer im Tobi-Ordner. Diktate werden nie als Audio gespeichert; die Gesprächsaufnahme wird gelöscht, sobald das Transkript geschrieben ist.",
    "tr": "Geçmiş, istatistikler ve notların bu bilgisayarda, Tobi klasöründe kalır. Dikteler asla ses olarak kaydedilmez; görüşmenin sesi, dökümü yazılır yazılmaz silinir."
@@ -4410,7 +4410,7 @@
    "fr": "Tobi écrit tes appels sur cet ordinateur avec Parakeet, et distingue les voix avec un second petit modèle. Les deux se téléchargent une fois (environ {0} Mo), puis tout marche hors ligne.",
    "bn": "Tobi এই কম্পিউটারে Parakeet দিয়ে আপনার কল লেখে, আর দ্বিতীয় একটি ছোট মডেল দিয়ে কণ্ঠগুলো আলাদা করে। দুটোই একবার ডাউনলোড হয় (প্রায় {0} MB), তারপর সবকিছু অফলাইনে চলে।",
    "pt-BR": "O Tobi escreve suas chamadas neste computador com o Parakeet e distingue as vozes com um segundo modelo pequeno. Os dois são baixados uma vez (cerca de {0} MB) e depois tudo funciona offline.",
-   "ru": "Tobi записывает ваши звонки на этом компьютере с помощью Parakeet и различает голоса второй небольшой моделью. Обе скачиваются один раз (около {0} МБ), дальше всё работает офлайн.",
+   "ru": "Tobi записывает звонок на компьютере и различает голоса второй небольшой моделью. Обе скачиваются один раз, около {0} МБ, дальше работают без интернета.",
    "id": "Tobi menulis panggilanmu di komputer ini dengan Parakeet, dan membedakan suara dengan model kecil kedua. Keduanya diunduh sekali (sekitar {0} MB), lalu semuanya bekerja offline.",
    "de": "Tobi transkribiert deine Gespräche auf diesem Computer mit Parakeet und unterscheidet die Stimmen mit einem zweiten kleinen Modell. Beide werden einmal heruntergeladen (etwa {0} MB), danach läuft alles offline.",
    "tr": "Tobi görüşmelerini bu bilgisayarda Parakeet ile yazıya döker ve ikinci küçük bir modelle sesleri ayırt eder. İkisi de bir kez indirilir (yaklaşık {0} MB), sonra her şey çevrimdışı çalışır."
@@ -4423,7 +4423,7 @@
    "fr": "Le nettoyage utilise ta clé Claude. Ajoute-la dans Notch → Chat.",
    "bn": "পরিষ্কার করতে আপনার Claude কী লাগে। Notch → চ্যাট-এ যোগ করুন।",
    "pt-BR": "A limpeza usa sua chave do Claude. Adicione-a em Notch → Chat.",
-   "ru": "Для очистки нужен ваш ключ Claude. Добавьте его в Notch → Чат.",
+   "ru": "Нужен ключ Claude. Добавьте его в разделе «Чат».",
    "id": "Pembersihan memakai kunci Claude-mu. Tambahkan di Notch → Obrolan.",
    "de": "Die Überarbeitung nutzt deinen Claude-Schlüssel. Füge ihn unter Notch → Chat hinzu.",
    "tr": "Düzenleme, Claude anahtarını kullanır. Çentik → Sohbet bölümünden ekle."
@@ -4436,7 +4436,7 @@
    "fr": "Nettoyage activé, le texte (jamais ta voix) part chez Anthropic avec ta clé Claude. Désactivé, tout reste sur cet ordinateur.",
    "bn": "পরিষ্কার চালু থাকলে লেখা (আপনার কণ্ঠ কখনো নয়) আপনার Claude কী দিয়ে Anthropic-এ যায়। বন্ধ থাকলে সবকিছু এই কম্পিউটারেই থাকে।",
    "pt-BR": "Com a limpeza ligada, o texto (nunca sua voz) vai para a Anthropic com sua chave do Claude. Desligada, tudo fica neste computador.",
-   "ru": "Когда очистка включена, текст (но никогда не голос) уходит в Anthropic с вашим ключом Claude. Когда выключена, всё остаётся на этом компьютере.",
+   "ru": "Когда очистка включена, в Anthropic уходит только текст, без голоса. Когда выключена, всё остаётся на компьютере.",
    "id": "Dengan pembersihan aktif, teks (tidak pernah suaramu) dikirim ke Anthropic dengan kunci Claude-mu. Saat nonaktif, semuanya tetap di komputer ini.",
    "de": "Bei aktivierter Überarbeitung wird der Text mit deinem Claude-Schlüssel an Anthropic gesendet, niemals deine Stimme. Ist sie aus, bleibt alles auf diesem Computer.",
    "tr": "Düzenleme açıkken metin, Claude anahtarınla Anthropic'e gönderilir; sesin asla gönderilmez. Kapalıyken her şey bu bilgisayarda kalır."
@@ -4449,7 +4449,7 @@
    "fr": "Tobi, ses sons et le comportement de l'île.",
    "bn": "Tobi, তার শব্দ আর আইল্যান্ড কেমন আচরণ করে।",
    "pt-BR": "Tobi, seus sons e como a ilha se comporta.",
-   "ru": "Tobi, его звуки и поведение острова.",
+   "ru": "Звуки Tobi и поведение острова.",
    "id": "Tobi, suaranya, dan cara pulau berperilaku.",
    "de": "Tobi, seine Klänge und das Verhalten der Insel.",
    "tr": "Tobi, sesleri ve adanın davranışı."
@@ -4462,7 +4462,7 @@
    "fr": "Les pilules affichées dans l'île, leur ordre et leurs couleurs.",
    "bn": "আইল্যান্ডে দেখানো পিলগুলো, তাদের ক্রম আর রং।",
    "pt-BR": "As pílulas mostradas na ilha, sua ordem e suas cores.",
-   "ru": "Пилюли на острове, их порядок и цвета.",
+   "ru": "Пилюли в острове: порядок и цвета.",
    "id": "Pil yang ditampilkan di pulau, urutannya, dan warnanya.",
    "de": "Die in der Insel angezeigten Kapseln, ihre Reihenfolge und Farben.",
    "tr": "Adada gösterilen araçlar, sıraları ve renkleri."
@@ -4475,7 +4475,7 @@
    "fr": "L'IA du chat de l'île, avec tes propres clés.",
    "bn": "আইল্যান্ডের চ্যাটের AI, আপনার নিজের কী দিয়ে।",
    "pt-BR": "A IA do chat da ilha, com suas próprias chaves.",
-   "ru": "ИИ чата острова — с вашими собственными ключами.",
+   "ru": "ИИ для чата в острове, с вашими ключами.",
    "id": "AI untuk obrolan pulau, dengan kuncimu sendiri.",
    "de": "Die KI im Chat der Insel, mit deinen eigenen Schlüsseln.",
    "tr": "Adanın sohbetindeki yapay zekâ, kendi anahtarlarınla."
@@ -4488,7 +4488,7 @@
    "fr": "Tes agents et leurs autorisations sur ton téléphone Android, par ton Wi-Fi.",
    "bn": "আপনার Wi-Fi-তে, আপনার Android ফোনে আপনার এজেন্ট আর তাদের অনুমোদন।",
    "pt-BR": "Seus agentes e as aprovações deles no seu celular Android, pelo seu Wi-Fi.",
-   "ru": "Ваши агенты и их подтверждения на телефоне Android через ваш Wi-Fi.",
+   "ru": "Агенты и запросы разрешений на вашем телефоне Android по Wi-Fi.",
    "id": "Agenmu dan persetujuannya di ponsel Android, lewat Wi-Fi-mu.",
    "de": "Deine Agenten und ihre Freigaben auf deinem Android-Telefon, über dein WLAN.",
    "tr": "Ajanların ve onayları, Wi-Fi üzerinden Android telefonunda."
@@ -4501,7 +4501,7 @@
    "fr": "Les touches qui ouvrent l'île et ses actions.",
    "bn": "যে কী-গুলো আইল্যান্ড আর এর কাজগুলো খোলে।",
    "pt-BR": "As teclas que abrem a ilha e suas ações.",
-   "ru": "Клавиши, открывающие остров и его действия.",
+   "ru": "Клавиши для острова и его действий.",
    "id": "Tombol yang membuka pulau dan tindakannya.",
    "de": "Die Tasten für die Insel und ihre Aktionen.",
    "tr": "Adayı ve işlemlerini açan tuşlar."
@@ -4592,7 +4592,7 @@
    "fr": "Dis « OK Tobi », puis demande ce que tu veux : ajouter une pilule, lancer de la musique, la météo, un e-mail à préparer.",
    "bn": "« OK Tobi » বলুন, তারপর যা খুশি জিজ্ঞেস করুন: একটি পিল যোগ করা, গান চালানো, আবহাওয়া, একটি ইমেল তৈরি করা।",
    "pt-BR": "Diga « OK Tobi » e peça o que quiser: adicionar uma pílula, tocar música, o clima, um e-mail para preparar.",
-   "ru": "Скажите « OK Tobi » и просите что угодно: добавить плашку, включить музыку, погоду, подготовить письмо.",
+   "ru": "Скажите «OK Tobi» и просите: добавить плашку, включить музыку, узнать погоду, подготовить письмо.",
    "id": "Ucapkan « OK Tobi », lalu minta apa saja: tambah pil, putar musik, cuaca, email yang perlu disiapkan.",
    "de": "Sage « OK Tobi » und frage dann nach Belieben: eine Kapsel hinzufügen, Musik abspielen, das Wetter oder eine E-Mail vorbereiten.",
    "tr": "« OK Tobi » de, sonra istediğini sor: araç ekleme, müzik çalma, hava durumu veya hazırlanacak bir e-posta."
@@ -4618,7 +4618,7 @@
    "fr": "Écouter « OK Tobi »",
    "bn": "« OK Tobi »-এর জন্য শুনুন",
    "pt-BR": "Escutar « OK Tobi »",
-   "ru": "Слушать « OK Tobi »",
+   "ru": "Слушать «OK Tobi»",
    "id": "Dengarkan « OK Tobi »",
    "de": "Auf « OK Tobi » hören",
    "tr": "« OK Tobi » ifadesini dinle"
@@ -4631,7 +4631,7 @@
    "fr": "Le micro reste ouvert ; seul ce qui suit « OK Tobi » va plus loin.",
    "bn": "মাইক্রোফোন খোলা থাকে; কেবল « OK Tobi »-এর পরে যা বলা হয় সেটুকুই আরও এগোয়।",
    "pt-BR": "O microfone fica aberto; só o que vem depois de « OK Tobi » vai adiante.",
-   "ru": "Микрофон остаётся включённым; дальше уходит только то, что сказано после « OK Tobi ».",
+   "ru": "Микрофон слушает постоянно, но дальше уходит только то, что вы говорите после «OK Tobi».",
    "id": "Mikrofon tetap terbuka; hanya yang diucapkan setelah « OK Tobi » yang diteruskan.",
    "de": "Das Mikrofon bleibt offen; nur das nach « OK Tobi » Gesagte wird weiterverarbeitet.",
    "tr": "Mikrofon açık kalır; yalnızca « OK Tobi » sonrasında söylediklerin işlenmeye devam eder."
@@ -4644,7 +4644,7 @@
    "fr": "Entend « OK Tobi » ici, sans internet.",
    "bn": "« OK Tobi » এখানেই শোনে, ইন্টারনেট ছাড়াই।",
    "pt-BR": "Ouve « OK Tobi » aqui, sem internet.",
-   "ru": "Слышит « OK Tobi » прямо здесь, без интернета.",
+   "ru": "Слышит «OK Tobi» на самом компьютере, без интернета.",
    "id": "Mendengar « OK Tobi » di sini, tanpa internet.",
    "de": "Erkennt « OK Tobi » hier, ohne Internet.",
    "tr": "« OK Tobi » ifadesini burada, internet olmadan duyar."
@@ -4761,7 +4761,7 @@
    "fr": "Ta voix ne quitte jamais cet ordinateur : Parakeet la transforme en texte ici. Seuls les mots qui suivent « OK Tobi » partent chez Anthropic avec ta clé Claude, et chez ElevenLabs si tu l'as choisi pour les réponses.",
    "bn": "আপনার কণ্ঠ কখনো এই কম্পিউটার ছেড়ে যায় না: Parakeet এখানেই একে টেক্সটে রূপান্তর করে। কেবল « OK Tobi »-এর পরের শব্দগুলো আপনার Claude কী দিয়ে Anthropic-এ যায়, আর উত্তরের জন্য ElevenLabs বেছে নিলে ElevenLabs-এও।",
    "pt-BR": "Sua voz nunca sai deste computador: o Parakeet a transforma em texto aqui. Só as palavras depois de « OK Tobi » vão para a Anthropic com sua chave do Claude, e para a ElevenLabs se você a escolheu para as respostas.",
-   "ru": "Ваш голос никогда не покидает этот компьютер: Parakeet превращает его в текст здесь. Только слова после « OK Tobi » уходят в Anthropic с вашим ключом Claude и в ElevenLabs, если вы выбрали его для ответов.",
+   "ru": "Голос не покидает компьютер: Parakeet превращает его в текст на месте. В Anthropic (с вашим ключом) и в ElevenLabs, если выбран для ответов, уходят только слова после «OK Tobi».",
    "id": "Suaramu tidak pernah keluar dari komputer ini: Parakeet mengubahnya menjadi teks di sini. Hanya kata-kata setelah « OK Tobi » yang dikirim ke Anthropic dengan kunci Claude-mu, dan ke ElevenLabs jika kamu memilihnya untuk jawaban.",
    "de": "Deine Stimme verlässt diesen Computer nie: Parakeet wandelt sie hier in Text um. Nur die Wörter nach « OK Tobi » werden mit deinem Claude-Schlüssel an Anthropic gesendet und an ElevenLabs, falls du es für Antworten ausgewählt hast.",
    "tr": "Sesin bu bilgisayardan asla dışarı çıkmaz: Parakeet burada metne dönüştürür. Yalnızca « OK Tobi » sonrasındaki sözcükler Claude anahtarınla Anthropic'e; yanıtlar için ElevenLabs'i seçtiysen ona da gönderilir."
@@ -4774,7 +4774,7 @@
    "fr": "Tobi n'envoie jamais d'e-mail : ton app de mail s'ouvre avec le message écrit, et c'est toi qui l'envoies.",
    "bn": "Tobi কখনো ইমেল পাঠায় না: আপনার মেল অ্যাপ লেখা ইমেলসহ খোলে, আর পাঠান আপনি।",
    "pt-BR": "O Tobi nunca envia um e-mail: seu app de e-mail abre com ele escrito, e quem envia é você.",
-   "ru": "Tobi никогда не отправляет письма: ваше почтовое приложение откроется с готовым текстом, а отправите его вы.",
+   "ru": "Tobi не отправляет письма сам: откроется почтовое приложение с готовым текстом, отправляете вы.",
    "id": "Tobi tidak pernah mengirim email: aplikasi email-mu terbuka dengan email yang sudah ditulis, dan kamu yang mengirimnya.",
    "de": "Tobi sendet niemals eine E-Mail: Deine Mail-App öffnet sich mit dem vorbereiteten Text und du sendest ihn.",
    "tr": "Tobi asla e-posta göndermez: posta uygulaman yazılmış e-postayla açılır ve sen gönderirsin."
@@ -4813,7 +4813,7 @@
    "fr": "La date et l'heure au milieu de l'îlot quand il est compact.",
    "bn": "আইল্যান্ড ছোট থাকলে মাঝখানে তারিখ ও সময় দেখায়।",
    "pt-BR": "A data e a hora no meio da ilha quando ela está compacta.",
-   "ru": "Дата и время в середине острова, когда он свёрнут.",
+   "ru": "Дата и время в центре свёрнутого острова.",
    "id": "Tanggal dan jam di tengah pulau saat ringkas.",
    "de": "Datum und Uhrzeit in der Mitte der Insel, wenn sie kompakt ist.",
    "tr": "Ada kompaktken ortasında tarih ve saat."
@@ -4969,7 +4969,7 @@
    "fr": "Tobi regarde ses propres versions sur GitHub quelques fois par jour. Une mise à jour ne s'installe qu'après ton clic, une fois son SHA-256 vérifié avec celui que publie GitHub.",
    "bn": "Tobi দিনে কয়েকবার GitHub-এ নিজের রিলিজ দেখে। আপনার ক্লিকের পরেই আপডেট ইনস্টল হয়, তাও কেবল যখন এর SHA-256 GitHub-এর প্রকাশিত SHA-256-এর সঙ্গে মেলে।",
    "pt-BR": "O Tobi verifica as próprias versões no GitHub algumas vezes por dia. Uma atualização só é instalada depois do seu clique, quando o SHA-256 dela bate com o que o GitHub publica.",
-   "ru": "Tobi несколько раз в день проверяет свои релизы на GitHub. Обновление устанавливается только после вашего нажатия и только если его SHA-256 совпадает с тем, что публикует GitHub.",
+   "ru": "Tobi несколько раз в день проверяет релизы на GitHub. Обновление ставится только после вашего нажатия и если совпадает SHA-256.",
    "id": "Tobi memeriksa rilisnya sendiri di GitHub beberapa kali sehari. Pembaruan hanya dipasang setelah kamu mengeklik, dan setelah SHA-256-nya cocok dengan yang diterbitkan GitHub.",
    "de": "Tobi schaut ein paar Mal am Tag nach seinen eigenen Releases auf GitHub. Ein Update wird erst nach deinem Klick installiert, wenn seine SHA-256 mit der von GitHub veröffentlichten übereinstimmt.",
    "tr": "Tobi günde birkaç kez GitHub'daki kendi sürümlerine bakar. Güncelleme yalnızca sen tıkladıktan sonra, SHA-256 değeri GitHub'ın yayımladığıyla eşleştiğinde yüklenir."
@@ -5073,7 +5073,7 @@
    "fr": "Rien ne reste en haut de l'écran tant que Tobi n'a rien à montrer. Appelez-le avec Ctrl+Alt+N ; les demandes de vos agents le font toujours apparaître.",
    "bn": "Tobi-র দেখানোর কিছু না থাকলে স্ক্রিনের উপরে কিছুই থাকে না। Ctrl+Alt+N দিয়ে ডাকুন; এজেন্টদের অনুরোধ তবুও তাকে বের করে আনে।",
    "pt-BR": "Nada fica no topo da tela enquanto o Tobi não tem nada para mostrar. Chame-o com Ctrl+Alt+N; os pedidos dos seus agentes ainda o trazem de volta.",
-   "ru": "Пока Tobi нечего показать, вверху экрана ничего нет. Вызывай его по Ctrl+Alt+N; запросы агентов всё равно его покажут.",
+   "ru": "Пока показывать нечего, остров скрыт. Вызовите его по Ctrl+Alt+N; запросы агентов покажут его сами.",
    "id": "Tidak ada yang tersisa di atas layar selama Tobi tidak punya apa pun untuk ditampilkan. Panggil dengan Ctrl+Alt+N; permintaan agen tetap memunculkannya.",
    "de": "Oben am Bildschirm bleibt nichts, solange Tobi nichts zu zeigen hat. Ruf ihn mit Strg+Alt+N; Anfragen deiner Agenten holen ihn trotzdem hervor.",
    "tr": "Tobi'nin gösterecek bir şeyi yokken ekranın üstünde hiçbir şey kalmaz. Onu Ctrl+Alt+N ile çağır; ajanlarının istekleri onu yine de getirir."
@@ -5853,7 +5853,7 @@
    "fr": "Numéro ou identifiant de chat à ignorer",
    "bn": "উপেক্ষা করার নম্বর বা চ্যাট id",
    "pt-BR": "Número ou id da conversa a ignorar",
-   "ru": "Номер или id чата для игнорирования",
+   "ru": "Номер телефона или id чата",
    "id": "Nomor atau id chat yang diabaikan",
    "de": "Telefonnummer oder Chat-ID zum Ignorieren",
    "tr": "Yok sayılacak telefon numarası veya sohbet kimliği"
@@ -6087,7 +6087,7 @@
    "fr": "Désactivé : marqué comme lu seulement quand tu réponds. Jamais à la simple réception.",
    "bn": "বন্ধ: শুধু উত্তর দিলে পড়া হিসেবে চিহ্নিত। বার্তা এলেই কখনও নয়।",
    "pt-BR": "Desativado: marcada como lida só quando você responde. Nunca só por chegar.",
-   "ru": "Выключено: прочитанным отмечается только при ответе. Никогда при простом получении.",
+   "ru": "Выключено: чат отмечается прочитанным только после вашего ответа.",
    "id": "Mati: ditandai dibaca hanya saat kamu membalas. Tidak pernah hanya karena pesan masuk.",
    "de": "Aus: nur als gelesen markiert, wenn du antwortest. Nie, wenn eine Nachricht nur ankommt.",
    "tr": "Kapalı: yalnızca yanıt verdiğinde okundu olarak işaretlenir. Bir mesaj yalnızca geldiğinde asla."
@@ -6204,7 +6204,7 @@
    "fr": "Tobi ne parle qu’à la passerelle sur cet ordinateur. Les messages restent en mémoire, ne sont jamais journalisés ni enregistrés, et sont oubliés quand Tobi quitte. Aucune photo ni aucun média n’est téléchargé.",
    "bn": "Tobi শুধু এই কম্পিউটারের গেটওয়ের সঙ্গে কথা বলে। বার্তা মেমরিতে থাকে, কখনও লগ বা সেভ হয় না, এবং Tobi বন্ধ হলে মুছে যায়। কোনো ছবি বা মিডিয়া ডাউনলোড হয় না।",
    "pt-BR": "O Tobi só fala com o gateway neste computador. As mensagens ficam na memória, nunca são registradas nem salvas e são esquecidas quando o Tobi fecha. Nenhuma foto ou mídia é baixada.",
-   "ru": "Tobi общается только со шлюзом на этом компьютере. Сообщения хранятся в памяти, никогда не пишутся в журнал и не сохраняются, и забываются при выходе из Tobi. Фото и медиа не загружаются.",
+   "ru": "Tobi говорит только со шлюзом на этом компьютере. Сообщения живут в памяти и пропадают при выходе. Фото и медиа не загружаются.",
    "id": "Tobi hanya berbicara dengan gateway di komputer ini. Pesan tetap di memori, tidak pernah dicatat atau disimpan, dan dilupakan saat Tobi ditutup. Tidak ada foto atau media yang diunduh.",
    "de": "Tobi spricht nur mit dem Gateway auf diesem Computer. Nachrichten bleiben im Arbeitsspeicher, werden nie protokolliert oder gespeichert und beim Beenden von Tobi vergessen. Es werden nie Fotos oder Medien geladen.",
    "tr": "Tobi yalnızca bu bilgisayardaki ağ geçidiyle konuşur. Mesajlar bellekte kalır, asla günlüğe yazılmaz veya kaydedilmez ve Tobi kapanınca unutulur. Hiçbir fotoğraf veya medya indirilmez."
@@ -6217,7 +6217,7 @@
    "fr": "Intégration non officielle : elle passe par une passerelle que tu lances sur cet ordinateur. À utiliser sur ton propre compte uniquement. WhatsApp peut restreindre un compte en cas d’abus.",
    "bn": "অনানুষ্ঠানিক ইন্টিগ্রেশন: এটি এই কম্পিউটারে চালানো একটি গেটওয়ে দিয়ে কাজ করে। শুধু নিজের অ্যাকাউন্টে ব্যবহার করুন। অপব্যবহারে WhatsApp অ্যাকাউন্ট সীমিত করতে পারে।",
    "pt-BR": "Integração não oficial: passa por um gateway que você executa neste computador. Use só na sua própria conta. O WhatsApp pode restringir contas em caso de abuso.",
-   "ru": "Неофициальная интеграция: работает через шлюз, запущенный на этом компьютере. Используйте только со своим аккаунтом. WhatsApp может ограничить аккаунт при злоупотреблении.",
+   "ru": "Неофициальное подключение через шлюз на этом компьютере. Только для вашего аккаунта: WhatsApp может его ограничить.",
    "id": "Integrasi tidak resmi: berjalan lewat gateway yang kamu jalankan di komputer ini. Gunakan hanya di akunmu sendiri. WhatsApp bisa membatasi akun yang menyalahgunakannya.",
    "de": "Inoffizielle Integration: Sie läuft über ein Gateway, das du auf diesem Computer betreibst. Nutze sie nur mit deinem eigenen Konto. WhatsApp kann Konten einschränken, die sie missbrauchen.",
    "tr": "Resmî olmayan entegrasyon: bu bilgisayarda çalıştırdığın bir ağ geçidi üzerinden çalışır. Yalnızca kendi hesabında kullan. WhatsApp kötüye kullanan hesapları kısıtlayabilir."
@@ -6386,7 +6386,7 @@
    "fr": "Clic droit sur une conversation dans l’île pour l’ignorer. Tobi parle à Telegram directement, comme ses propres applis. Les messages restent en mémoire, ne sont jamais journalisés ni enregistrés et sont oubliés quand Tobi se ferme. Aucune photo ni aucun média n’est jamais téléchargé.",
    "bn": "আইল্যান্ডে কোনো চ্যাটে রাইট-ক্লিক করে সেটি উপেক্ষা করুন। Tobi নিজের অ্যাপগুলির মতোই সরাসরি Telegram-এর সঙ্গে কথা বলে। বার্তা কেবল মেমরিতে থাকে, কখনও লগ বা সেভ হয় না, আর Tobi বন্ধ হলে ভুলে যায়। কোনো ছবি বা মিডিয়া ডাউনলোড হয় না।",
    "pt-BR": "Clique com o botão direito em uma conversa na ilha para ignorá-la. O Tobi fala com o Telegram diretamente, como os apps oficiais. As mensagens ficam na memória, nunca são registradas nem salvas e são esquecidas quando o Tobi fecha. Nenhuma foto ou mídia é baixada.",
-   "ru": "Щёлкните правой кнопкой по чату на острове, чтобы игнорировать его. Tobi общается с Telegram напрямую, как его собственные приложения. Сообщения хранятся только в памяти, нигде не записываются и забываются при выходе из Tobi. Фото и медиа не скачиваются.",
+   "ru": "Чтобы игнорировать чат, щёлкните по нему правой кнопкой в острове. Tobi подключается к Telegram напрямую. Сообщения живут в памяти и пропадают при выходе. Фото и медиа не скачиваются.",
    "id": "Klik kanan sebuah obrolan di pulau untuk mengabaikannya. Tobi berbicara langsung dengan Telegram, seperti aplikasinya sendiri. Pesan hanya di memori, tidak pernah dicatat atau disimpan, dan dilupakan saat Tobi ditutup. Foto dan media tidak pernah diunduh.",
    "de": "Rechtsklick auf einen Chat in der Insel, um ihn zu ignorieren. Tobi spricht direkt mit Telegram, wie dessen eigene Apps. Nachrichten bleiben im Speicher, werden nie protokolliert oder gespeichert und beim Beenden von Tobi vergessen. Fotos und Medien werden nie heruntergeladen.",
    "tr": "Yok saymak için adadaki bir sohbete sağ tıklayın. Tobi, Telegram’ın kendi uygulamaları gibi doğrudan Telegram ile konuşur. İletiler yalnızca bellekte kalır, asla günlüğe yazılmaz veya kaydedilmez ve Tobi kapanınca unutulur. Hiçbir fotoğraf veya medya indirilmez."
@@ -6672,7 +6672,7 @@
    "fr": "Ton propre compte Telegram, avec ton propre ID d’API. À utiliser avec prudence : se connecter sur un nouvel appareil fait envoyer à Telegram un avis de sécurité à tes autres appareils.",
    "bn": "আপনার নিজের Telegram অ্যাকাউন্ট, আপনার নিজের API আইডি দিয়ে। সাবধানে ব্যবহার করুন: নতুন ডিভাইসে সাইন ইন করলে Telegram আপনার অন্য ডিভাইসে নিরাপত্তা বিজ্ঞপ্তি পাঠায়।",
    "pt-BR": "Sua própria conta do Telegram, com seu próprio ID de API. Use com cuidado: entrar em um novo dispositivo faz o Telegram enviar um aviso de segurança aos seus outros dispositivos.",
-   "ru": "Ваш собственный аккаунт Telegram через ваш API id. Осторожнее: вход на новом устройстве заставляет Telegram отправить уведомление о безопасности на ваши другие устройства.",
+   "ru": "Ваш аккаунт Telegram через ваш API id. Вход с нового устройства заставит Telegram прислать предупреждение на ваши остальные устройства.",
    "id": "Akun Telegram Anda sendiri, dengan API id Anda sendiri. Gunakan dengan hati-hati: masuk di perangkat baru membuat Telegram mengirim pemberitahuan keamanan ke perangkat Anda yang lain.",
    "de": "Dein eigenes Telegram-Konto mit deiner eigenen API-ID. Mit Bedacht nutzen: Die Anmeldung auf einem neuen Gerät lässt Telegram eine Sicherheitsmeldung an deine anderen Geräte senden.",
    "tr": "Kendi Telegram hesabınız, kendi API id’nizle. Dikkatli kullanın: yeni bir cihazda oturum açmak Telegram’ın diğer cihazlarınıza güvenlik bildirimi göndermesine yol açar."
@@ -7023,7 +7023,7 @@
    "fr": "Désactivé : marqué comme lu seulement par le bouton. Seul le texte d’un message est affiché, jamais ses images ni les pages de ses liens. Rien n’est envoyé sans ton clic sur Envoyer.",
    "bn": "বন্ধ: শুধু বোতামে পঠিত চিহ্নিত হয়। বার্তার শুধু লেখা দেখানো হয়, কখনও ছবি বা লিংকের পেজ নয়। আপনি “পাঠান” না চাপলে কিছুই পাঠানো হয় না।",
    "pt-BR": "Desligado: marcada como lida só pelo botão. Só o texto da mensagem é mostrado, nunca suas imagens nem as páginas dos links. Nada é enviado sem o seu clique em Enviar.",
-   "ru": "Выключено: прочитанным письмо отмечается только кнопкой. Показывается только текст письма, никогда его картинки и страницы по ссылкам. Ничего не отправляется без вашего нажатия «Отправить».",
+   "ru": "Выключено: письмо отмечается прочитанным только кнопкой. Показывается только текст, без картинок и ссылок. Ничего не уходит без вашего «Отправить».",
    "id": "Nonaktif: ditandai dibaca hanya lewat tombol. Hanya teks pesan yang ditampilkan, tidak pernah gambar atau halaman tautannya. Tidak ada yang dikirim tanpa klik Anda pada Kirim.",
    "de": "Aus: nur per Schaltfläche als gelesen markiert. Es wird nur der Text einer Nachricht gezeigt, nie ihre Bilder oder verlinkten Seiten. Nichts wird ohne deinen Klick auf Senden verschickt.",
    "tr": "Kapalı: yalnızca düğmeyle okundu işaretlenir. İletinin yalnızca metni gösterilir, resimleri veya bağlantı sayfaları asla. Gönder’e tıklamadan hiçbir şey gönderilmez."
@@ -7140,7 +7140,7 @@
    "fr": "Tobi parle directement à Gmail, chaque minute tant que c’est activé. Les mails restent en mémoire, ne sont jamais journalisés ni enregistrés et sont oubliés quand Tobi se ferme.",
    "bn": "চালু থাকলে Tobi প্রতি মিনিটে সরাসরি Gmail-এর সঙ্গে কথা বলে। মেইল কেবল মেমরিতে থাকে, কখনও লগ বা সেভ হয় না, আর Tobi বন্ধ হলে ভুলে যায়।",
    "pt-BR": "O Tobi fala diretamente com o Gmail, a cada minuto enquanto isto estiver ligado. Os e-mails ficam na memória, nunca são registrados nem salvos e são esquecidos quando o Tobi fecha.",
-   "ru": "Пока это включено, Tobi раз в минуту напрямую обращается к Gmail. Почта хранится только в памяти, нигде не записывается и забывается при выходе из Tobi.",
+   "ru": "Пока включено, Tobi раз в минуту обращается к Gmail напрямую. Почта живёт в памяти и пропадает при выходе.",
    "id": "Tobi berbicara langsung dengan Gmail setiap menit selama ini aktif. Email hanya di memori, tidak pernah dicatat atau disimpan, dan dilupakan saat Tobi ditutup.",
    "de": "Solange das aktiv ist, spricht Tobi jede Minute direkt mit Gmail. Mails bleiben im Speicher, werden nie protokolliert oder gespeichert und beim Beenden von Tobi vergessen.",
    "tr": "Bu açıkken Tobi her dakika doğrudan Gmail ile konuşur. Postalar yalnızca bellekte kalır, asla günlüğe yazılmaz veya kaydedilmez ve Tobi kapanınca unutulur."
@@ -7231,7 +7231,7 @@
    "fr": "Ton propre Gmail, avec ta propre connexion Google. Tobi peut lire, envoyer, archiver et mettre à la corbeille, jamais supprimer définitivement.",
    "bn": "আপনার নিজের Gmail, আপনার নিজের Google সাইন-ইনে। Tobi পড়তে, পাঠাতে, আর্কাইভ করতে ও ট্র্যাশে পাঠাতে পারে, কখনও চিরতরে মুছে না।",
    "pt-BR": "Seu próprio Gmail, com seu próprio login do Google. O Tobi pode ler, enviar, arquivar e mandar para a lixeira, nunca apagar de vez.",
-   "ru": "Ваш собственный Gmail через ваш вход в Google. Tobi может читать, отправлять, архивировать и переносить в корзину, но никогда не удаляет навсегда.",
+   "ru": "Ваш Gmail через вход в Google. Tobi читает, отправляет, архивирует и отправляет в корзину, но не удаляет навсегда.",
    "id": "Gmail Anda sendiri, lewat akun Google Anda sendiri. Tobi dapat membaca, mengirim, mengarsipkan, dan membuang ke tempat sampah, tidak pernah menghapus permanen.",
    "de": "Dein eigenes Gmail mit deiner eigenen Google-Anmeldung. Tobi kann lesen, senden, archivieren und in den Papierkorb legen, nie endgültig löschen.",
    "tr": "Kendi Gmail’iniz, kendi Google girişinizle. Tobi okuyabilir, gönderebilir, arşivleyebilir ve çöp kutusuna taşıyabilir, asla kalıcı olarak silmez."
@@ -7491,7 +7491,7 @@
    "fr": "Tobi parle directement à ton serveur de messagerie, chaque minute tant que c’est activé. Les mails restent en mémoire, ne sont jamais journalisés ni enregistrés et sont oubliés quand Tobi se ferme. Le mot de passe d’application reste dans le coffre d’identifiants du système.",
    "bn": "চালু থাকলে Tobi প্রতি মিনিটে সরাসরি আপনার মেইল সার্ভারের সঙ্গে কথা বলে। মেইল কেবল মেমরিতে থাকে, কখনও লগ বা সেভ হয় না, আর Tobi বন্ধ হলে ভুলে যায়। অ্যাপ পাসওয়ার্ড সিস্টেমের ক্রেডেনশিয়াল স্টোরে থাকে।",
    "pt-BR": "O Tobi fala diretamente com o seu servidor de e-mail, a cada minuto enquanto isto estiver ligado. Os e-mails ficam na memória, nunca são registrados nem salvos e são esquecidos quando o Tobi fecha. A senha de app fica no cofre de credenciais do sistema.",
-   "ru": "Пока это включено, Tobi раз в минуту напрямую обращается к вашему почтовому серверу. Почта хранится только в памяти, нигде не записывается и забывается при выходе из Tobi. Пароль приложения остаётся в системном хранилище учётных данных.",
+   "ru": "Пока включено, Tobi раз в минуту обращается к вашему почтовому серверу напрямую. Почта живёт в памяти и пропадает при выходе. Пароль приложения лежит в системном хранилище.",
    "id": "Tobi berbicara langsung dengan server email Anda setiap menit selama ini aktif. Email hanya di memori, tidak pernah dicatat atau disimpan, dan dilupakan saat Tobi ditutup. Kata sandi aplikasi tetap di penyimpanan kredensial sistem.",
    "de": "Solange das aktiv ist, spricht Tobi jede Minute direkt mit deinem Mailserver. Mails bleiben im Speicher, werden nie protokolliert oder gespeichert und beim Beenden von Tobi vergessen. Das App-Passwort bleibt im Anmeldespeicher des Systems.",
    "tr": "Bu açıkken Tobi her dakika doğrudan posta sunucunuzla konuşur. Postalar yalnızca bellekte kalır, asla günlüğe yazılmaz veya kaydedilmez ve Tobi kapanınca unutulur. Uygulama parolası sistemin kimlik bilgisi deposunda kalır."
@@ -7556,7 +7556,7 @@
    "fr": "Ta propre boîte mail, avec un mot de passe d’application. Tobi peut lire, envoyer, archiver et mettre à la corbeille, jamais supprimer définitivement.",
    "bn": "আপনার নিজের মেইলবক্স, অ্যাপ পাসওয়ার্ডে। Tobi পড়তে, পাঠাতে, আর্কাইভ করতে ও ট্র্যাশে পাঠাতে পারে, কখনও চিরতরে মুছে না।",
    "pt-BR": "Sua própria caixa de e-mail, com uma senha de app. O Tobi pode ler, enviar, arquivar e mandar para a lixeira, nunca apagar de vez.",
-   "ru": "Ваш собственный почтовый ящик через пароль приложения. Tobi может читать, отправлять, архивировать и переносить в корзину, но никогда не удаляет навсегда.",
+   "ru": "Ваш почтовый ящик по паролю приложения. Tobi читает, отправляет, архивирует и отправляет в корзину, но не удаляет навсегда.",
    "id": "Kotak email Anda sendiri, lewat kata sandi aplikasi. Tobi dapat membaca, mengirim, mengarsipkan, dan membuang ke tempat sampah, tidak pernah menghapus permanen.",
    "de": "Dein eigenes Postfach mit einem App-Passwort. Tobi kann lesen, senden, archivieren und in den Papierkorb legen, nie endgültig löschen.",
    "tr": "Kendi posta kutunuz, bir uygulama parolasıyla. Tobi okuyabilir, gönderebilir, arşivleyebilir ve çöp kutusuna taşıyabilir, asla kalıcı olarak silmez."
@@ -8011,7 +8011,7 @@
    "fr": "Fonctionne avec l'application YouTube Music ou dans un onglet du navigateur. Dans un navigateur, Tobi montre les titres qui ont un album.",
    "bn": "YouTube Music অ্যাপে বা ব্রাউজারের ট্যাবে চলে। ব্রাউজারে Tobi শুধু অ্যালবামসহ গান দেখায়।",
    "pt-BR": "Toca no app do YouTube Music ou em uma aba do navegador. No navegador, o Tobi mostra as músicas que têm álbum.",
-   "ru": "Играет в приложении YouTube Music или во вкладке браузера. В браузере Tobi показывает песни, у которых есть альбом.",
+   "ru": "Играет в YouTube Music или во вкладке браузера. В браузере Tobi показывает только песни с альбомом.",
    "id": "Diputar di aplikasi YouTube Music atau di tab browser. Di browser, Tobi menampilkan lagu yang punya album.",
    "de": "Läuft in der YouTube-Music-App oder in einem Browser-Tab. Im Browser zeigt Tobi Songs, die ein Album haben.",
    "tr": "YouTube Music uygulamasında veya bir tarayıcı sekmesinde çalar. Tarayıcıda Tobi, albümü olan şarkıları gösterir."
@@ -8076,7 +8076,7 @@
    "fr": "L’outil principal passe en premier et Tobi s’ouvre dessus.",
    "bn": "মূল টুল সবার আগে আসে এবং Tobi সেটিতেই খোলে।",
    "pt-BR": "A ferramenta principal vem primeiro e o Tobi abre nela.",
-   "ru": "Главный инструмент идёт первым, и Tobi открывается на нём.",
+   "ru": "Основной инструмент стоит первым, и остров открывается на нём.",
    "id": "Alat utama tampil pertama dan Tobi terbuka di sana.",
    "de": "Das Hauptwerkzeug steht vorn und Tobi öffnet sich darauf.",
    "tr": "Ana araç en başta gelir ve Tobi onda açılır."
@@ -8089,7 +8089,7 @@
    "fr": "Une pastille masquée continue de fonctionner et garde sa place. Elle réapparaît quand elle vous demande quelque chose.",
    "bn": "লুকানো পিল কাজ চালিয়ে যায় এবং তার স্লট ধরে রাখে। আপনাকে কিছু জিজ্ঞেস করলে সেটি আবার দেখা যায়।",
    "pt-BR": "Uma pílula oculta continua funcionando e mantém a sua vaga. Ela reaparece quando pede algo a você.",
-   "ru": "Скрытая пилюля продолжает работать и занимает своё место. Она снова появится, когда спросит вас о чём-то.",
+   "ru": "Скрытая пилюля продолжает работать и держит место. Она появится, когда ей что-то нужно от вас.",
    "id": "Pil yang disembunyikan tetap bekerja dan tetap memakai slotnya. Pil itu muncul lagi saat meminta jawaban Anda.",
    "de": "Eine ausgeblendete Pille arbeitet weiter und behält ihren Platz. Sie erscheint wieder, wenn sie dich etwas fragt.",
    "tr": "Gizlenen hap çalışmaya ve yerini korumaya devam eder. Size bir şey sorarken yeniden görünür."
