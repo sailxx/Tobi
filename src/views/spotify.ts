@@ -270,16 +270,16 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
   // Now playing: artwork row, progress row, controls row.
   const art = h("div", { class: "np-art" });
   const artImg = h("img", { alt: "", draggable: "false" }) as HTMLImageElement;
-  const artNote = svg(ICONS.musicNote, 16);
+  const artNote = svg(ICONS.musicNote, 26);
   artNote.style.color = `${green}b3`;
   art.append(artNote, artImg);
   art.addEventListener("click", () => void Bridge.spotifyOpen(id));
   const title = h("span", { class: "np-title" });
   const subtitle = h("div", { class: "np-sub" });
-  const head = h("div", { class: "np-head" },
-    art,
-    h("div", { class: "np-text" }, h("div", { class: "np-title-row" }, dot(green, 6), title), subtitle),
-  );
+  const head = h("div", { class: "np-text" }, h("div", { class: "np-title-row" }, title), subtitle);
+  // The cover again, blurred, as the light of the whole card.
+  const ambient = h("div", { class: "np-ambient" });
+  ambient.style.setProperty("--np-color", green);
 
   let dragFraction: number | null = null;
   const elapsed = h("span", { class: "np-time elapsed" });
@@ -298,12 +298,12 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
   );
   const progressRow = h("div", { class: "np-progress" }, elapsed, progress.el, remaining);
 
-  const shuffle = iconButton(ICONS.shuffle, 10, 2.2, () => setFlag("shuffle", !state().shuffle));
-  const prev = iconButton(ICONS.backward, 11, 0, () => void Bridge.spotifyControl("previous"));
-  const next = iconButton(ICONS.forward, 11, 0, () => void Bridge.spotifyControl("next"));
-  const repeat = iconButton(ICONS.repeat, 10, 2.2, () => setFlag("repeat", !state().repeat));
-  prev.style.color = "#C5C8CD";
-  next.style.color = "#C5C8CD";
+  const shuffle = iconButton(ICONS.shuffle, 12, 2.1, () => setFlag("shuffle", !state().shuffle));
+  const prev = iconButton(ICONS.backward, 14, 0, () => void Bridge.spotifyControl("previous"));
+  const next = iconButton(ICONS.forward, 14, 0, () => void Bridge.spotifyControl("next"));
+  const repeat = iconButton(ICONS.repeat, 12, 2.1, () => setFlag("repeat", !state().repeat));
+  prev.style.color = "#E4E6EA";
+  next.style.color = "#E4E6EA";
   const play = h("button", { class: "np-play", onclick: togglePlay });
   const volIcon = h("span", { class: "np-vol-icon" });
   const volume = new NowPlayingBar(
@@ -317,7 +317,8 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
     h("div", { class: "grow" }),
     volumeBox,
   );
-  const playingEl = h("div", { class: ytm ? "np-card ytm" : "np-card" }, head, progressRow, controls);
+  const playingEl = h("div", { class: ytm ? "np-card ytm" : "np-card" },
+    ambient, art, h("div", { class: "np-main" }, head, progressRow, controls));
 
   // Idle: the same layout as the other idle cards.
   const idleDot = dot("#22C55E", 5);
@@ -383,11 +384,17 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
       : (track.album ? t("{0} — open Spotify", { 0: track.album }) : t("Open Spotify"));
     const cover = currentArtwork(s);
     if (cover) {
-      if (artImg.getAttribute("src") !== cover) artImg.setAttribute("src", cover);
+      if (artImg.getAttribute("src") !== cover) {
+        artImg.setAttribute("src", cover);
+        ambient.style.backgroundImage = `url("${cover.replace(/"/g, "%22")}")`;
+      }
       art.classList.add("has-art");
+      ambient.classList.add("has-art");
     } else {
       art.classList.remove("has-art");
+      ambient.classList.remove("has-art");
       artImg.removeAttribute("src");
+      ambient.style.backgroundImage = "";
     }
 
     progress.enabled = !isAd(track) && track.duration > 0;
@@ -402,7 +409,7 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
     if (playIcon !== s.playing) {
       playIcon = s.playing;
       clear(play);
-      const icon = svg(s.playing ? ICONS.pause : ICONS.play, ytm ? 12 : 9);
+      const icon = svg(s.playing ? ICONS.pause : ICONS.play, 13);
       if (!s.playing) icon.style.transform = "translateX(1px)";
       play.append(icon);
     }
@@ -412,7 +419,7 @@ export function buildSpotifyCard(id: string = SPOTIFY_ID): SpotifyCardHost {
     if (level !== volIconLevel) {
       volIconLevel = level;
       clear(volIcon);
-      volIcon.append(svg([ICONS.volume0, ICONS.volume1, ICONS.volume2, ICONS.volume3][level], 10, { stroke: 2.2 }));
+      volIcon.append(svg([ICONS.volume0, ICONS.volume1, ICONS.volume2, ICONS.volume3][level], 12, { stroke: 2 }));
     }
     volume.set(s.volume / 100);
     volumeBox.title = t("Volume {0}%", { 0: s.volume });

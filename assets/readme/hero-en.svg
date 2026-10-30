@@ -43,7 +43,7 @@ text{font-family:"G","Segoe UI",system-ui,sans-serif}
 <circle class="glow2" cx="88" cy="456" r="288" fill="url(#g2)"/>
 <rect class="sweep" x="0" y="0" width="308" height="480" fill="url(#sw)"/></g>
 <rect x=".5" y=".5" width="879" height="479" rx="24" fill="none" stroke="#242424"/>
-<g class="r"><rect x="40" y="39" width="84" height="30" rx="8" fill="#141414" stroke="#333"/><text class="m" x="54" y="59" font-size="12" font-weight="600" letter-spacing="1" fill="#fff">V0.13.0</text></g><g class="r" style="animation-delay:0.18s"><text x="40" y="146.0" font-size="44" font-weight="800" letter-spacing="-1" fill="#FFFFFF"><tspan>Your AI helper,</tspan></text>
+<g class="r"><rect x="40" y="39" width="84" height="30" rx="8" fill="#141414" stroke="#333"/><text class="m" x="54" y="59" font-size="12" font-weight="600" letter-spacing="1" fill="#fff">V0.14.0</text></g><g class="r" style="animation-delay:0.18s"><text x="40" y="146.0" font-size="44" font-weight="800" letter-spacing="-1" fill="#FFFFFF"><tspan>Your AI helper,</tspan></text>
 <text x="40" y="196.0" font-size="44" font-weight="800" letter-spacing="-1" fill="#FFFFFF"><tspan fill="url(#tg)">one Ctrl+Alt+N away</tspan></text></g><g class="r" style="animation-delay:0.27s"><text x="40" y="236.0" font-size="16" font-weight="500" fill="#A3A3A3"><tspan>Tobi lives at the top of your screen and shows</tspan></text>
 <text x="40" y="260.0" font-size="16" font-weight="500" fill="#A3A3A3"><tspan>what Claude is doing: thinking, editing, running.</tspan></text></g><g class="r" style="animation-delay:0.36s"><rect x="40" y="290" width="218" height="74" rx="18" fill="url(#cg)" stroke="#2A2A2A"/><rect x="58" y="290.5" width="182" height="1" fill="url(#hl)"/>
 <circle cx="62" cy="317" r="4" fill="#2E9BFF"/>

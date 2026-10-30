@@ -55,6 +55,17 @@ async function call<T>(cmd: string, args?: Record<string, unknown>): Promise<T |
   }
 }
 
+/** A file the island's search found (file_search.rs FoundFile). */
+export interface FoundFile {
+  name: string;
+  path: string;
+  /** The folder it is in, from the home folder ("Documents/Work"). */
+  folder: string;
+  isDir: boolean;
+  /** Seconds since the epoch. */
+  modified: number;
+}
+
 export interface BootInfo {
   settings: Settings;
   /** Logical screen rect of the monitor the island lives on. */
@@ -261,6 +272,10 @@ export const Bridge = {
   listMonitors: () => call<{ key: string; label: string }[]>("list_monitors"),
 
   openUrl: (url: string) => call<void>("open_url", { url }),
+  /** The island's search: files by name in the home folders (file_search.rs). */
+  searchFiles: (query: string) => call<FoundFile[]>("search_files", { query }),
+  /** Opens a file the last search found; `reveal` shows it in its folder. */
+  openFoundFile: (path: string, reveal = false) => call<void>("open_found_file", { path, reveal }),
   /** Opens a GitLab link only when it belongs to the configured instance. */
   openGitLabUrl: (url: string) => call<void>("open_gitlab_url", { url }),
   /** Opens the configured Gitea instance without exposing its URL to the page. */

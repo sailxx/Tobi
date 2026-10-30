@@ -56,6 +56,15 @@ function wake() {
 }
 
 document.addEventListener("visibilitychange", wake);
+// Focus or the pointer over the page mean the window is on screen, whatever
+// Rust said last: a missed `hub-visible` must not leave every Tobi blank.
+for (const type of ["focus", "pointermove", "pointerdown"]) {
+  window.addEventListener(type, () => {
+    if (windowShown) return;
+    windowShown = true;
+    wake();
+  });
+}
 
 /** The window was shown or hidden (the `hub-visible` event): hidden, the loop
  *  stops at once; shown, it starts again. */
@@ -71,6 +80,12 @@ export function setWindowShown(shown: boolean) {
 function add(a: Animated) {
   live.add(a);
   wake();
+  // One still frame as soon as it is in the page, even with the loop stopped.
+  const first = (tries: number) => {
+    if (a.el.isConnected) a.draw(0, (performance.now() - start) / 1000);
+    else if (tries > 0) window.setTimeout(() => first(tries - 1), 50);
+  };
+  window.setTimeout(() => first(40), 0);
 }
 
 function fit(canvas: HTMLCanvasElement): { w: number; h: number; ctx: CanvasRenderingContext2D | null } {

@@ -19,6 +19,7 @@ export type IslandViewName =
   | "choose"
   | "mail"
   | "prompt"
+  | "find"
   | "searching"
   | "result"
   | "note"
@@ -60,10 +61,36 @@ export const PANEL_W = 720;
 export const PANEL_H = 320;
 
 // No notch on a PC: these are the hidden/compact sizes from docs/SPEC.md.
-export const NOTCH_W = 184;
+export const NOTCH_W = 120;
 export const NOTCH_H = 32;
-export const COMPACT_W = 288; // NOTCH_W + 104
+/** The compact island: a small pill with Tobi in its middle. */
+export const COMPACT_W = 66;
+export const COMPACT_H = 24;
+export const COMPACT_CORNER = 10;
+/** Tobi's size in the compact island. */
+export const COMPACT_BOT_D = 14;
+/** …and the old wide one when it shows the date and time (Tobi left, the clock in the middle). */
+export const COMPACT_CLOCK_W = 288;
 export const EXPANDED_W = 640;
+
+/** What the compact island has to make room for besides Tobi. */
+export interface CompactExtras {
+  clock?: boolean;
+}
+
+export function compactWidth(extras: CompactExtras = {}): number {
+  return extras.clock ? COMPACT_CLOCK_W : COMPACT_W;
+}
+
+/** The clock needs the full notch height; the plain pill is lower. */
+export function compactHeight(extras: CompactExtras = {}): number {
+  return extras.clock ? NOTCH_H : COMPACT_H;
+}
+
+/** Where Tobi sits in the compact island: its middle, or the left end beside the clock. */
+export function compactBotX(extras: CompactExtras = {}): number {
+  return extras.clock ? 40 : compactWidth(extras) / 2;
+}
 
 export const ROUNDED_CORNER = 14; // hidden / compact
 export const EXPANDED_CORNER = 22;
@@ -86,10 +113,11 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   uploading: { height: 176, botX: 46, botY: 103, botDiameter: 20, agentMode: "none" },
   choose: { height: 176, botX: 60, botY: 101, botDiameter: 52, agentMode: "column" },
   mail: { height: 240, botX: 56, botY: null, botDiameter: 46, agentMode: "column" },
-  prompt: { height: 160, botX: 52, botY: null, botDiameter: 44, agentMode: "column" },
+  prompt: { height: 160, botX: 50, botY: null, botDiameter: 46, agentMode: "column" },
+  find: { height: 236, botX: 50, botY: null, botDiameter: 46, agentMode: "column" },
   searching: { height: 160, botX: 52, botY: null, botDiameter: 44, agentMode: "column" },
   // Tobi: Claude's whole text (src/views/reply.ts), tall enough to read.
-  result: { height: 300, botX: 46, botY: 44, botDiameter: 40, agentMode: "column" },
+  result: { height: 300, botX: 64, botY: 112, botDiameter: 46, agentMode: "column" },
   note: { height: 160, botX: 60, botY: null, botDiameter: 50, agentMode: "column" },
   settings: { height: 160, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
   greeting: { height: 150, botX: 320, botY: 90, botDiameter: 0, agentMode: "none" },
@@ -125,6 +153,7 @@ export function islandSize(
   view: IslandViewName,
   chatCount = 0,
   chatOpen = false,
+  extras: CompactExtras = {},
 ): { w: number; h: number } {
   switch (mode) {
     case "hidden":
@@ -132,7 +161,7 @@ export function islandSize(
       // slides into the top edge of the screen instead of sitting there as a bar.
       return { w: NOTCH_W, h: 0 };
     case "compact":
-      return { w: COMPACT_W, h: NOTCH_H };
+      return { w: compactWidth(extras), h: compactHeight(extras) };
     case "expanded": {
       const h = view === "prompt" ? chatPromptHeight(chatCount) : view === "overview" && chatOpen ? CHAT_OPEN_H : VIEW_LAYOUTS[view].height;
       return { w: EXPANDED_W, h };
@@ -153,12 +182,13 @@ export function botPosition(
   view: IslandViewName,
   islandH: number,
   uploadProgress = 0,
+  extras: CompactExtras = {},
 ): BotPlacement {
   switch (mode) {
     case "hidden":
-      return { cx: 46, cy: 16, diameter: 6, opacity: 0 };
+      return { cx: NOTCH_W / 2, cy: 16, diameter: 6, opacity: 0 };
     case "compact":
-      return { cx: 40, cy: 16, diameter: 20, opacity: 1 };
+      return { cx: compactBotX(extras), cy: compactHeight(extras) / 2, diameter: COMPACT_BOT_D, opacity: 1 };
     case "expanded": {
       const layout = VIEW_LAYOUTS[view];
       if (view === "uploading") {
@@ -168,6 +198,10 @@ export function botPosition(
           diameter: layout.botDiameter,
           opacity: 1,
         };
+      }
+      // The chat and the search: Tobi sits low on the left, beside the text field.
+      if (view === "prompt" || view === "find") {
+        return { cx: layout.botX, cy: islandH - 44, diameter: layout.botDiameter, opacity: 1 };
       }
       if (layout.botY != null) {
         return { cx: layout.botX, cy: layout.botY, diameter: layout.botDiameter, opacity: 1 };

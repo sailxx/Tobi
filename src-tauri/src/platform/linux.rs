@@ -533,6 +533,26 @@ pub fn pin_to_monitor(win: &WebviewWindow, x: i32, y: i32) {
     unsafe { layer::gtk_layer_set_monitor(gtk_window_ptr(&gw), mon_ptr) };
 }
 
+/// How far (logical px) the top panel reaches down on the monitor at `x, y`.
+/// A layer surface sits over the panel by itself; a regular window (GNOME, X11)
+/// placed at the very top ends up under GNOME's top bar with only its last few
+/// pixels showing, so it goes right below the panel instead.
+pub fn top_inset(win: &WebviewWindow, x: i32, y: i32) -> i32 {
+    if LAYER_SURFACE.load(Ordering::Relaxed) {
+        return 0;
+    }
+    let Ok(gw) = win.gtk_window() else { return 0 };
+    let display = gw.display();
+    (0..display.n_monitors())
+        .filter_map(|i| display.monitor(i))
+        .find(|m| {
+            let g = m.geometry();
+            g.x() == x && g.y() == y
+        })
+        .map(|m| (m.workarea().y() - m.geometry().y()).clamp(0, 200))
+        .unwrap_or(0)
+}
+
 /// Temporarily allow keyboard focus so a text field inside the island can be
 /// typed in.
 pub fn set_activating(win: &WebviewWindow, activating: bool) {

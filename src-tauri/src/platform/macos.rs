@@ -278,6 +278,11 @@ pub fn pin_to_monitor(win: &WebviewWindow, _x: i32, _y: i32) {
     WINDOW_SCALE.store(win.scale_factor().unwrap_or(1.0).to_bits(), Ordering::Relaxed);
 }
 
+/// The island sits at the very top of the screen: nothing to make room for.
+pub fn top_inset(_win: &WebviewWindow, _x: i32, _y: i32) -> i32 {
+    0
+}
+
 /// Nothing to unblock: WKWebView takes drops through Tauri.
 pub fn unblock_webview_drops(_app: &AppHandle) {}
 

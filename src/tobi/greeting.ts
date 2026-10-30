@@ -5,7 +5,7 @@
 
 import { closeCurve } from "../core/anim";
 import { Sound } from "../core/sound";
-import { COMPACT_W, NOTCH_H, NOTCH_W } from "../core/layout";
+import { COMPACT_BOT_D, COMPACT_H, COMPACT_W, NOTCH_W } from "../core/layout";
 import { BODY_BOTTOM, BODY_EXP, BODY_RX, BODY_RY, BODY_TOP, EYE_INK, MOUTH_INK, MOUTH_TONGUE, PHONE_BOTTOM, PHONE_TOP } from "./look";
 
 // ── Timing (GT in the Swift file) ─────────────────────────────────────────────
@@ -39,7 +39,8 @@ export const GREETING_H = 150;
 const C0 = { x: 320, y: 90 };
 const HB = 58;
 export const ASP = BODY_RX / BODY_RY;
-const EAR_X = 40;
+// Tobi lands in the middle of the compact pill.
+const COMPACT_BOT_X = COMPACT_W / 2;
 const EAR_HB = 17;
 const CARD = { x: 10, y: 36, w: 620, h: 104 };
 const CARD_R = 20;
@@ -47,11 +48,9 @@ const CARD_R = 20;
 /** IslandRestingLayout for the compact island the greeting lands in. */
 const COMPACT = {
   width: COMPACT_W,
-  height: NOTCH_H,
-  botDiameter: Math.min(20, Math.max(0, NOTCH_H - 6)),
-  botCenterY: NOTCH_H / 2,
-  miniGridScale: Math.min(1, Math.max(0, NOTCH_H - 4) / 28),
-  miniGridCenterX: COMPACT_W - 40,
+  height: COMPACT_H,
+  botDiameter: COMPACT_BOT_D,
+  botCenterY: COMPACT_H / 2,
 };
 
 // ── Easing ────────────────────────────────────────────────────────────────────
@@ -208,7 +207,7 @@ function greetPose(t: number): Pose {
 function smallPose(): Pose {
   return {
     hb: (EAR_HB * COMPACT.botDiameter) / 20,
-    x: GREETING_W / 2 - COMPACT.width / 2 + EAR_X,
+    x: GREETING_W / 2 - COMPACT.width / 2 + COMPACT_BOT_X,
     y: COMPACT.botCenterY,
     sx: 1, sy: 1, tilt: 0,
     eye: "dot", open: 1, eyeRoll: 0,
@@ -623,25 +622,6 @@ function drawParticles(x: CanvasRenderingContext2D, t: number, p: Pose) {
   }
 }
 
-const MINI_COLORS = ["#E86A6A", "#3E86E0", "#EFAE5A", "#8C73F2"];
-
-function drawMinis(x: CanvasRenderingContext2D, alpha: number) {
-  if (alpha <= 0.01) return;
-  const cx = GREETING_W / 2 - COMPACT.width / 2 + COMPACT.miniGridCenterX;
-  const cy = COMPACT.botCenterY;
-  const sp = 6 * COMPACT.miniGridScale;
-  const offsets: [number, number][] = [[-sp, -sp], [sp, -sp], [-sp, sp], [sp, sp]];
-  offsets.forEach(([dx, dy], i) => {
-    x.save();
-    x.translate(cx + dx, cy + dy);
-    const scale = alpha * COMPACT.miniGridScale;
-    x.scale(scale, scale);
-    x.fillStyle = MINI_COLORS[i];
-    x.fill(tobiPath(5.3, 4));
-    x.restore();
-  });
-}
-
 // ── Controller ────────────────────────────────────────────────────────────────
 
 /**
@@ -730,7 +710,6 @@ export class Greeting {
       drawParticles(x, t, p);
     }
 
-    drawMinis(x, p.minis);
     drawTobi(x, p);
   }
 }
