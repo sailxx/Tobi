@@ -1,0 +1,33 @@
+name: relay
+
+on:
+  pull_request:
+    paths: ['android/relay/**', '.github/workflows/relay.yml']
+  push:
+    branches: [main]
+    paths: ['android/relay/**', '.github/workflows/relay.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: relay tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: android/relay
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: android/relay/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run vectors
