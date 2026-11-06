@@ -172,6 +172,8 @@ class Notifications(private val context: Context) {
             .setSmallIcon(R.drawable.ic_stat_tobi)
             .setContentTitle(agentName)
             .setSubText(context.getString(R.string.approval_title))
+            // How long the request has waited, counted by the system beside the title, in Tobi's amber for waiting for you.
+            .setUsesChronometer(true).setWhen(r.createdAtMs).setColor(0xFFFFA630.toInt())
             // A label and at most the program's name: the exact command is on the approval sheet, behind a tap.
             .setContentText(SafeText.requestLabel(r.tool, r.command))
             .setCategory(Notification.CATEGORY_ALARM)

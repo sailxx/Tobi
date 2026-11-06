@@ -115,11 +115,13 @@ ${StrLoc}
       StrCmp $2 "#32770" dk_dialog
       Goto dk_loop
     dk_static:
-      ; 1034 — белая подложка шапки, остальные подписи рисуются поверх неё
-      StrCmp $3 1034 0 +3
-        SetCtlColors $1 ${DK_TEXT} ${DK_BG}
-        Goto dk_loop
-      SetCtlColors $1 ${DK_TEXT} transparent
+      ; Картинки (SS_ICON 3, SS_BITMAP 14) не трогаем. У подписей фон непрозрачный: с transparent
+      ; новый текст рисуется поверх старого (заголовок и строки журнала на странице установки)
+      System::Call 'user32::GetWindowLong(p r1, i -16) i .r3'
+      IntOp $3 $3 & 0x1F
+      IntCmp $3 3 dk_loop 0 0
+      IntCmp $3 14 dk_loop 0 0
+      SetCtlColors $1 ${DK_TEXT} ${DK_BG}
       Goto dk_loop
     dk_button:
       System::Call 'uxtheme::SetWindowTheme(p r1, w "DarkMode_Explorer", p 0)'

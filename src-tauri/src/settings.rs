@@ -57,6 +57,12 @@ pub struct Settings {
     /// season), "none" or an outfit id — the Mac's raw values. The island reads
     /// anything it doesn't know as "auto", so the value is stored as it comes.
     pub tobi_outfit: String,
+    /// Tobi's name, picked in the Tobi window → Tobi. Empty means "Tobi".
+    pub tobi_name: String,
+    /// Tobi's eye colour for each group of states ("busy", "done", "error" →
+    /// "#RRGGBB"). Empty means the built-in colours. Kept as it comes, like
+    /// `pill_colors`: src/core/eye-colors.ts reads what is not a colour as no choice.
+    pub eye_colors: BTreeMap<String, String>,
     /// A colour of the user's own for a pill's Tobi, by pill ID ("#RRGGBB"),
     /// picked in Settings → Active pills. Empty means the catalog's colours.
     /// Kept as it comes, like `tobi_outfit`: src/core/pill-colors.ts reads
@@ -161,6 +167,8 @@ impl Default for Settings {
             custom_url: String::new(),
             shortcuts: Default::default(),
             tobi_outfit: "auto".into(),
+            tobi_name: String::new(),
+            eye_colors: BTreeMap::new(),
             pill_colors: BTreeMap::new(),
             hidden_pills: Vec::new(),
             // Tobi speaks Russian out of the box; "" (System) is one click away.
@@ -453,6 +461,8 @@ mod tests {
   "customUrl": "https://llm.example.com",
   "shortcuts": { "openChat": { "keys": "Ctrl+Shift+K", "enabled": false } },
   "tobiOutfit": "witchHat",
+  "tobiName": "Robo",
+  "eyeColors": { "busy": "#FFC93D" },
   "pillColors": { "integration_claude": "#2DD4BF" },
   "hiddenPills": ["integration_notion"],
   "language": "pt-BR",
@@ -699,6 +709,19 @@ mod tests {
         let loaded = parse(&custom_with("pillColors", None)).unwrap();
         assert!(loaded.pill_colors.is_empty());
         assert_eq!(loaded.tobi_outfit, "witchHat");
+    }
+
+    #[test]
+    fn name_and_eye_colours_default_to_tobi_s_own_and_are_kept_as_written() {
+        let loaded = parse(&custom_with("eyeColors", None)).unwrap();
+        assert!(loaded.eye_colors.is_empty());
+        let loaded = parse(&custom_with("tobiName", None)).unwrap();
+        assert_eq!(loaded.tobi_name, "");
+        let loaded = parse(&custom_with("eyeColors", Some(json!({ "done": "#60A5FA" })))).unwrap();
+        assert_eq!(loaded.eye_colors.get("done").map(String::as_str), Some("#60A5FA"));
+        let loaded = parse(&custom_with("tobiName", Some(json!("Robo")))).unwrap();
+        assert_eq!(loaded.tobi_name, "Robo");
+        assert_eq!(loaded.model, "some-model");
     }
 
     #[test]
@@ -984,6 +1007,8 @@ mod tests {
                 "customUrl",
                 "shortcuts",
                 "tobiOutfit",
+                "tobiName",
+                "eyeColors",
                 "pillColors",
                 "hiddenPills",
                 "language",

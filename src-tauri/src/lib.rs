@@ -9,6 +9,7 @@ mod code_window;
 mod codex_plan;
 mod config_file;
 mod desktop;
+mod file_search;
 mod files;
 mod flow;
 mod github;
@@ -842,6 +843,8 @@ pub fn run() {
             reposition,
             fit_zoom,
             hub_shown,
+            file_search::search_files,
+            file_search::open_found_file,
             list_monitors,
             open_url,
             open_gitlab_url,

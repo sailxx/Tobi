@@ -119,6 +119,26 @@ export function agentName(id: string): string {
   return raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : id;
 }
 
+/** What the Tobi window's home page counts. */
+export interface HomeStats {
+  done: number;
+  today: number;
+  /** Days in a row with a finished task, up to today (or yesterday, while today has none yet). */
+  streak: number;
+}
+
+export function homeStats(turns: RecapTurn[], now = new Date()): HomeStats {
+  const days = new Set(turns.map((x) => dayKey(new Date(x.end * 1000))));
+  const today = turns.filter((x) => dayKey(new Date(x.end * 1000)) === dayKey(now)).length;
+  let d = days.has(dayKey(now)) ? now : addDays(now, -1);
+  let streak = 0;
+  while (days.has(dayKey(d))) {
+    streak++;
+    d = addDays(d, -1);
+  }
+  return { done: turns.length, today, streak };
+}
+
 /** The most frequent key; ties go to whatever `order` ranks first. */
 function topKey<K>(counts: Map<K, number>, order: (a: K, b: K) => number): K | null {
   let best: K | null = null;

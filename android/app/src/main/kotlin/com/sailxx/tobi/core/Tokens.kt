@@ -37,7 +37,7 @@ data class Tokens(
     val hero: Long = 0xFF0E0F12, val sheet: Long = 0xFF141518,
     val heroText: Long = 0xFFF5F6F8, val heroTextDim: Long = 0xFF9398A1,
     /** The main pill on a hero surface and its label; every other pill on it. */
-    val heroPrimary: Long = 0xFFF5F6F8, val heroOnPrimary: Long = 0xFF0B0C0E, val heroButton: Long = 0xFF2A2B2E,
+    val heroPrimary: Long = Accent.BUTTON, val heroOnPrimary: Long = Accent.ON_BUTTON, val heroButton: Long = 0xFF2A2B2E,
     /** The thin edge of a hero panel or a sheet, and the faint fill of a row or a chip on it (alpha is part of the colour). */
     val heroLine: Long = 0x0FFFFFFF, val heroFill: Long = 0x12FFFFFF,
     /** The colours of an added and a removed line of a file change, readable on [sheet]. */
@@ -47,7 +47,7 @@ data class Tokens(
         val DARK = Tokens(
             bg = 0xFF000000, panel = 0xFF141518, panel2 = 0xFF1D1F23, line = 0xFF26282D,
             text = 0xFFF5F6F8, textDim = 0xFF9398A1, textFaint = 0xFF6E737C,
-            primaryButton = 0xFFF5F6F8, onPrimaryButton = 0xFF0B0C0E, secondaryButton = 0xFF292A2D,
+            primaryButton = Accent.BUTTON, onPrimaryButton = Accent.ON_BUTTON, secondaryButton = 0xFF292A2D,
             danger = 0xFFFF8D97, online = 0xFF34D399, washAlpha = 0.5,
         )
 
@@ -55,12 +55,12 @@ data class Tokens(
         val LIGHT = Tokens(
             bg = 0xFFF4F5F7, panel = 0xFFFFFFFF, panel2 = 0xFFECEEF1, line = 0xFFD8DBE0,
             text = 0xFF14161A, textDim = 0xFF575D67, textFaint = 0xFF6B717B,
-            primaryButton = 0xFF14161A, onPrimaryButton = 0xFFF5F6F8, secondaryButton = 0xFFE4E6EA,
+            primaryButton = Accent.BUTTON, onPrimaryButton = Accent.ON_BUTTON, secondaryButton = 0xFFE4E6EA,
             danger = 0xFFB3261E, online = 0xFF0B8A5E, washAlpha = 0.28,
             isDark = false,
             hero = 0xFFFFFFFF, sheet = 0xFFFFFFFF,
             heroText = 0xFF14161A, heroTextDim = 0xFF575D67,
-            heroPrimary = 0xFF14161A, heroOnPrimary = 0xFFF5F6F8, heroButton = 0xFFE4E6EA,
+            heroPrimary = Accent.BUTTON, heroOnPrimary = Accent.ON_BUTTON, heroButton = 0xFFE4E6EA,
             heroLine = 0xFFD8DBE0, heroFill = 0x14000000,
             diffAdded = 0xFF0B7A55, diffRemoved = 0xFFB3261E,
         )
@@ -74,7 +74,18 @@ object IslandSurface {
     const val HERO = 0xFF0E0F12L
     const val TEXT = 0xFFF5F6F8L
     const val TEXT_DIM = 0xFF9398A1L
-    const val ON_PRIMARY = 0xFF0B0C0EL
+    const val ON_PRIMARY = 0xFFF4F8FFL
+}
+
+/**
+ * Tobi's blue, the same as on the computer: the main button is a soft gradient from [TOP] to [BOTTOM] with a light label; [BUTTON] is
+ * the colour in the middle, the one the contrast rules are checked against.
+ */
+object Accent {
+    const val TOP = 0xFF2D72DBL
+    const val BOTTOM = 0xFF1D4FC0L
+    const val BUTTON = 0xFF2562CEL
+    const val ON_BUTTON = 0xFFF4F8FFL
 }
 
 /**

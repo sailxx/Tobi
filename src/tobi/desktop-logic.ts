@@ -21,6 +21,8 @@ export interface DesktopSnapshot {
   paused: boolean;
   /** Music plays: he dances (the compact island's rules, core/spotify.ts). */
   dancing: boolean;
+  /** The user's eye colours (core/eye-colors.ts), so he looks like the island's Tobi. */
+  eyeColors?: Record<string, string>;
 }
 
 /** Events between the two windows. Rust adds `desktop-tobi-dropped`. */

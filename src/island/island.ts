@@ -4,8 +4,8 @@
 import { Tracked, Spring, clamp, FRAME_GAP, frameDue } from "../core/anim";
 import { Bridge, IS_TAURI, onDragDrop } from "../core/bridge";
 import {
-  EXPANDED_CORNER, EXPANDED_W, NOTCH_W, PANEL_H, PANEL_W,
-  ROUNDED_CORNER, VIEW_LAYOUTS, botGlowColor, botGlowOpacity, botPosition, chatPromptHeight,
+  COMPACT_CORNER, EXPANDED_CORNER, EXPANDED_W, NOTCH_H, NOTCH_W, PANEL_H, PANEL_W,
+  ROUNDED_CORNER, VIEW_LAYOUTS, botGlowColor, botGlowOpacity, botPosition, type CompactExtras, chatPromptHeight,
   islandSize,
   QUESTION_PICKER_H,
   type BotEmoteName, type IslandMode, type IslandViewName,
@@ -15,7 +15,7 @@ import { State } from "../core/state";
 import { isMusicPill, islandDances } from "../core/spotify";
 import { BotEngine, hexToRGB } from "../tobi/engine";
 import { Greeting } from "../tobi/greeting";
-import { createMiniBot, pruneMiniBots, syncMiniBotStates, tickMiniBots } from "../tobi/minibots";
+import { syncMiniBotStates, tickMiniBots } from "../tobi/minibots";
 import { SeasonCache, parseOutfit } from "../tobi/wardrobe";
 import { UploadCanvas } from "../upload/canvas";
 import { USC, UploadSeq } from "../upload/sequence";
@@ -29,6 +29,7 @@ import type { ViewCommand } from "./shortcuts";
 import { DRAG_THRESHOLD } from "../tobi/desktop-logic";
 import { Updates } from "./update";
 import { UPDATE_BLUE, showsUpdateHint } from "../whats-new/whats-new";
+import { setEyeColors } from "../core/eye-colors";
 
 const BOT_OVERHANG = 40;
 const UPDATE_BLUE_RGB = hexToRGB(UPDATE_BLUE);
@@ -44,6 +45,9 @@ const UPLOAD_VIEWS: ReadonlySet<IslandViewName> = new Set(["upload", "uploading"
 /** Seconds between the drop and the moment the progress bar starts filling. */
 const PRE_PROGRESS = USC.T_PROG_START - USC.T_DROP;
 
+/** The warm light under the open chat and search. */
+const CHAT_GLOW = "#F0743A";
+
 const modeOrder = (m: IslandMode) => (m === "hidden" ? 0 : m === "compact" ? 1 : 2);
 
 export class Island {
@@ -58,8 +62,11 @@ export class Island {
   private viewsEl!: HTMLElement;
   private botCanvas!: HTMLCanvasElement;
   private botGlow!: HTMLElement;
+  /** The open island's light from below, in the colour of what Tobi is doing. */
+  private wash!: HTMLElement;
+  private washColor = "";
   private greetingCanvas!: HTMLCanvasElement;
-  private miniGrid!: HTMLElement;
+  private compactKey = "";
   private clockEl!: HTMLElement;
   private clockTimer?: number;
   private countdown!: HTMLElement;
@@ -284,7 +291,7 @@ export class Island {
       keyboard: (on) => {
         // The chat view manages the keyboard on its own.
         if (on) void Bridge.focusWindow(true);
-        else if (State.view !== "prompt" && State.mode === "expanded") void Bridge.focusWindow(false);
+        else if (State.view !== "prompt" && State.view !== "find" && State.mode === "expanded") void Bridge.focusWindow(false);
       },
       holdOpen: (on) => {
         if (this.holdingOpen === on) return;
@@ -301,9 +308,9 @@ export class Island {
 
     this.wakeStrip = h("div", { id: "wake-strip" });
     this.botGlow = h("div", { id: "bot-glow" });
+    this.wash = h("div", { id: "island-wash" });
     this.botCanvas = h("canvas", { id: "bot-canvas" });
     this.greetingCanvas = h("canvas", { id: "greeting-canvas" });
-    this.miniGrid = h("div", { id: "mini-grid" });
     this.clockEl = h("div", { id: "island-clock" });
     this.countdown = h("div", { id: "countdown" });
 
@@ -328,6 +335,7 @@ export class Island {
     this.clipEl = h(
       "div",
       { id: "island-clip" },
+      this.wash,
       this.greetingCanvas,
       this.uploadCanvas.el,
       this.contentEl,
@@ -338,7 +346,6 @@ export class Island {
       this.clipEl,
       this.botGlow,
       this.botCanvas,
-      this.miniGrid,
       this.clockEl,
       this.countdown,
     );
@@ -706,11 +713,11 @@ export class Island {
   // ── Geometry ────────────────────────────────────────────────────────────────
 
   private targetSize(): { w: number; h: number; r: number } {
-    let { w, h } = islandSize(State.mode, State.view, State.chatHistory.length, State.chatOpen);
+    let { w, h } = islandSize(State.mode, State.view, State.chatHistory.length, State.chatOpen, this.compactExtras());
     if (State.mode === "expanded" && State.view === "question" && State.pendingApproval?.questions) {
       h = QUESTION_PICKER_H;
     }
-    const r = State.mode === "expanded" ? EXPANDED_CORNER : ROUNDED_CORNER;
+    const r = State.mode === "expanded" ? EXPANDED_CORNER : State.mode === "compact" && h < NOTCH_H ? COMPACT_CORNER : ROUNDED_CORNER;
     return { w, h, r };
   }
 
@@ -735,11 +742,12 @@ export class Island {
     this.islandEl.style.width = `${w}px`;
     this.islandEl.style.height = `${hh}px`;
     this.islandEl.style.borderRadius = `0 0 ${r}px ${r}px`;
+    // The flares that join the island to the top of the screen grow in only as it opens:
+    // the compact pill hangs plain, with no flares.
+    this.islandEl.style.setProperty("--ear", `${Math.min(10, Math.max(0, (hh - NOTCH_H) / 4))}px`);
     this.islandEl.style.transform = `translateX(-50%)`;
     // These follow the island as it resizes, so they belong here rather than in
     // the state-driven DOM sync.
-    this.miniGrid.style.left = `${w - 40 - 14.5}px`;
-    this.miniGrid.style.top = `${hh / 2 - 14.5}px`;
     this.clockEl.style.height = `${hh}px`;
     this.greetingCanvas.style.left = `${(w - EXPANDED_W) / 2}px`;
     this.uploadCanvas.el.style.left = `${(w - EXPANDED_W) / 2}px`;
@@ -1092,7 +1100,7 @@ export class Island {
   };
 
   private updateBotTargets() {
-    const p = botPosition(State.mode, State.view, this.height.value, State.uploadProgress);
+    const p = botPosition(State.mode, State.view, this.height.value, State.uploadProgress, this.compactExtras());
     this.botCx.target = p.cx;
     this.botCy.target = p.cy;
     this.botSize.target = p.diameter / 0.6;
@@ -1128,9 +1136,24 @@ export class Island {
         this.glowOpacity = glowOpacity;
         this.botGlow.style.opacity = glowOpacity;
       }
+      // Idle, the open island stays black; busy, done or waiting, it lights up from
+      // below. The chat and the search always glow warm, whatever Tobi is doing.
+      const lit = botGlowOpacity(State.effectiveState) >= 0.5;
+      const warm = State.view === "prompt" || State.view === "find";
+      this.wash.classList.toggle("warm", warm);
+      this.setWash(warm ? CHAT_GLOW : lit ? color : "");
     } else {
       this.botGlow.style.display = "none";
+      this.setWash("");
     }
+  }
+
+  /** Written only when it changes: the colour itself fades in CSS (`--wash` is a registered colour). */
+  private setWash(color: string) {
+    if (color === this.washColor) return;
+    this.washColor = color;
+    if (color) this.wash.style.setProperty("--wash", color);
+    this.wash.classList.toggle("on", color !== "");
   }
 
   private drawBot(dt: number) {
@@ -1185,7 +1208,8 @@ export class Island {
     // In the wardrobe the hovered outfit swaps in at once, without the drop-in.
     const inWardrobe = State.mode === "expanded" && State.view === "wardrobe";
     const mainFocused = State.focusId == null || State.focusId === State.mainPillId;
-    const showOutfit = mainFocused || State.mode !== "expanded" || inWardrobe;
+    // The compact pill shows him as on the logo, headphones on, nothing else.
+    const showOutfit = State.mode === "expanded" && (mainFocused || inWardrobe);
     const outfit = State.wardrobePreview ?? this.seasons.get(parseOutfit(State.settings.tobiOutfit));
     this.engine.setOutfit(showOutfit ? outfit : "none", !inWardrobe);
     // Dances while music plays: always in the compact island, expanded only on
@@ -1263,36 +1287,35 @@ export class Island {
     // The chat is the only view with a text field, so it is the only time the
     // island is allowed to take keyboard focus.
     if (this.lastSyncedView !== State.view) {
-      const wasChat = this.lastSyncedView === "prompt";
+      const typed = (v: string | null) => v === "prompt" || v === "find";
+      const wasChat = typed(this.lastSyncedView);
       this.lastSyncedView = State.view;
-      if (State.view === "prompt") {
+      if (typed(State.view)) {
+        const view = State.view;
         void Bridge.focusWindow(true);
-        window.setTimeout(() => this.views.get("prompt")?.focus?.(), 120);
+        window.setTimeout(() => this.views.get(view)?.focus?.(), 120);
       } else if (wasChat) {
         void Bridge.focusWindow(false);
       }
     }
 
-    // Compact mini grid
-    const showGrid = State.mode === "compact";
-    this.miniGrid.style.opacity = showGrid ? "1" : "0";
-    if (showGrid) {
-      const others = State.otherTasks.slice(0, 4);
-      const key = others.map((t) => t.id).join("|");
-      if (this.miniGrid.dataset.key !== key) {
-        this.miniGrid.dataset.key = key;
-        this.miniGrid.replaceChildren();
-        for (const t of others) {
-          this.miniGrid.append(createMiniBot(t, 13));
-        }
-        pruneMiniBots();
-      }
+    // The compact pill widens for the clock and narrows back.
+    const extras = this.compactExtras();
+    const extrasKey = String(extras.clock);
+    if (extrasKey !== this.compactKey) {
+      this.compactKey = extrasKey;
+      if (State.mode === "compact") this.animateGeometry(false);
     }
 
     this.updateClock();
 
     syncMiniBotStates(State.tasks);
     this.engine.setState(State.effectiveState);
+  }
+
+  /** What the compact island makes room for besides Tobi. */
+  private compactExtras(): CompactExtras {
+    return { clock: State.settings.showClock };
   }
 
   /** The clock sits in the middle of the compact island, where the notch is on a Mac. */
@@ -1309,6 +1332,7 @@ export class Island {
 
   /** Applies settings coming from Rust at boot. */
   applySettings() {
+    setEyeColors(State.settings.eyeColors);
     Sound.setEnabled(State.settings.soundEnabled);
     Sound.setVolume(State.settings.soundVolume);
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;

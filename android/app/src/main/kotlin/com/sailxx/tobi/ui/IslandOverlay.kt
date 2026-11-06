@@ -63,6 +63,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import kotlinx.coroutines.delay
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -108,6 +115,8 @@ class IslandOverlay(
     private val onAllow: (fingerprint: String) -> Unit,
     private val onDeny: (fingerprint: String) -> Unit,
     private val onOpen: () -> Unit,
+    /** An option (or null: the whole question) was tapped: the app opens on it. */
+    private val onQuestion: (pillId: String, label: String?) -> Unit = { _, _ -> },
 ) {
     private val wm = context.getSystemService(WindowManager::class.java)
     private val main = Handler(Looper.getMainLooper())
@@ -190,7 +199,7 @@ class IslandOverlay(
         }
         val reduced = MotionPolicy.reduced(MotionState.choice, Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f))
         if (phase == IslandTimeline.Phase.OPEN) {
-            val (w, h) = IslandGeometry.sizeFor(b, current.kind)
+            val (w, h) = IslandGeometry.sizeFor(b, current.kind, IslandGeometry.optionRows(current.question))
             val corner = (if (current.kind == IslandSpec.Kind.WORKING) b.cornerSmall else b.cornerLarge).toDouble()
             // "Remove animations": no spring, the island simply appears at its size.
             if (reduced) { width.jump(w.toDouble()); height.jump(h.toDouble()); radius.jump(corner) }
@@ -304,7 +313,7 @@ class IslandOverlay(
         val density = LocalDensity.current
         fun px(v: Double): Dp = with(density) { v.toFloat().toDp() }
         val topInset = px(b.topInset.toDouble())
-        val (targetW, targetH) = IslandGeometry.sizeFor(b, s.kind)
+        val (targetW, targetH) = IslandGeometry.sizeFor(b, s.kind, IslandGeometry.optionRows(s.question))
         // The content fades in as the island opens and out as it goes up.
         val open = ((height.value / targetH.toDouble()) - 0.35) / 0.55
         val corner = px(radius.value)
@@ -330,6 +339,7 @@ class IslandOverlay(
                             when (s.kind) {
                                 IslandSpec.Kind.WORKING -> WorkingStrip(s)
                                 IslandSpec.Kind.APPROVAL -> RequestCard(s)
+                                IslandSpec.Kind.QUESTION -> if (s.question != null) QuestionCard(s, s.question!!) else ResultCard(s)
                                 else -> ResultCard(s)
                             }
                         }
@@ -357,19 +367,65 @@ class IslandOverlay(
         drawPath(right, color)
     }
 
+    // The colours of the words and buttons on the black island: amber while it waits for you, green when it went well, red when not.
+    private val amber = Color(0xFFFFA630)
+    private val good = Color(0xFF34D399)
+    private val bad = Color(0xFFFF8D97)
+
+    /** Tobi on a small rounded tile, as the app icon is. */
+    @Composable
+    private fun Tile(engine: TobiEngine, size: Dp) {
+        Box(
+            Modifier.size(size).clip(RoundedCornerShape(size * 0.28f)).background(Color(IslandSurface.PANEL)),
+            contentAlignment = Alignment.Center,
+        ) { TobiView(engine, Modifier.size(size * 0.88f)) }
+    }
+
+    /** How long this has been going on, m:ss, counting while the island is on screen. */
+    @Composable
+    private fun Elapsed(sinceMs: Long, color: Color, size: androidx.compose.ui.unit.TextUnit) {
+        if (sinceMs <= 0L) return
+        var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+        LaunchedEffect(sinceMs) {
+            while (true) {
+                now = System.currentTimeMillis()
+                delay(1000)
+            }
+        }
+        val seconds = ((now - sinceMs) / 1000).coerceAtLeast(0)
+        Text(
+            String.format(java.util.Locale.ROOT, "%d:%02d", seconds / 60, seconds % 60),
+            color = color, fontSize = size, fontWeight = FontWeight.Bold, maxLines = 1,
+            style = TextStyle(fontFeatureSettings = "tnum"),
+        )
+    }
+
+    /** The request's two buttons: a tinted rectangle, a white label, a small icon. */
+    @Composable
+    private fun IslandButton(label: String, onClick: () -> Unit, top: Color, bottom: Color, modifier: Modifier, icon: IconKind) {
+        Row(
+            modifier.heightIn(min = 48.dp).clip(RoundedCornerShape(16.dp)).background(Brush.linearGradient(listOf(top, bottom)))
+                .clickable(role = Role.Button, onClick = onClick).padding(horizontal = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TobiIcon(icon, tint = Color.White, size = 18.dp)
+            Text(label, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+    }
+
+    /** Working: the little pill. Tobi on the left, the time on the right; the middle is left to the camera. */
     @Composable
     private fun WorkingStrip(s: IslandSpec) {
         val engine = remember(s.state) { TobiEngine(clock).apply { setState(s.state, force = true) } }
         Row(
-            Modifier.fillMaxWidth().clickable { tap("the working strip") { onOpen() } }.padding(horizontal = 18.dp, vertical = 6.dp),
+            Modifier.fillMaxWidth().clickable { tap("the working strip") { onOpen() } }.padding(horizontal = 14.dp, vertical = 6.dp)
+                .semantics(mergeDescendants = true) { contentDescription = s.agent },
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TobiView(engine, Modifier.size(34.dp))
-            Spacer(Modifier.width(10.dp))
-            Column(Modifier.weight(1f)) {
-                Text(s.agent, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                if (s.text.isNotBlank()) Text(s.text, color = dim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
+            Tile(engine, 34.dp)
+            Spacer(Modifier.weight(1f))
+            Elapsed(s.sinceMs, amber, 15.sp)
         }
     }
 
@@ -382,44 +438,93 @@ class IslandOverlay(
             IslandSpec.Kind.QUESTION -> R.string.notif_question
             else -> R.string.notif_finished
         }
+        val tone = when (s.kind) {
+            IslandSpec.Kind.FINISHED -> good
+            IslandSpec.Kind.ERROR -> bad
+            else -> amber
+        }
         Row(
-            Modifier.fillMaxWidth().clickable { tap("the result card") { onOpen() } }.padding(horizontal = 18.dp, vertical = 8.dp),
+            Modifier.fillMaxWidth().clickable { tap("the result card") { onOpen() } }.padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TobiView(engine, Modifier.size(52.dp))
-            Spacer(Modifier.width(12.dp))
+            Tile(engine, 52.dp)
+            Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(s.agent, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(label), color = dim, fontSize = 12.sp, maxLines = 1)
-                }
+                Text(s.agent, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(stringResource(label), color = tone, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
                 val text = if (s.kind == IslandSpec.Kind.QUESTION) stringResource(R.string.island_answer_on_pc) else s.text
-                if (text.isNotBlank()) Text(text, color = Color.White, fontSize = 13.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                if (text.isNotBlank()) Text(text, color = dim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }
 
+    /**
+     * A question the phone may answer: the question and its options to tap. A tap opens the app with the option picked, where the
+     * answer is sent after the screen lock, like Allow. Several questions or a multiple choice are answered in the app.
+     */
+    @Composable
+    private fun QuestionCard(s: IslandSpec, request: com.sailxx.tobi.link.QuestionRequest) {
+        val engine = remember { TobiEngine(clock).apply { setState(BotState.QUESTION, force = true) } }
+        val quick = IslandGeometry.quickOptions(request) > 0
+        val q = request.questions.first()
+        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(Modifier.clickable { tap("the question header") { onQuestion(s.pillId, null) } }, verticalAlignment = Alignment.CenterVertically) {
+                Tile(engine, 44.dp)
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(s.agent, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(q.question, color = amber, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+                Spacer(Modifier.width(8.dp))
+                Elapsed(s.sinceMs, dim, 14.sp)
+            }
+            if (quick) {
+                for (o in q.options) {
+                    Column(
+                        Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(14.dp)).background(Color(IslandSurface.PANEL))
+                            .clickable(role = Role.Button) { tap("an option") { onQuestion(s.pillId, o.label) } }
+                            .padding(horizontal = 14.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(o.label, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        if (o.description.isNotBlank()) Text(o.description, color = dim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                }
+            } else {
+                IslandButton(
+                    stringResource(R.string.question_see_answer), { tap("answer in the app") { onQuestion(s.pillId, null) } },
+                    Color(0xFF2D72DB), Color(0xFF1D4FC0), Modifier.fillMaxWidth(), IconKind.CHEVRON,
+                )
+            }
+        }
+    }
+
+    /** A permission request: who asks and what for, how long it has waited, Deny and Allow. */
     @Composable
     private fun RequestCard(s: IslandSpec) {
         val engine = remember { TobiEngine(clock).apply { setState(BotState.APPROVAL, force = true) } }
         val fingerprint = s.fingerprint ?: return
-        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(Modifier.clickable { tap("the request header") { onOpen() } }, verticalAlignment = Alignment.CenterVertically) {
-                TobiView(engine, Modifier.size(40.dp))
-                Spacer(Modifier.width(10.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(s.agent, style = TypeScale.SECONDARY.style(dim), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Tile(engine, 52.dp)
+                Spacer(Modifier.width(14.dp))
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(s.agent, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     // What kind of action, never the command: the exact text is in the app and in the lock prompt.
-                    Text(stringResource(R.string.approval_wants, s.text), style = TypeScale.HEADLINE.style(Color.White), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    Text(stringResource(R.string.approval_wants, s.text), color = amber, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
+                Spacer(Modifier.width(8.dp))
+                Elapsed(s.sinceMs, dim, 14.sp)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                PillButton(stringResource(R.string.action_deny), { tap("Deny") { onDeny(fingerprint) } }, Modifier.weight(1f), onDark = true)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                IslandButton(
+                    stringResource(R.string.action_deny), { tap("Deny") { onDeny(fingerprint) } },
+                    Color(0xFF86302A), Color(0xFF5C1F1B), Modifier.weight(1f), IconKind.CLOSE,
+                )
                 if (s.canAllow) {
-                    PillButton(
-                        stringResource(R.string.action_allow), { tap("Allow") { onAllow(fingerprint) } }, Modifier.weight(1f), PillKind.PRIMARY, onDark = true,
-                        icon = { TobiIcon(IconKind.LOCK, tint = Color(IslandSurface.ON_PRIMARY), size = 18.dp) },
+                    IslandButton(
+                        stringResource(R.string.action_allow), { tap("Allow") { onAllow(fingerprint) } },
+                        Color(0xFF1F8A47), Color(0xFF166B38), Modifier.weight(1.15f), IconKind.LOCK,
                     )
                 }
             }

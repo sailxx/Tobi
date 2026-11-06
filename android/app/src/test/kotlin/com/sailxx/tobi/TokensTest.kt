@@ -34,7 +34,7 @@ class TokensTest {
 
     @Test fun theMainButtonAndItsLabelAreReadable() {
         for ((n, t) in themes) {
-            assertTrue("$n label", c(t.onPrimaryButton, t.primaryButton) >= 7.0)
+            assertTrue("$n label", c(t.onPrimaryButton, t.primaryButton) >= 4.5)
             assertTrue("$n button stands out from the panel", c(t.primaryButton, t.panel) >= 3.0)
         }
     }

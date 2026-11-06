@@ -1,6 +1,7 @@
 package com.sailxx.tobi.core
 
 import com.sailxx.tobi.link.ApprovalRequest
+import com.sailxx.tobi.link.QuestionRequest
 import com.sailxx.tobi.link.SessionInfo
 import com.sailxx.tobi.character.BotState
 
@@ -24,10 +25,17 @@ object IslandPlan {
         approvals: List<ApprovalRequest>,
         allowed: Boolean,
         name: (String) -> String,
+        questions: List<QuestionRequest> = emptyList(),
     ): IslandSpec? {
         if (!allowed) return null
         approvals.firstOrNull()?.let {
             return IslandSpec(IslandSpec.Kind.APPROVAL, it.pillId, name(it.pillId), BotState.APPROVAL, ToolLabels.action(it.tool), it.fingerprint, ApprovalSheetPlan.canAllowHere(it))
+                .also { spec -> spec.sinceMs = it.createdAtMs }
+        }
+        // A question the phone may answer: the island shows its options.
+        questions.firstOrNull()?.let { q ->
+            return IslandSpec(IslandSpec.Kind.QUESTION, q.pillId, name(q.pillId), BotState.QUESTION, "", q.fingerprint)
+                .also { spec -> spec.sinceMs = q.createdAtMs; spec.question = q }
         }
         val question = sessions.firstOrNull { it.state == BotState.QUESTION }
         if (question != null) return spec(IslandSpec.Kind.QUESTION, question, name)
@@ -62,5 +70,5 @@ object IslandPlan {
     }
 
     private fun spec(kind: IslandSpec.Kind, s: SessionInfo, name: (String) -> String) =
-        IslandSpec(kind, s.pillId, name(s.pillId), s.state, ToolLabels.label(s.statusText))
+        IslandSpec(kind, s.pillId, name(s.pillId), s.state, ToolLabels.label(s.statusText)).also { it.sinceMs = s.updatedAtMs }
 }

@@ -6,7 +6,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { GREETING_END, GREETING_W, greetingPose, tobiBounds } from "../src/tobi/greeting.ts";
 import { Tracked } from "../src/core/anim.ts";
-import { COMPACT_W, NOTCH_H, NOTCH_W, VIEW_LAYOUTS } from "../src/core/layout.ts";
+import { COMPACT_H, COMPACT_W, NOTCH_H, NOTCH_W, VIEW_LAYOUTS } from "../src/core/layout.ts";
 
 const FRAME = 1 / 60;
 const SLACK = 0.5; // anti-aliasing
@@ -66,7 +66,7 @@ test("he slides to the side to wave, then comes back to the middle", () => {
 
 test("he lands where the compact island's Tobi sits", () => {
   const end = greetingPose(10, 5);
-  assert.equal(end.y, NOTCH_H / 2);
-  assert.equal(end.x, GREETING_W / 2 - COMPACT_W / 2 + 40);
+  assert.equal(end.y, COMPACT_H / 2);
+  assert.equal(end.x, GREETING_W / 2);
   assert.equal(end.minis, 1);
 });
