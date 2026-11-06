@@ -384,9 +384,13 @@ pub fn apply_geometry(app: &AppHandle, pref: &str, collapsed: bool) {
     // still offers the user nothing to resize it by. (Found by @YossiYad, #44.)
     #[cfg(target_os = "linux")]
     let _ = win.set_resizable(true);
+    let (lx, ly) = logical_origin(&m);
+    if !hide {
+        // Below a top panel the island would otherwise hide under (GNOME).
+        y += (platform::top_inset(&win, lx, ly) as f64 * scale).round() as i32;
+    }
     let _ = win.set_size(PhysicalSize::new(pw, ph));
     let _ = win.set_position(PhysicalPosition::new(x, y));
-    let (lx, ly) = logical_origin(&m);
     platform::pin_to_monitor(&win, lx, ly);
     // Moving across displays can rescale the window: re-assert the physical size.
     let _ = win.set_size(PhysicalSize::new(pw, ph));

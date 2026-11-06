@@ -213,7 +213,12 @@ fun QuestionSheet(model: AppModel, pillId: String, onDismiss: () -> Unit, onSend
             PillButton(stringResource(R.string.question_ok), onDismiss, Modifier.fillMaxWidth(), PillKind.PRIMARY, onDark = true)
             return@BottomSheetHost
         }
-        var st by remember(request.fingerprint) { mutableStateOf(QuestionFlow.start(request.questions)) }
+        var st by remember(request.fingerprint) {
+            val start = QuestionFlow.start(request.questions)
+            val picked = model.preselect?.takeIf { it.first == request.fingerprint }?.second
+            model.preselect = null
+            mutableStateOf(if (picked != null) QuestionFlow.toggle(request.questions, start, picked) else start)
+        }
         var armed by remember(request.fingerprint) { mutableStateOf(false) }
         LaunchedEffect(request.fingerprint) { delay(ApprovalSheetPlan.GUARD_MS); armed = true }
         val q = request.questions[st.index.coerceIn(0, request.questions.lastIndex)]

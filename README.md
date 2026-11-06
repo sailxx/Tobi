@@ -8,7 +8,7 @@
 
 Press `Ctrl+Alt+N` and Tobi drops in to show what Claude Code is doing: thinking, reading, editing files, running commands. Allow or deny an agent’s request in one click, drop a file on him, chat with Claude, read your Telegram, Gmail and other mail without leaving what you are doing.
 
-**No telemetry, no account.** Open source, MIT.
+**No telemetry, no account.** Open source, Apache 2.0.
 
 <img src="https://img.shields.io/github/v/release/sailxx/Tobi?label=version&color=%232E9BFF" alt="version">
 <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-2E9BFF" alt="Windows 10 | 11">
@@ -16,7 +16,7 @@ Press `Ctrl+Alt+N` and Tobi drops in to show what Claude Code is doing: thinking
 <img src="https://img.shields.io/badge/Linux-AppImage%20%7C%20deb%20%7C%20rpm-2E9BFF" alt="Linux AppImage | deb | rpm">
 <img src="https://img.shields.io/badge/Android-11%2B-2E9BFF" alt="Android 11+">
 <img src="https://img.shields.io/badge/Tauri-2-2E9BFF" alt="Tauri 2">
-<img src="https://img.shields.io/badge/code-MIT-2E9BFF" alt="MIT">
+<img src="https://img.shields.io/badge/code-Apache%202.0-2E9BFF" alt="Apache 2.0">
 <img src="https://img.shields.io/github/stars/sailxx/Tobi?style=flat&logo=github&color=%232E9BFF" alt="Stars">
 
 <br>
@@ -143,6 +143,6 @@ npm run sounds                                     # sounds/
 cd tools/readme && npm install && node build.mjs   # assets/readme/
 ```
 
-Tobi is based on the code of [Coucou for Windows](https://github.com/louis-cfm/coucou) (MIT, © Louis Raillé), see [NOTICE.md](NOTICE.md). The character, icon and sounds are his own. Golos Text and JetBrains Mono in the README images are under the SIL Open Font License 1.1.
+Tobi is based on the code of [Coucou for Windows](https://github.com/louis-cfm/coucou) (MIT, © Louis Raillé, kept in [NOTICE.md](NOTICE.md)). The character, icon and sounds are his own. Golos Text and JetBrains Mono in the README images are under the SIL Open Font License 1.1.
 
 </details>

@@ -61,7 +61,7 @@ export async function notesPage(page: HTMLElement, ctx: HubContext) {
         drawList();
       });
     }, "primary");
-    b.prepend(h("span", { class: "hub-rec", style: "background:#170c04;box-shadow:none;margin-inline-end:8px" }));
+    b.prepend(h("span", { class: "hub-rec", style: "background:#f4f8ff;box-shadow:none;margin-inline-end:8px" }));
     return b;
   }
 

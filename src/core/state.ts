@@ -143,6 +143,10 @@ export interface Settings {
    * Same raw values as the Mac's "tobiOutfit"; read it through parseOutfit.
    */
   tobiOutfit: string;
+  /** Tobi's name; empty means "Tobi" (see tobiName()). */
+  tobiName: string;
+  /** Eye colours by group of states, read through core/eye-colors.ts. Empty means the built-in ones. */
+  eyeColors: Record<string, string>;
   /**
    * A colour of the user's own for a pill's Tobi, by pill ID ("#RRGGBB").
    * Empty means the catalog's colours; read it through core/pill-colors.ts.
@@ -200,6 +204,8 @@ export const DEFAULT_SETTINGS: Settings = {
   customUrl: "",
   shortcuts: {},
   tobiOutfit: DEFAULT_OUTFIT,
+  tobiName: "",
+  eyeColors: {},
   pillColors: {},
   hiddenPills: [],
   language: "ru",
