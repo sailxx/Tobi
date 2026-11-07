@@ -11,13 +11,13 @@
     "vectors": "node tools/gen-vectors.mjs --check"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "5.20261010.1",
+    "@cloudflare/vitest-plugin": "1.4.9",
+    "@cloudflare/workers-types": "5.20261023.1",
     "@types/node": "^22.0.0",
     "@types/ws": "^8.5.0",
     "typescript": "^5.6.0",
     "vitest": "4.1.12",
-    "wrangler": "4.149.0",
-    "ws": "^8.18.0",
-    "@cloudflare/vitest-plugin": "1.4.0"
+    "wrangler": "4.154.0",
+    "ws": "^8.18.0"
   }
 }
